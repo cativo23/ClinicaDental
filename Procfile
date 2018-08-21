@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath Sistema_Informatico_Gestion_Odontologica_Clinica_Dental_Merliot Sistema_Informatico_Gestion_Odontologica_Clinica_Dental_Merliot.wsgi --log-file -

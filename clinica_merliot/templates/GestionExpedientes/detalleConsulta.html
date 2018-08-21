@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="tratamiento">
+  <div class="container">
+    <div class="about-grids">
+      <div class="contact-form">
+        <div class="col-md-14 about-left">
+        <form action="/GestionExpedientes/consultas/" method="get">
+          <input type="submit" value="Consultas"  id="frm1_submit" />
+        </form>
+      </div>
+    </div>
+      <div class="col-12">
+        <h1 align ="center">Consulta de: {{ consulta.paciente.paciente.nombresPaciente }}</h1>
+        <br>
+        <ul>
+          <li><p><b>Doctor que atendio: </b>{{consulta.doctor}}</p></li>
+          <li><p><b>Fecha: </b>{{consulta.fechaConsulta}}</p></li>
+          <li><p><b>Hora Inicio: </b> {{consulta.horaInicio}}</p></li>
+          <li><p><b>Hora Final: </b> {{consulta.horaFinal}}</p></li>
+          <li><p><b>Observaciones: </b> {{consulta.observacionCons}}</p></li>
+        </ul>
+        <a class="more-btn" href="{% url 'gestionExp:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+{% endblock %}

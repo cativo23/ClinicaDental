@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="tratamiento">
+  <div class="container">
+    <div class="about-grids">
+      <div class="contact-form">
+        <div class="col-md-14 about-left">
+        <form action="/GestionExpedientes/tratamientos/" method="get">
+          <input type="submit" value="Tratamientos"  id="frm1_submit" />
+        </form>
+      </div>
+    </div>
+      <div class="col-12">
+        <h1 align="center">Tratamiento: {{ tratamiento }}</h1>
+        <br>
+        <ul>
+          <li><p><b>Nombre:</b>{{tratamiento.nombreTratamiento}}</p></li>
+          <li><p><b>Descripcion:</b> {{tratamiento.descripcionTratamiento}}</p></li>
+          <li><p><b>Precio Base</b> {{tratamiento.precioBase}}</p></li>
+        </ul>
+        <a class="more-btn" href="{% url 'gestionExp:editarTratamiento' tratamiento.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Tratamiento</a>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+{% endblock %}

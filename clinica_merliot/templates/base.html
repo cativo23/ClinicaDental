@@ -1,0 +1,114 @@
+{% load static %}
+{% load staticfiles %}
+{% load i18n %}
+
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="shortcut icon" type="image/png" href="{% static 'images/logo.jpg' %}"/>
+		<title>Sistema Informatico Gestion Odontologica Clinica Dental Merliot </title>
+		<link href="{% static "css/bootstrap.css" %}" rel='stylesheet' type='text/css' />
+		<script src="{% static "js/jquery.min.js" %}"></script>
+		 <!-- Custom Theme files -->
+		<link href="{% static "css/style.css" %}" rel='stylesheet' type='text/css' />
+   		 <!-- Custom Theme files -->
+   		 <meta name="viewport" content="width=device-width, initial-scale=1">
+		 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+   		 <!-- webfonts -->
+   		 <link href='http://fonts.googleapis.com/css?family=Arimo:400,700' rel='stylesheet' type='text/css'>
+   		  <!-- webfonts -->
+				<style>
+#customers {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+	</head>
+	<body>
+		<!-- container -->
+			<!-- header -->
+			<div class="header">
+				<div class="container">
+					<!-- logo -->
+					<div class="logo">
+						<a href="/"><img align="middle" src="{% static "images/logo.jpg" %}" width="150" height="150" title="clinicaDentalMerliot" /></a>
+					</div>
+					<!-- logo -->
+					<!-- top-nav -->
+					<div class="top-nav">
+						<span class="menu"> </span>
+						{% block navbar %}
+
+						{% endblock %}
+					</div>
+					<!-- top-nav -->
+					<!-- script-for-nav -->
+					<script>
+						$(document).ready(function(){
+							$("span.menu").click(function(){
+								$(".top-nav ul").slideToggle(300);
+							});
+						});
+					</script>
+					<!-- script-for-nav -->
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+			<!-- /header -->
+		</div>
+		<!-- /container -->
+          {% block content%}
+					{% endblock %}
+					{% block body%}
+					{% endblock %}
+		<div class="team-grids-caption">
+			<div class="container">
+				<div class="team-grids-caption-left">
+					<h4>Contactenos</h4>
+					<p>Si tiene algun problema llame al: 7226-9345</p>
+				</div>
+				<div class="team-grids-caption-right">
+					<a class="team-btn" href="#">Contact</a>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+		<!-- team-grids-caption -->
+		<!-- footer -->
+		<div class="footer">
+			<div class="container">
+				<p class="copy-right">Grupo 03 de la materia de Diseño de Sistemas</p>
+				<br>
+				<p class="copy-right" >Miembros:</p>
+				<br>
+				<ul class="copy-right">
+					<li><p class="copy-right">Carlos Cativo</p></li>
+					<li><p class="copy-right">Melvin Herrera</p></li>
+					<li><p class="copy-right">Reynaldo Navarro</p></li>
+					<li><p class="copy-right">Cristian Osegueda</p></li>
+					<li><p class="copy-right">Luis Sorto</p></li>
+				</ul>
+			</div>
+		</div>
+		<!-- /footer -->
+	</body>
+</html>

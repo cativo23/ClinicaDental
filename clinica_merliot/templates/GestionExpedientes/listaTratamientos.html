@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li class="active"><a href="/">Inicio</a></li>
+  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="tratamiento">
+  <div class="container">
+    <div class="about-grids">
+      <div class="contact-form">
+    <div class="col-md-14 about-left">
+    <form action="/GestionExpedientes/" method="get">
+      <input type="submit" value="menu"  id="frm1_submit" />
+    </form>
+  </div>
+</div>
+      <div class="col-md-14 about-left">
+        <h1 align = "center">Tratamientos</h1>
+        <div class="contact-form">
+          <form id="searchform" action="{% url 'gestionExp:listarTratamientos' %}" method="get" accept-charset="utf-8">
+      <input value="Buscar" type="submit">
+      <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+    </div>
+    </form>
+    <br>
+          {% if messages %}
+     {% for message in messages %}
+     {% if message.tags == 'success' %}
+     <p style="color: green"> <u>{{ message }}</u></p>
+         {% else %}
+     <p style="color: red"><u>{{ message }}</u> </p>
+     {% endif %}
+     {% endfor %}
+     <p></p>
+     {% endif %}
+
+     <div class="container">
+       {% if object_list %}
+       <table id="customers">
+          <thead>
+            <tr>
+              <td><b>Nombre</b></td>
+              <td><b>PrecioBase</b></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tratamiento in object_list %}
+            <tr>
+              <td><a class="button" href="{% url 'gestionExp:detalleTratamiento' tratamiento.id %}">{{ tratamiento.nombreTratamiento }}</a></td>
+              <td>{{ tratamiento.precioBase}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No hay tratamientos con esos parametros</p> <a class="more-btn" href="/GestionExpedientes/agregarTratamiento/">Agregar</a>
+      {% endif %}
+     </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+{% endblock %}

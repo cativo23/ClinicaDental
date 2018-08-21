@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="tratamiento">
+  <div class="container">
+    <div class="about-grids">
+      <div class="contact-form">
+        <div class="col-md-14 about-left">
+        <form action="/GestionExpedientes/expedientes/" method="get">
+          <input type="submit" value="Expedientes"  id="frm1_submit" />
+        </form>
+      </div>
+    </div>
+      <div class="col-12">
+        <h1 align= "center">Modificar Expediente</h1>
+        {% if messages %}
+       {% for message in messages %}
+       {% if message.tags == 'success' %}
+       <p style="color: green"> <u>{{ message }}</u></p>
+           {% else %}
+       <p style="color: red"><u>{{ message }}</u> </p>
+       {% endif %}
+       {% endfor %}
+       <p></p>
+       {% endif %}
+       <div class="contact-form">
+         <form method="post">
+         {% csrf_token %}
+         {% for field in form %}
+         <div class="contact-form-row">
+            {{ field.label_tag }}
+            {{ field }}
+            <br>
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text|safe }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+               <div class="alert alert-danger">
+                 <strong>{{ error|escape }}</strong>
+               </div>
+               {% endfor %}
+             <div class="clearfix"> </div>
+         </div>
+         {% endfor %}
+         {% for field in form1 %}
+         <div class="contact-form-row">
+            {{ field.label_tag }}
+            {{ field }}
+            <br>
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text|safe }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+               <div class="alert alert-danger">
+                 <strong>{{ error|escape }}</strong>
+               </div>
+               {% endfor %}
+             <div class="clearfix"> </div>
+         </div>
+         {% endfor %}
+         <input value="Enviar" type="submit">
+         </form>
+    </div>
+  </div>
+</div>
+<br>
+{% endblock %}

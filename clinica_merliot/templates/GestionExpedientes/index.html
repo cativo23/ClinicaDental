@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li class="active"><a href="/">Inicio</a></li>
+  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="Expedientes">
+  <div class="container">
+    <div class="">
+      <p><h1 align="center">Bienvenido(a) {{user.doctor}} !</h1></p>
+    </div>
+    <div class="top-grids text-center">
+      <div class="container">
+        <h1>Consultas</h1>
+        <div class="col-md-6">
+					<div class="top-grid">
+						<span class="t-icon2"> </span>
+						<h3>Nueva Consulta</h3>
+						 <p>Inicie una nueva consulta</p>
+             <a class="more-btn" href="{% url 'gestionExp:nuevaConsulta' %}">Ir</a>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="top-grid">
+						<span class="t-icon1"> </span>
+            <h3>Ver Consultas</h3>
+            <p>Va las consultas</p>
+            <a class="more-btn" href="{% url 'gestionExp:listarConsultas' %}">Ir</a>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="container">
+        <h1>Gestion de Expedientes</h1>
+				<div class="col-md-4">
+					<div class="top-grid">
+						<span class="t-icon2"> </span>
+						<h3>Expedientes</h3>
+						<p>Vea todos los expedientes creados</p>
+            <a class="more-btn" href="{% url 'gestionExp:listarExpedientes' %}">Ir</a>
+					</div>
+				</div>
+        <div class="col-md-4">
+					<div class="top-grid">
+						<span class="t-icon1"> </span>
+						<h3>Agregar Expediente</h3>
+						 <p>Aqui puede agregar nuevos expedientes</p>
+             <a class="more-btn" href="/GestionExpedientes/nuevoExpediente/">Ir</a>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="top-grid">
+						<span class="t-icon3"> </span>
+						<h3>Modificar Expediente</h3>
+						 <p>Modifique un expediente anteriormente creado</p>
+              <a class="more-btn" href="/GestionExpedientes/actualizarExpediente/">Ir</a>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+      <div class="container">
+        <h1>Gestion de Tratamientos</h1>
+        <div class="col-md-6">
+					<div class="top-grid">
+						<span class="t-icon2"> </span>
+						<h3>Tratamientos</h3>
+						 <p>Vea los tratamientos disponibles</p>
+             <a class="more-btn" href="/GestionExpedientes/tratamientos/">Ir</a>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="top-grid">
+						<span class="t-icon1"> </span>
+            <h3>Agregar Tratamientos</h3>
+            <p>Aqui puede agregar nuevos Expedientes</p>
+            <a class="more-btn" href="{% url 'gestionExp:agregarTratamiento' %}">Ir</a>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+
+		</div>
+  </div>
+</div>
+{% endblock %}

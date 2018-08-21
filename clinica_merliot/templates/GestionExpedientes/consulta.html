@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="tratamiento">
+  <div class="container">
+    <div class="about-grids">
+      <div class="col-12">
+        <h1 align="center">Consulta</h1>
+        {% if messages %}
+       {% for message in messages %}
+       {% if message.tags == 'success' %}
+       <p style="color: green"> <u>{{ message }}</u></p>
+           {% else %}
+       <p style="color: red"><u>{{ message }}</u> </p>
+       {% endif %}
+       {% endfor %}
+       <p></p>
+       {% endif %}
+       <div class="contact-form">
+         <div class="">
+           <h2>{{expediente}}</h2>
+           <ul>
+             <li><b>Sexo: </b>{{expediente.paciente.sexo}}</li>
+             <li><b>Edad: </b></li>
+             <li><b>Observaciones Expediente: </b>{{expediente.observacionExp}}</li>
+           </ul>
+         </div>
+         <form method="post">
+         {% csrf_token %}
+         <div class="contact-form-row">
+            <ul>
+              <li>{{ form.doctor.label_tag }}
+              {{ form.doctor }}</li>
+            </ul>
+            <br>
+            {% if form.doctor.help_text %}
+            <small style="color: grey">{{ form.doctor.help_text|safe }}</small>
+            {% endif %}
+            {% for error in form.doctor.errors %}
+               <div class="alert alert-danger">
+                 <strong>{{ error|escape }}</strong>
+               </div>
+               {% endfor %}
+             <div class="clearfix"> </div>
+         </div>
+         <div class="contact-form-row">
+           <ul>
+             <li>{{ form1.tratamientos.label_tag }}
+             {{ form1.tratamientos}}</li>
+           </ul>
+
+            <br>
+            {% if form1.tratamientos.help_text %}
+            <small style="color: grey">{{ form1.tratamientos.help_text|safe }}</small>
+            {% endif %}
+            {% for error in form1.tratamientos.errors %}
+               <div class="alert alert-danger">
+                 <strong>{{ error|escape }}</strong>
+               </div>
+               {% endfor %}
+             <div class="clearfix"> </div>
+         </div>
+         <div class="contact-form-row">
+           <ul>
+             <li>{{ form.observacionCons.label_tag }}
+             {{ form.observacionCons}}</li>
+           </ul>
+
+            <br>
+            {% if form1.tratamientos.help_text %}
+            <small style="color: grey">{{ form.observacionCons.help_text|safe }}</small>
+            {% endif %}
+            {% for error in form1.tratamientos.errors %}
+               <div class="alert alert-danger">
+                 <strong>{{ error|escape }}</strong>
+               </div>
+               {% endfor %}
+             <div class="clearfix"> </div>
+         </div>
+         <div class="">
+           <h2>ODONTOGRAMA</h2>
+
+         </div>
+         <input value="Enviar" type="submit">
+         </form>
+    </div>
+  </div>
+</div>
+<br>
+{% endblock %}
