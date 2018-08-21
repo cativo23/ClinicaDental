@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Sistema_Informatico_Gestion_Odontologica_Clinica_Dental_Merliot.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clinica_merliot.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
