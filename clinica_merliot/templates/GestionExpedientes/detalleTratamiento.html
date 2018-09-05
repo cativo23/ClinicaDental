@@ -15,11 +15,11 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container">
+  <div class="container center">
     <div class="about-grids">
       <div class="contact-form">
         <div class="col-md-14 about-left">
-        <form action="/GestionExpedientes/tratamientos/" method="get">
+        <form action="/GestionExpedientes/tratamientos/" method="get" align="center">
           <input type="submit" value="Tratamientos"  id="frm1_submit" />
         </form>
       </div>
@@ -27,12 +27,31 @@
       <div class="col-12">
         <h1 align="center">Tratamiento: {{ tratamiento }}</h1>
         <br>
-        <ul>
-          <li><p><b>Nombre:</b>{{tratamiento.nombreTratamiento}}</p></li>
-          <li><p><b>Descripcion:</b> {{tratamiento.descripcionTratamiento}}</p></li>
-          <li><p><b>Precio Base</b> {{tratamiento.precioBase}}</p></li>
-        </ul>
-        <a class="more-btn" href="{% url 'gestionExp:editarTratamiento' tratamiento.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Tratamiento</a>
+
+        <table align="center">
+            <tr>
+                <td align="right"><b>Nombre:</b></td>
+                <td>{{tratamiento.nombreTratamiento}}</td>
+            </tr>
+            <tr><td><br></td></tr>
+
+            <tr>
+                <td align="right"><b>Descripcion:</b></td>
+                <td>{{tratamiento.descripcionTratamiento}}</td>
+            </tr>
+            <tr><td><br></td></tr>
+
+            <tr>
+                <td align="right"><b>Precio Base</b></td>
+                <td>{{tratamiento.precioBase}}</td>
+            </tr>
+            <tr><td><br></td></tr>
+        </table>
+        <div align="center">
+            <a class="more-btn" href="{% url 'gestionExp:editarTratamiento' tratamiento.id %}" >
+                <span class="glyphicon glyphicon-pencil"></span> Modificar Tratamiento
+            </a>
+        </div>
       </div>
     </div>
   </div>

@@ -15,28 +15,71 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container">
-    <div class="about-grids">
+  <div class="container center" align="center">
       <div class="contact-form">
-        <div class="col-md-14 about-left">
-        <form action="/GestionExpedientes/consultas/" method="get">
-          <input type="submit" value="Consultas"  id="frm1_submit" />
-        </form>
+        <div>
+            <form action="/GestionExpedientes/consultas/" method="get">
+                <input type="submit" value="Consultas"  id="frm1_submit" />
+            </form>
+        </div>
       </div>
-    </div>
-      <div class="col-12">
-        <h1 align ="center">Consulta de: {{ consulta.paciente.paciente.nombresPaciente }}</h1>
-        <br>
-        <ul>
-          <li><p><b>Doctor que atendio: </b>{{consulta.doctor}}</p></li>
-          <li><p><b>Fecha: </b>{{consulta.fechaConsulta}}</p></li>
-          <li><p><b>Hora Inicio: </b> {{consulta.horaInicio}}</p></li>
-          <li><p><b>Hora Final: </b> {{consulta.horaFinal}}</p></li>
-          <li><p><b>Observaciones: </b> {{consulta.observacionCons}}</p></li>
-        </ul>
-        <a class="more-btn" href="{% url 'gestionExp:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
-      </div>
-    </div>
+    <table>
+        <tr>
+            <td><h1>Consulta de:</h1></td>
+            <td><h1>{{ consulta.paciente.paciente.nombresPaciente }}</h1></td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td align="right">
+                <b>Doctor que atendio: </b>
+            </td>
+            <td>
+                {{consulta.doctor}}
+            </td>
+        </tr>
+
+        <tr><td><br></td></tr>
+        <tr>
+            <td align="right">
+                <b>Fecha: </b>
+            </td>
+            <td>
+                {{consulta.fechaConsulta}}
+            </td>
+        </tr>
+
+        <tr><td><br></td></tr>
+        <tr>
+            <td align="right">
+                <b>Hora Inicio: </b>
+            </td>
+            <td>
+                {{consulta.horaInicio}}
+            </td>
+        </tr>
+
+        <tr><td><br></td></tr>
+        <tr>
+            <td align="right">
+                <b>Hora Final: </b>
+            </td>
+            <td>
+                {{consulta.horaFinal}}
+            </td>
+        </tr>
+
+        <tr><td><br></td></tr>
+        <tr>
+            <td align="right">
+                <b>Observaciones: </b>
+            </td>
+            <td>
+                {{consulta.observacionCons}}
+            </td>
+        </tr>
+        <tr><td><br></td></tr>
+    </table>
+    <a class="more-btn" href="{% url 'gestionExp:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
   </div>
 </div>
 <br>
