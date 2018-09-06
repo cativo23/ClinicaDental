@@ -13,89 +13,116 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="tratamiento">
-  <div class="container">
+  <div class="container center">
     <div class="about-grids">
-      <div class="col-12">
-        <h1 align="center">Consulta</h1>
         {% if messages %}
-       {% for message in messages %}
-       {% if message.tags == 'success' %}
-       <p style="color: green"> <u>{{ message }}</u></p>
-           {% else %}
-       <p style="color: red"><u>{{ message }}</u> </p>
-       {% endif %}
-       {% endfor %}
-       <p></p>
-       {% endif %}
-       <div class="contact-form">
-         <div class="">
-           <h2>{{expediente}}</h2>
-           <ul>
-             <li><b>Sexo: </b>{{expediente.paciente.sexo}}</li>
-             <li><b>Edad: </b></li>
-             <li><b>Observaciones Expediente: </b>{{expediente.observacionExp}}</li>
-           </ul>
-         </div>
-         <form method="post">
-         {% csrf_token %}
-         <div class="contact-form-row">
-            <ul>
-              <li>{{ form.doctor.label_tag }}
-              {{ form.doctor }}</li>
-            </ul>
-            <br>
-            {% if form.doctor.help_text %}
-            <small style="color: grey">{{ form.doctor.help_text|safe }}</small>
-            {% endif %}
-            {% for error in form.doctor.errors %}
-               <div class="alert alert-danger">
-                 <strong>{{ error|escape }}</strong>
-               </div>
-               {% endfor %}
-             <div class="clearfix"> </div>
-         </div>
-         <div class="contact-form-row">
-           <ul>
-             <li>{{ form1.tratamientos.label_tag }}
-             {{ form1.tratamientos}}</li>
-           </ul>
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <p style="color: green"><u>{{ message }}</u></p>
+        {% else %}
+        <p style="color: red"><u>{{ message }}</u> </p>
+        {% endif %}
+        {% endfor %}
+        <p></p>
+        {% endif %}
+        <div class="contact-form" align="center">
+            <h1>CONSULTA</h1>
+            <h2>{{expediente}}</h2>
+            <table>
+                <tr><td><br></td></tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Sexo: </b></td>
+                    <td>{{expediente.paciente.sexo}}</td>
+                </tr>
 
-            <br>
-            {% if form1.tratamientos.help_text %}
-            <small style="color: grey">{{ form1.tratamientos.help_text|safe }}</small>
-            {% endif %}
-            {% for error in form1.tratamientos.errors %}
-               <div class="alert alert-danger">
-                 <strong>{{ error|escape }}</strong>
-               </div>
-               {% endfor %}
-             <div class="clearfix"> </div>
-         </div>
-         <div class="contact-form-row">
-           <ul>
-             <li>{{ form.observacionCons.label_tag }}
-             {{ form.observacionCons}}</li>
-           </ul>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Edad: </b></td>
+                    <td>{{edad}}</td>
+                </tr>
 
-            <br>
-            {% if form1.tratamientos.help_text %}
-            <small style="color: grey">{{ form.observacionCons.help_text|safe }}</small>
-            {% endif %}
-            {% for error in form1.tratamientos.errors %}
-               <div class="alert alert-danger">
-                 <strong>{{ error|escape }}</strong>
-               </div>
-               {% endfor %}
-             <div class="clearfix"> </div>
-         </div>
-         <div class="">
-           <h2>ODONTOGRAMA</h2>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Observaciones Expediente: </b></td>
+                    <td>{{expediente.observacionExp}} </td>
+                </tr>
 
-         </div>
-         <input value="Enviar" type="submit">
-         </form>
+                <tr><td><br></td></tr>
+                <form method="post">{% csrf_token %}
+                    <div class="contact-form-row">
+                        <tr>
+                            <td align="right">
+                                {{ form.doctor.label_tag }}
+                            </td>
+                            <td>
+                                {{ form.doctor }}
+                            </td>
+                        </tr>
+                        {% if form.doctor.help_text %}
+                        <small style="color: grey">{{ form.doctor.help_text|safe }}</small>
+                        {% endif %}
+                        {% for error in form.doctor.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+
+                <tr><td><br></td></tr>
+                <div class="contact-form-row">
+                    <tr>
+                        <td align="right">{{ form1.tratamientos.label_tag }}</td>
+                        <td>{{ form1.tratamientos }}</td>
+                    </tr>
+                    {% if form1.tratamientos.help_text %}
+                    <tr>
+                        <td></td>
+                        <td width="100px"><small style="color: grey">{{ form1.tratamientos.help_text|safe }}</small></td>
+                    </tr>
+                    {% endif %}
+                    {% for error in form1.tratamientos.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <tr><td><br></td></tr>
+                <div class="contact-form-row">
+                    <tr>
+                        <td align="right">{{ form.observacionCons.label_tag }}</td>
+                        <td>{{ form.observacionCons}}</td>
+                    </tr>
+                    {% if form1.tratamientos.help_text %}
+                    <small style="color: grey">{{ form.observacionCons.help_text|safe }}</small>
+                    {% endif %}
+                    {% for error in form1.tratamientos.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+                <tr><td><br></td></tr>
+                <tr>
+                    <td></td>
+                    <td><h2>ODONTOGRAMA</h2></td>
+                </tr>
+
+
+                <tr><td><br></td></tr>
+                <tr>
+                    <td></td>
+                    <td><input value="Enviar" type="submit"></td>
+                </tr>
+
+                </form>
+            </table>
+        </div>
     </div>
   </div>
 </div>

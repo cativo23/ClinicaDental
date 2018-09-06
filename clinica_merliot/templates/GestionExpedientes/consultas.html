@@ -15,16 +15,16 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container">
+  <div class="container center">
     <div class="about-grids">
-      <div class="col-md-14 about-left">
-        <h1 alig = "center">Consultas</h1>
+
         <div class="contact-form">
-          <form action="/" method="get">
-            <input type="submit" value="Menu" name="Submit" id="frm1_submit" />
+          <form action="/" method="get" align = "center">
+            <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
           </form>
-          <form id="searchform" action="{% url 'gestionExp:listarConsultas' %}" method="get" accept-charset="utf-8">
-            <input value="Buscar" type="submit">
+          <h1 align = "center">CONSULTAS</h1>
+          <form id="searchform" action="{% url 'gestionExp:listarConsultas' %}" method="get" accept-charset="utf-8" style="padding-left: 30px" >
+            <input value="Buscar" type="submit" >
             <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
           </form>
             <br>
@@ -39,34 +39,37 @@
      <p></p>
      {% endif %}
 
-     <div class="container">
+
+
        {% if object_list %}
-       <table id="customers">
-          <thead>
-            <tr>
-              <td><b>Paciente</b></td>
-              <td><b>Doctor</b></td>
-              <td><b>Fecha Consulta</b></td>
-            </tr>
-          </thead>
-          <tbody>
-            {% for consulta in object_list %}
-            <tr>
-              <td><a class="button" href="{% url 'gestionExp:detalleConsulta' consulta.id %}">{{ consulta.paciente }}</a></td>
-              <td>{{ consulta.doctor }}</td>
-              <td>{{ consulta.fechaConsulta }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <p>No hay paciente con esos parametros</p>
-      {% endif %}
-     </div>
-        </div>
-      </div>
+       <div style="padding-left: 30px; padding-right: 30px">
+           <table id="customers" >
+              <thead>
+                <tr >
+                  <td><b>Paciente</b></td>
+                  <td><b>Doctor</b></td>
+                  <td><b>Fecha Consulta</b></td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for consulta in object_list %}
+                <tr>
+                  <td><a class="button" href="{% url 'gestionExp:detalleConsulta' consulta.id %}">{{ consulta.paciente }}</a></td>
+                  <td>{{ consulta.doctor }}</td>
+                  <td>{{ consulta.fechaConsulta }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <p>No hay paciente con esos parametros</p>
+                {% endif %}
+              </tbody>
+            </table>
+
+       </div>
+
+
     </div>
-  </div>
+</div>
 </div>
 <br>
 {% endblock %}
