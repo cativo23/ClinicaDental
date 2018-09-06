@@ -29,25 +29,20 @@ def nuevoExpediente(request):
                 a = form2.save()
                 b = form1.cleaned_data['observacionExp']
                 expediente = Expediente.objects.create(paciente=a, observacionExp=b)
-
                 if request.user.doctor is not None:
                     cons = Consulta.objects.create(paciente=expediente, doctor=request.user.doctor)
                     messages.success(request, 'Expediente correctamente guardado!')
                     return redirect('gestionExp:verConsulta', cons.id)
-
             else:
                 print ('hola')
-                return render(request, 'GestionExpedientes/nuevoExpediente.html', { 'form2': form2, 'form1': form1,})
+                return render(request, 'GestionExpedientes/nuevoExpediente.html', { 'form2': form2,})
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
-            return render(request, 'GestionExpedientes/nuevoExpediente.html', { 'form2': form2, 'form1': form1,})
-
+            return render(request, 'GestionExpedientes/nuevoExpediente.html', { 'form2': form2,})
     else:
         form2 = nuevoPacienteForm()
         form1 = ExpForm()
         return render(request, 'GestionExpedientes/nuevoExpediente.html', { 'form2': form2, 'form1': form1,})
-
-
 
 
 @login_required
@@ -219,8 +214,6 @@ def consulta(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
 
-    edad = datetime.now().year - expediente.paciente.fechaNacimiento.year
-
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
         form1 = nuevoExpedienteForm(request.POST, instance=expediente)
@@ -229,8 +222,8 @@ def consulta(request, pk):
             if form.is_valid() and form1.is_valid():
                 consulta = form.save()
                 consulta.horaFinal = datetime.now()
-                #form1.save()
-                messages.success(request, "La consulta fue modificada correctamente!")
+                form1.save()
+                messages.success(request, "El la consulta fue modificada correctamente!")
                 return redirect('gestionExp:listarConsultas')
 
         except Exception as e:
@@ -243,8 +236,7 @@ def consulta(request, pk):
         'form': form,
         'form1': form1,
         'consulta': consulta,
-        'expediente': expediente,
-        'edad': edad
+        'expediente': expediente
     }
 
     return render(request, template, context)

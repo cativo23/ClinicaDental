@@ -26,11 +26,11 @@ class Paciente(models.Model):
         (MASCULINO, 'Masculino'),
         (FEMENINO, 'Femenino'),
     )
-    nombresPaciente = models.CharField('Nombres del paciente', max_length=60, blank=False, null=False)
+    nombresPaciente = models.CharField('Nombres del paciente ', max_length=60, blank=False, null=False)
     apellidosPaciente = models.CharField(max_length=60, blank=False, null=False)
     ocupacion = models.CharField(max_length=60, blank=True, null=True)
     sexo = models.CharField(max_length=2, choices=SEXO_CHOICES, default=None, blank=False, null=False)
-    fechaNacimiento = models.DateField('Fecha de nacimiento',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)
+    fechaNacimiento = models.DateField('fecha_nacimiento',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)
     direccionCasa = models.CharField('Direccion Casa', max_length=150, blank=True, null=True)
     direccionTrabajo = models.CharField('Direccion Trabajo', max_length=150, blank=True, null=True)
     telefonoCasa = models.CharField('Telefono Casa', max_length=9, help_text='Formato: XXXX-XXXX', blank=True, null=True)

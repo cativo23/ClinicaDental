@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block navbar %}
 <ul>
   <li><a href="/">Inicio</a></li>
@@ -10,73 +11,44 @@
   <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
 </ul>
 {% endblock %}
+
 {% block content %}
+
 <div class="tratamiento">
-  <div class="container center">
+  <div class="container">
     <div class="about-grids">
-       <div align="center">
-          <table>
-              <thead>
-                  <tr>
-                      <th></th>
-                      <th>
-                          <div class="contact-form">
-                              <form action="/" method="get">{% csrf_token %}
-                                <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
-                              </form>
-                          </div>
-                      </th>
-                  </tr>
-                  <tr><td><br></td></tr>
-                  <tr>
-                      <th></th>
-                      <th><h1>NUEVA CONSULTA</h1></th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr><td><br></td></tr>
-                  <div class="contact-form">
-                    <form method="post">{% csrf_token %}
-                      {% for field in form %}
-                      <div class="contact-form-row">
-                      <tr>
-                          <td align="right">
-                              <label for="{{ field.label }}" style="padding-right:10px" >{{ field.label_tag }}</label>
-                          </td>
-                          <td>
-                              {{ field }}
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <br>
-                          </td>
-                      </tr>
-                         {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                              <strong>{{ error|escape }}</strong>
-                            </div>
-                            {% endfor %}
-                          <div class="clearfix"> </div>
-                      </div>
-                      {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                    {% endfor %}
-                    <tr>
-                        <td></td>
-                        <td>
-                            <div class="contact-form">
-                                <input value="Enviar" type="submit">
-                            </div>
-                        </td>
-                    </tr>
-                    </form>
+      <div class="col-md-14 about-left">
+        <h1 align="center">Nueva Consulta</h1>
+        <div class="contact-form">
+          <form action="/" method="get">
+            <input type="submit" value="Menu" name="Submit" id="frm1_submit" />
+          </form>
+          <br>
+          <form method="post">
+          {% csrf_token %}
+            {% for field in form %}
+            <div class="contact-form-row">
+               {{ field.label_tag }}
+               {% if field.help_text %}
+               <small style="color: grey">{{ field.help_text|safe }}</small>
+               {% endif %}
+               {{ field }}
+               {% for error in field.errors %}
+                  <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
                   </div>
-              </tbody>
-          </table>
+                  {% endfor %}
+                <div class="clearfix"> </div>
+            </div>
+            {% endfor %}
+          {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+          <input value="Enviar" type="submit">
+          </form>
+        </div>
       </div>
     </div>
   </div>

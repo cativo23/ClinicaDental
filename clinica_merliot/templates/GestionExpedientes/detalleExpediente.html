@@ -15,10 +15,10 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container center">
+  <div class="container">
     <div class="about-grids">
       <div class="contact-form">
-        <div class="col-md-14 about-left" align="center">
+        <div class="col-md-14 about-left">
         <form action="/GestionExpedientes/expedientes/" method="get">
           <input type="submit" value="Expedientes"  id="frm1_submit" />
         </form>
@@ -27,118 +27,33 @@
       <div class="col-12">
         <h1 align="center">{{ expediente }}</h1>
         <br>
-        <table align="center">
-            <tr>
-                <td align="right"><b>Nombres:</b></td>
-                <td>{{expediente.paciente.nombresPaciente}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Apellidos:</b></td>
-                <td>{{expediente.paciente.apellidosPaciente}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Ocupacion:</b></td>
-                <td>{{expediente.paciente.ocupacion}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Sexo:</b></td>
-                <td>{{expediente.paciente.sexo}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Fecha de Nacimiento:</b></td>
-                <td>{{expediente.paciente.fechaNacimiento}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Direccion Casa:</b></td>
-                <td>{{expediente.paciente.direccionCasa}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td  align="right"><b>Direccion Trabajo:</b></td>
-                <td>{{expediente.paciente.direccionTrabajo }}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Telefono Casa:</b></td>
-                <td>{{expediente.paciente.telefonoCasa}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Telefono Trabajo:</b></td>
-                <td>{{expediente.paciente.telefonoTrabajo}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            {% if expediente.paciente.referencia %}
-            <tr>
-                <td align="right"><b>Telefono Casa:</b></td>
-                <td>{{expediente.paciente.referencia}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-            {% endif %}
-
-            {% if expediente.tratamientos %}
-
-            <tr>
-                <td align="right"><b>Tratamientos:</b></td>
-
-            </tr>
-            {% for tratamiento in expediente.tratamientos.all  %}
-            <tr>
-                <td></td>
-                <td><b>{{tratamiento.nombreTratamiento}}</b>: {{tratamiento.precioBase}}</td>
-            </tr>
-            {% endfor %}
-            <tr><td><br></td></tr>
-            {% endif %}
-
-            <tr>
-                <td align="right"><b>Fecha Creacion:</b></td>
-                <td>{{expediente.fechaCreacion}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Total Pagado:</b></td>
-                <td>{{expediente.pagado}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Total debe:</b> </td>
-                <td>{{expediente.saldo}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td align="right"><b>Observaciones: </b> </td>
-                <td>{{expediente.observacionExp}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-
-            <tr>
-                <td></td>
-                <td>
-                    <a class="more-btn" href="{% url 'gestionExp:editarExpediente' expediente.id %}">
-                        <span class="glyphicon glyphicon-pencil"></span> Modificar Expediente
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
+        <ul>
+          <li><p><b>Nombres:</b>{{expediente.paciente.nombresPaciente}}</p></li>
+          <li><p><b>Apellidos:</b> {{expediente.paciente.apellidosPaciente}}</p></li>
+          <li><p><b>Ocupacion:</b> {{expediente.paciente.ocupacion}}</p></li>
+          <li><p><b>Sexo:</b> {{expediente.paciente.sexo}}</p></li>
+          <li><p><b>Fecha de Nacimiento:</b> {{expediente.paciente.fechaNacimiento}}</p></li>
+          <li><p><b>Direccion Casa:</b> {{expediente.paciente.direccionCasa}}</p></li>
+          <li><p><b>Direccion Trabajo:</b> {{expediente.paciente.direccionTrabajo }}</p></li>
+          <li><p><b>Telefono Casa:</b> {{expediente.paciente.telefonoCasa}}</p></li>
+          <li><p><b>Telefono Trabajo:</b> {{expediente.paciente.telefonoTrabajo}}</p></li>
+          {% if expediente.paciente.referencia %}<li><p><b>Telefono Casa:</b> {{expediente.paciente.referencia}}</p></li>{% endif %}
+          {% if expediente.tratamientos %}
+          <li><p><b>Tratamientos:</b>
+            <ul>
+              {% for tratamiento in expediente.tratamientos.all  %}
+                <li><b>{{tratamiento.nombreTratamiento}}</b>: {{tratamiento.precioBase}}</li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li><p><b>Fecha Creacion:</b> {{expediente.fechaCreacion}}</p></li>
+          <li><p><b>Total Pagado:</b> {{expediente.pagado}}</p></li>
+          <li><p><b>Total debe:</b> {{expediente.saldo}}</p></li>
+          <li><p><b>Observaciones: </b> {{expediente.observacionExp}}</p></li>
+          {% endif %}
+        </ul>
+        <a class="more-btn" href="{% url 'gestionExp:editarExpediente' expediente.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Expediente</a>
+      </div>
     </div>
   </div>
 </div>

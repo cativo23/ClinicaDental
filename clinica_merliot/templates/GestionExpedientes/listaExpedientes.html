@@ -15,21 +15,19 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container center">
+  <div class="container">
     <div class="about-grids">
       <div class="contact-form">
       <div class="col-md-14 about-left">
-      <form action="/GestionExpedientes/" method="get" align="center">
-        <input type="submit" value="regresar"  id="frm1_submit" />
+      <form action="/GestionExpedientes/" method="get">
+        <input type="submit" value="menu"  id="frm1_submit" />
       </form>
-      <br>
-      <h1 align="center">EXPEDIENTES</h1>
     </div>
-    </div>
+  </div>
       <div class="col-md-14 about-left">
-
+        <h1 align="center">Expedientes</h1>
         <div class="contact-form">
-          <form id="searchform" action="{% url 'gestionExp:listarExpedientes' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
+          <form id="searchform" action="{% url 'gestionExp:listarExpedientes' %}" method="get" accept-charset="utf-8">
       <input value="Buscar" type="submit">
       <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
     </form>
@@ -46,7 +44,7 @@
      <p></p>
      {% endif %}
 
-     <div style="padding-left: 30px; padding-right: 30px" >
+     <div class="container">
        {% if object_list %}
        <table id="customers">
           <thead>

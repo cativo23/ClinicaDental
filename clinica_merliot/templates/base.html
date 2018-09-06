@@ -2,30 +2,23 @@
 {% load staticfiles %}
 {% load i18n %}
 
+
 <!DOCTYPE HTML>
-
-
 <html>
 	<head>
-
-		<title>Sistema Informatico Gestion Odontologica Clinica Dental Merliot </title>
-
 		<link rel="shortcut icon" type="image/png" href="{% static 'images/logo.jpg' %}"/>
+		<title>Sistema Informatico Gestion Odontologica Clinica Dental Merliot </title>
 		<link href="{% static "css/bootstrap.css" %}" rel='stylesheet' type='text/css' />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 		<script src="{% static "js/jquery.min.js" %}"></script>
-
 		 <!-- Custom Theme files -->
 		<link href="{% static "css/style.css" %}" rel='stylesheet' type='text/css' />
    		 <!-- Custom Theme files -->
-
-		 <!-- webfonts -->
-   		 <link href='http://fonts.googleapis.com/css?family=Arimo:400,700' rel='stylesheet' type='text/css'>
+   		 <meta name="viewport" content="width=device-width, initial-scale=1">
+		 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
    		 <!-- webfonts -->
-
-		 <style>
-
+   		 <link href='http://fonts.googleapis.com/css?family=Arimo:400,700' rel='stylesheet' type='text/css'>
+   		  <!-- webfonts -->
+				<style>
 #customers {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
@@ -44,62 +37,49 @@
 #customers th {
     padding-top: 12px;
     padding-bottom: 12px;
-    text-align: center;
+    text-align: left;
     background-color: #4CAF50;
     color: white;
 }
-.center {
-    margin: auto;
-    width: 85%;
-    border: 1px solid #11223b;
-    padding: 40px 0;
-}
-
-     	 </style>
+</style>
 	</head>
-
 	<body>
-		<!-- header -->
-		<div class="header" >
+		<!-- container -->
+			<!-- header -->
+			<div class="header">
+				<div class="container">
+					<!-- logo -->
+					<div class="logo">
+						<a href="/"><img align="middle" src="{% static "images/logo.jpg" %}" width="150" height="150" title="clinicaDentalMerliot" /></a>
+					</div>
+					<!-- logo -->
+					<!-- top-nav -->
+					<div class="top-nav">
+						<span class="menu"> </span>
+						{% block navbar %}
 
-			<!-- container -->
-			<div class="container  ">
-
-				<!-- logo -->
-				<div class="logo">
-					<a href="/"><img align="middle" src="{% static "images/logo.jpg" %}" width="150" height="150" title="clinicaDentalMerliot" /></a>
-				</div>
-				<!-- logo -->
-
-				<!-- top-nav -->
-				<div class="top-nav center">
-					<span class="menu"> </span>
-					{% block navbar %}
-
-					{% endblock %}
-				</div>
-				<!-- top-nav -->
-
-				<!-- script-for-nav -->
-				<script>
-					$(document).ready(function(){
-						$("span.menu").click(function(){
-							$(".top-nav ul").slideToggle(300);
+						{% endblock %}
+					</div>
+					<!-- top-nav -->
+					<!-- script-for-nav -->
+					<script>
+						$(document).ready(function(){
+							$("span.menu").click(function(){
+								$(".top-nav ul").slideToggle(300);
+							});
 						});
-					});
-				</script>
-				<!-- script-for-nav -->
-
+					</script>
+					<!-- script-for-nav -->
+					<div class="clearfix"> </div>
+				</div>
 			</div>
-			<!-- /container -->
-
+			<!-- /header -->
 		</div>
-		<!-- /header -->
-
-          {% block content%}{% endblock %}
-		  {% block body%}{% endblock %}
-
-		<!-- team-grids-caption -->
+		<!-- /container -->
+          {% block content%}
+					{% endblock %}
+					{% block body%}
+					{% endblock %}
 		<div class="team-grids-caption">
 			<div class="container">
 				<div class="team-grids-caption-left">
@@ -113,7 +93,6 @@
 			</div>
 		</div>
 		<!-- team-grids-caption -->
-
 		<!-- footer -->
 		<div class="footer">
 			<div class="container">
@@ -131,6 +110,5 @@
 			</div>
 		</div>
 		<!-- /footer -->
-
 	</body>
 </html>

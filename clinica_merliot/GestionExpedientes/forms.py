@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import TextInput
 from .models import Expediente, Paciente, Tratamiento, Consulta
 
 
@@ -15,25 +14,20 @@ class ExpForm(forms.ModelForm):
 class nuevoExpedienteForm(forms.ModelForm):
     class Meta:
         model = Expediente
-
         exclude = [
             'paciente',
             'fechaCreacion',
             'pagado',
             'saldo',
         ]
-
         labels = {
             'tratamientos': 'Tratamientos',
             'fechaCreacion': 'Fecha de Creación',
             'pagado': 'Saldo pagado',
         }
-
         help_texts = {
-            'tratamientos': 'Mantenga presionado "Ctrl" o "Command" , para seleccionar más de una opción.'
+            'tratamientos': 'Mantenga presionado "Control" o "Command" en un Mac, para seleccionar más de una opción.'
         }
-
-
 
 
 class nuevoPacienteForm(forms.ModelForm):
