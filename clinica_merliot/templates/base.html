@@ -13,8 +13,21 @@
 		<link rel="shortcut icon" type="image/png" href="{% static 'images/logo.jpg' %}"/>
 		<link href="{% static "css/bootstrap.css" %}" rel='stylesheet' type='text/css' />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-		<script src="{% static "js/jquery.min.js" %}"></script>
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('.telefono').mask('0000-0000', {placeholder: "Ingrese Telefono"});
+			});
+		</script>
+		<script>
+		$( function() {
+			$( ".datepicker" ).datepicker();
+		} );
+		</script>
 
 		 <!-- Custom Theme files -->
 		<link href="{% static "css/style.css" %}" rel='stylesheet' type='text/css' />
@@ -48,12 +61,7 @@
     background-color: #4CAF50;
     color: white;
 }
-.center {
-    margin: auto;
-    width: 85%;
-    border: 1px solid #11223b;
-    padding: 40px 0;
-}
+
 
      	 </style>
 	</head>

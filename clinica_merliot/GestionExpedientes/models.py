@@ -11,12 +11,16 @@ class Doctor(models.Model):
     esDuenio = models.BooleanField(' Es la duenia? ', default=False)
 
     def __str__(self):
-        return "Dra. " + self.nombreDoctor
+        if self.usuario.sex == "M":
+            return "Dr. " + self.nombreDoctor
+        else:
+            return "Dra. " + self.nombreDoctor
+
 
     class Meta:
         ordering = ['nombreDoctor']
-        verbose_name = 'Doctor(a)'
-        verbose_name_plural = 'Doctor(a)s'
+        verbose_name = 'Doctor'
+        verbose_name_plural = 'Doctores'
 
 
 class Paciente(models.Model):
@@ -30,7 +34,7 @@ class Paciente(models.Model):
     apellidosPaciente = models.CharField(max_length=60, blank=False, null=False)
     ocupacion = models.CharField(max_length=60, blank=True, null=True)
     sexo = models.CharField(max_length=2, choices=SEXO_CHOICES, default=None, blank=False, null=False)
-    fechaNacimiento = models.DateField('Fecha de nacimiento',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)
+    fechaNacimiento = models.DateField('Fecha de nacimiento',  help_text='Formato: DD-MM-AAAA', blank=False, null=False)
     direccionCasa = models.CharField('Direccion Casa', max_length=150, blank=True, null=True)
     direccionTrabajo = models.CharField('Direccion Trabajo', max_length=150, blank=True, null=True)
     telefonoCasa = models.CharField('Telefono Casa', max_length=9, help_text='Formato: XXXX-XXXX', blank=True, null=True)

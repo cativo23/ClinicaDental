@@ -36,10 +36,16 @@ class nuevoExpedienteForm(forms.ModelForm):
 
 
 
+
 class nuevoPacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         fields = '__all__'
+
+        widgets = {'fechaNacimiento': forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'datepicker'}),
+                   'telefonoCasa': forms.TextInput(attrs={'class':'telefono',}),
+                   'telefonoTrabajo': forms.TextInput(attrs={'class':'telefono',})
+        }
 
 
 class nuevoTratamientoForm(forms.ModelForm):

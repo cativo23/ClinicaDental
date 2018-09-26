@@ -86,8 +86,8 @@ class MyUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
-    def image_(self):
-        return '<a href="/media/{0}"><img src="/media/{0}" style="height:100px;width:100px;"  ></a>'.format(self.avatar)
+    #def avatar(self):
+    #    return '<a href="{0}{1}"><img src="{0}{1}" style="height:100px;width:100px;"  ></a>'.format(settings.MEDIA_URL, self.avatar.url)
 
-    image_.short_description = 'Image'
-    image_.allow_tags = True
+#    //avatar.short_description = 'Image'
+#    avatar.allow_tags = True

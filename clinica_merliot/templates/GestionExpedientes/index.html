@@ -17,7 +17,7 @@
 <div class="Expedientes">
   <div class="container">
     <div class="">
-      <p><h1 align="center">Bienvenido(a) {{user.doctor}} !</h1></p>
+      <p><h1 align="center">{% ifequal user.sex "M"  %}Bienvenido {% else %} Bienvenida{% endifequal %} {{user.doctor}} !</h1></p>
     </div>
     <div class="top-grids text-center">
       <div class="container">

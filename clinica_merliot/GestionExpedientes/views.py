@@ -9,7 +9,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.shortcuts import get_object_or_404
-from datetime import datetime
+from datetime import date, datetime
 
 # Create your views here.
 
@@ -36,7 +36,6 @@ def nuevoExpediente(request):
                     return redirect('gestionExp:verConsulta', cons.id)
 
             else:
-                print ('hola')
                 return render(request, 'GestionExpedientes/nuevoExpediente.html', { 'form2': form2, 'form1': form1,})
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
@@ -86,6 +85,17 @@ class PacienteDetail(LoginRequiredMixin, DetailView):
     template_name = 'GestionExpedientes/detalleExpediente.html'
     slug_field = 'id'
     slug_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fecha = Expediente.objects.get(id=self.kwargs['id']).paciente.fechaNacimiento
+        print(fecha)
+        hoy = date.today()
+        print(hoy)
+        edad = hoy.year - fecha.year - ((hoy.month, hoy.day) < (fecha.month, fecha.day))
+        print(edad)
+        context['ahorita'] = edad
+        return context
 
 
 class TratamientoDetail(LoginRequiredMixin, DetailView):
