@@ -34,6 +34,7 @@ AUTH_USER_MODEL = 'myauth.MyUser'
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.postgres',
     'django.contrib.auth',
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'clinica_merliot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'SistemaClinicaMerliot3',
+        'NAME': 'sistemaclinicamerliot3',
         'USER': 'clinicauser',
         'PASSWORD': 'clinicaDental',
         'HOST': 'localhost',

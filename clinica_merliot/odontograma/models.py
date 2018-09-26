@@ -8,7 +8,7 @@ class Odontograma(models.Model):
     notas = models.TextField()
 
     def __str__(self):
-        return '%s - %s' % (self.id, self.evaluacion)
+        return '%s - %s' % (self.id, self.paciente)
 
 class Procedimiento(models.Model):
     CARAS_CHOICES = (
@@ -36,4 +36,4 @@ class Procedimiento(models.Model):
         max_length=12, choices=STATUS_CHOICES, default='recomendado')
 
     def __str__(self):
-        return unicode(self.tratamiento)
+        return self.tratamiento.nombreTratamiento

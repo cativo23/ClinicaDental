@@ -3,10 +3,12 @@ from django.shortcuts import render
 from datetime import datetime
 
 from django.contrib.auth.decorators import permission_required
-from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic import UpdateView, DetailView
+from GestionExpedientes.models import Tratamiento, Doctor, Paciente
+from .models import Odontograma
 
+from .forms import OdontogramaForm, ProcedimientoFormSet
 # Create your views here.
 
 def odontograma(request, paciente_id):
@@ -14,9 +16,10 @@ def odontograma(request, paciente_id):
     Crea Odontograma con Procedimientos. Se generará una cotizacion despues
     de esto.
     '''
+    template = 'Odonto/testOdonto.html'
     paciente = get_object_or_404(Paciente, pk=paciente_id)
     tratamientos = Tratamiento.objects.all()
-    medico = request.user.medico_set.get()
+    medico = get_object_or_404(Doctor, pk = request.user.doctor.pk)
     # initial = [{
     #     'pieza': None,
     #     'cara': None,
@@ -35,37 +38,35 @@ def odontograma(request, paciente_id):
             odontograma.paciente = paciente
             odontograma.medico = medico
             odontograma.save()
-
+            print(formset)
             if formset.is_valid():
                 for form in formset:
                     form.instance.odontograma = odontograma
                     form.save()
 
-                try:
-                    cotizacion = odontograma.cotizacion_set.get()
+            #    try:
+                    #cotizacion = odontograma.cotizacion_set.get()
 
-                except Cotizacion.DoesNotExist:
-                    cotizacion = Cotizacion.objects.create(
-                        odontograma=odontograma)
-                    CotizacionItem.objects.create_items(cotizacion)
+            #    except Cotizacion.DoesNotExist:
+                    #cotizacion = Cotizacion.objects.create(
+            #            odontograma=odontograma)
+            #        CotizacionItem.objects.create_items(cotizacion)
 
                 return redirect(reverse(
                     'clinica:odontograma_detail', args=[odontograma.id]))
-
-        # TODO: agregar form vacio
 
     else:
         modelform = OdontogramaForm()
         formset = ProcedimientoFormSet(initial=initial)
 
     # print len(formset)
-    print formset.initial_form_count()
-    print formset.total_form_count()
+    print (formset.initial_form_count())
+    print (formset.total_form_count())
     # for form in formset:
     #     print '*' * 20
     #     print form
 
-    return render(request, 'odontograma.html', {
+    return render(request, template, {
                   'form': modelform,
                   'formset': formset,
                   'paciente': paciente,
@@ -74,7 +75,7 @@ def odontograma(request, paciente_id):
                   })
 
 
-class OdontogramaDetail(PermissionRequiredMixin, DetailView):
+class OdontogramaDetail(DetailView):
     model = Odontograma
     context_object_name = 'odontograma'
     template_name = 'odontograma-detail.html'
