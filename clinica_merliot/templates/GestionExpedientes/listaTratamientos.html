@@ -15,19 +15,22 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container">
+  <div class="container center">
     <div class="about-grids">
       <div class="contact-form">
     <div class="col-md-14 about-left">
-    <form action="/GestionExpedientes/" method="get">
-      <input type="submit" value="menu"  id="frm1_submit" />
+
+    <form action="/GestionExpedientes/" method="get" align="center">
+      <input type="submit" value="regresar"  id="frm1_submit" />
     </form>
+    <br><br>
+    <h1 align = "center">TRATAMIENTOS</h1>
   </div>
 </div>
       <div class="col-md-14 about-left">
-        <h1 align = "center">Tratamientos</h1>
+
         <div class="contact-form">
-          <form id="searchform" action="{% url 'gestionExp:listarTratamientos' %}" method="get" accept-charset="utf-8">
+          <form id="searchform" action="{% url 'gestionExp:listarTratamientos' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
       <input value="Buscar" type="submit">
       <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
     </div>
@@ -44,7 +47,7 @@
      <p></p>
      {% endif %}
 
-     <div class="container">
+     <div style="padding-left: 30px; padding-right: 30px" >
        {% if object_list %}
        <table id="customers">
           <thead>

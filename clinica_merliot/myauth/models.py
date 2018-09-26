@@ -31,21 +31,12 @@ class MyUserManager(BaseUserManager):
 
 
 class MyUser(AbstractBaseUser):
-    MALE= 'M'
-    FEMALE = "F"
-    NO = "N"
-    SEX_CHOICES = (
-        (MALE, 'Masculino'),
-        (FEMALE, 'Femenino'),
-        (NO, "No decir"),
-    )
     username = models.CharField('Nombre de usuario', max_length=25, unique=True)
     email = models.EmailField(
         verbose_name='email address',
         max_length=100,
         unique=True,
     )
-    sex = models.CharField(max_length=2, choices=SEX_CHOICES, blank=False, null=False, default=NO)
     avatar = models.ImageField(blank=True, null=True, upload_to='profiles/')
     is_admin = models.BooleanField(default=False)
 
