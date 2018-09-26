@@ -14,7 +14,9 @@ class UserChangeForm(forms.ModelForm):
     email = forms.EmailField(label='Email',
                              help_text='Un correo valido porfavor',
                              required=True, )
+    sex = forms.ChoiceField(label='Sexo',
+                            required=True, )
 
     class Meta:
         model = MyUser
-        fields = ('username', 'avatar', 'email', )
+        fields = ('username', 'avatar', 'email', 'sex' )
