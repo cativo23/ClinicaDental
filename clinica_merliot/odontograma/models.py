@@ -56,7 +56,7 @@ class Procedimiento(models.Model):
 
 class Consulta(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT)
-    odontograma = models.ForeignKey(Odontograma, null=True, on_delete = models.SET_NULL)
+    odontograma = models.ForeignKey(Odontograma, null=True, blank=True, on_delete = models.SET_NULL)
     paciente = models.ForeignKey(Expediente, on_delete=models.PROTECT)
     fechaConsulta = models.DateField('Fecha de Consulta', auto_now_add=True)
     horaInicio = models.TimeField('Hora de inicio', auto_now_add=True)

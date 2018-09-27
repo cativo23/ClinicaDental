@@ -142,7 +142,7 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DATE_INPUT_FORMATS = ['%m/%d/%Y']
 DATETIME_INPUT_FORATS = ['%m/%d/%Y H:M:S p']
-DATE_FORMAT = '%m/%d/%Y'
+DATE_FORMAT = 'm/d/Y'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
