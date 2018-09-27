@@ -25,7 +25,8 @@ urlpatterns = [
     # path('', include('GestionExpedientes.urls'),),
     path('admin/', admin.site.urls),
     path('auth/', include('myauth.urls')),
-    path('odo/', include('odontograma.urls')),
+    path('odo/', include(('odontograma.urls', 'odontograma'), namespace='odontograma')),
+    path('django_popup_view_field/',include('django_popup_view_field.urls', namespace="django_popup_view_field")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

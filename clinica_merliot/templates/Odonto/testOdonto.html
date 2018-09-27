@@ -30,6 +30,9 @@
 {% endblock %}
 
 {% block content %}
+<div class="tratamiento">
+  <div class="container center">
+    <div class="about-grids">
 <h2 class="page-header">Odontograma</h2>
 
 <div class="form-inline">
@@ -111,6 +114,7 @@
       {% if forloop.last %}
       <li data-bind="foreach: tratamientosAplicados">
         <div class="form-inline" data-bind='attr: { id: form_div_id }'>
+
       {% else %}
       <li>
         <div class="form-inline" id="form_div_{{forloop.counter0}}">
@@ -120,7 +124,8 @@
 
         </div>
         <a href="#" data-bind="click: $parent.quitarTratamiento" class="pull-left text-warning bin"><i class="fa fa-trash fa-lg"></i></a>
-      </li>
+      </li></li>
+
     {% endfor %}
 
     </ul><!-- end foreach -->
@@ -132,4 +137,9 @@
   {% crispy form %}
 
 </form>
+</div>
+
+</div>
+
+</div>
 {% endblock %}

@@ -6,7 +6,7 @@ from crispy_forms.layout import (
     Layout, Fieldset, HTML, Field, ButtonHolder, Submit
 )
 
-from .models import Odontograma, Procedimiento
+from .models import Odontograma, Procedimiento, Tratamiento, Consulta
 
 class OdontogramaForm(forms.ModelForm):
     class Meta:
@@ -56,3 +56,36 @@ class ProcedimientoForm(forms.ModelForm):
 
 
 ProcedimientoFormSet = formset_factory(ProcedimientoForm, extra=0)
+
+class nuevoTratamientoForm(forms.ModelForm):
+    class Meta:
+        model = Tratamiento
+        fields = [
+            'nombreTratamiento',
+            'descripcionTratamiento',
+            'precioBase',
+        ]
+        labels = {
+            'nombreTratamiento': 'Nombre del Tratamiento',
+            'descripcionTratamiento': 'Descripcion',
+            'precioBase': 'Precio Base',
+        }
+
+
+class ConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = [
+            'doctor',
+            'observacionCons',
+            'odontograma'
+        ]
+
+
+class NuevaConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = [
+            'doctor',
+            'paciente',
+        ]
