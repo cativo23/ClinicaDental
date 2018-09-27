@@ -190,14 +190,14 @@ def consulta(request, pk):
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
         form1 = nuevoExpedienteForm(request.POST, instance=expediente)
-        
+
         try:
             if form.is_valid() and form1.is_valid():
                 consulta = form.save()
                 consulta.horaFinal = datetime.now()
                 #form1.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
-                return redirect('odontograma:listarConsultas')
+                return redirect('gestionExp:listarConsultas')
 
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
