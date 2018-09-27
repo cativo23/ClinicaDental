@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'clinica_merliot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'SistemaClinicaMerliot3',
+        'NAME': 'sistemaclinicamerliot3',
         'USER': 'clinicauser',
         'PASSWORD': 'clinicaDental',
         'HOST': 'localhost',
@@ -120,12 +120,11 @@ LANGUAGE_CODE = 'es-SV'
 
 TIME_ZONE = 'America/El_Salvador'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -141,8 +140,9 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-DATE_INPUT_FORMATS = ('%d/%m/%Y')
-DATETIME_INPUT_FORMATS = ('%m/%d/%Y %H:%M:%S %p')
+DATE_INPUT_FORMATS = ['%m/%d/%Y']
+DATETIME_INPUT_FORATS = ['%m/%d/%Y H:M:S p']
+DATE_FORMAT = '%m/%d/%Y'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
