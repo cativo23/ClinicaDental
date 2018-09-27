@@ -15,7 +15,13 @@ urlpatterns = [
     path('tratamientos/<slug:id>/', TratamientoDetail.as_view(), name='detalleTratamiento'),
     path('actualizarExpediente/', Paciente2List.as_view(), name='listar2Expedientes'),
     path('consultas/', views.ConsultasList.as_view(), name='listarConsultas'),
+
+
+    
     path('expedientes/<pk>/edit/', views.editarExpediente, name='editarExpediente'),
+
+
+
     path('consultas/<slug:id>/', views.ConsultaDetail.as_view(), name='detalleConsulta'),
     path('consultas/<pk>/ver/', views.consulta, name='verConsulta'),
     path('nuevaConsulta/', views.agregarConsulta, name='nuevaConsulta'),

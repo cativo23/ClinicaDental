@@ -218,9 +218,7 @@ def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
-
     edad = datetime.now().year - expediente.paciente.fechaNacimiento.year
-
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
         form1 = nuevoExpedienteForm(request.POST, instance=expediente)

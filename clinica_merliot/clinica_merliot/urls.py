@@ -22,6 +22,11 @@ from . import views as SisW
 urlpatterns = [
     path('GestionExpedientes/', include(('GestionExpedientes.urls', 'GestionExpedientes'), namespace='gestionExp')),
     path('', SisW.index),
+
+
+    path('inventario/', include(('inventario.urls', 'inventario'), namespace='inv')),
+
+
     # path('', include('GestionExpedientes.urls'),),
     path('admin/', admin.site.urls),
     path('auth/', include('myauth.urls')),

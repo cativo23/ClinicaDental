@@ -5,7 +5,10 @@
   <li class="active"><a href="/">Inicio</a></li>
   <li ><a href="/GestionExpedientes/">Expedientes</a></li>
   <li><a href="#">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
+  <li><a href="{% url 'inv:principalProducto' %}">Inventario</a></li>
+
+
+
   <li><a href="/auth/settings/">Modificar Perfil</a></li>
   <li><a href="/auth/logout/">Salir</a></li>
   <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
