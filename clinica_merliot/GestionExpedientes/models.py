@@ -93,3 +93,21 @@ class Consulta(models.Model):
         ordering = ['fechaConsulta', 'horaInicio']
         verbose_name = 'Consulta'
         verbose_name_plural = 'Consultas'
+
+class Cita(models.Model):
+    asuntoCita=models.TextField('Asunto de la cita', max_length=50,blank=False,null=False)
+    paciente = models.ForeignKey(Expediente, on_delete=models.PROTECT)
+    doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT)
+    fechaCita = models.DateField('Fecha de Cita', auto_now_add=True)
+    horaCita = models.TimeField('Hora de Cita', auto_now_add=True)
+    
+
+    def __str__(self):
+        return 'Consulta de {} del dia {}'.format(self.paciente.paciente.nombresPaciente, self.fechaCita)
+
+    class Meta:
+        ordering = ['fechaCita', 'horaCita']
+        verbose_name = 'Cita'
+        verbose_name_plural = 'Citas'
+
+
