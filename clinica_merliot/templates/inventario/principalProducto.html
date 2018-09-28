@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="{% url 'inv:principalProducto' %}">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+{% block content %}
+<div class = "tratamiento">
+    <div class = "conteiner center">
+        <div class="contact-form" style = "padding:30px ">
+            <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">
+              <input type="submit" value="regresar"  id="frm1_submit" />
+            </form>
+            <form action="agregarProducto/" method="get" align="center" style = "display:inline">
+              <input type="submit" value="agregar producto"  id="frm1_submit" />
+            </form>
+            <form id="searchform" action="{% url 'inv:principalProducto' %}" method="get" accept-charset="utf-8" style = "display:inline">
+                <input value="Buscar" type="submit">
+                <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+            </form>
+        </div>
+        <br>
+        <div style="padding-left: 30px; padding-right: 30px" >
+            {% if object_list %}
+            <table id="customers">
+                <thead>
+                    <tr>
+                        <td><b>Nombre del producto</b></td>
+                        <td><b>Marca del producto</b></td>
+                        <td><b>Existencias</b></td>
+                        <td><b>Precio al que fue adquirido</b></td>
+                        <td><b>Suma/Resta de existencias</b></td>
+                    </tr>
+                </thead>
+               <tbody>
+                 {% for producto in object_list %}
+                 <tr>
+                   <td><a class="button" href="{% url 'inv:editarProducto' producto.id %}">{{producto.nombre_producto}}</a></td>
+                   <td>{{ producto.marca_producto}}</td>
+                   <td>{{ producto.existencia_producto}}</td>
+                   <td>{{ producto.precio_producto }}</td>
+                   <td>
+                       <form id="searchform" action="{% url 'inv:principalProducto' %}" method="post" accept-charset="utf-8">
+                           {% csrf_token %}
+                           <input type ="hidden" name="identificador" value="{{producto.id}}">
+                           <input value="+" name="suma" type="submit">
+                           <input value="-" name="resta" type="submit">
+                           {% for field in form%}
+                           {{field}}
+                           {% endfor %}
+                       </form>
+                   </td>
+                 </tr>
+                 {% endfor %}
+               </tbody>
+             </table>
+             {% else %}
+             <p>No hay productos con esos parametros con esos parametros</p>
+           {% endif %}
+        </div>
+    </div>
+</div>
+<br>
+{% endblock %}
