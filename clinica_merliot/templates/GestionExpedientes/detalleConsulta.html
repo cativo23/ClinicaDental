@@ -18,7 +18,7 @@
   <div class="container center" align="center">
       <div class="contact-form">
         <div>
-            <form action="/GestionExpedientes/consultas/" method="get">
+            <form action="/odo/consultas/" method="get">
                 <input type="submit" value="Consultas"  id="frm1_submit" />
             </form>
         </div>
@@ -79,7 +79,7 @@
         </tr>
         <tr><td><br></td></tr>
     </table>
-    <a class="more-btn" href="{% url 'gestionExp:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
+    <a class="more-btn" href="{% url 'odontograma:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
   </div>
 </div>
 <br>
