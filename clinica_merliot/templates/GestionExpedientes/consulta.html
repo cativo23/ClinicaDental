@@ -114,11 +114,12 @@
                 </tr>
 
                 <tr>
-                  <td align="center">{{odontograma.id}}
-                    {% if odontograma != None %}
-                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma_detail' odontograma.id %}')">Ver Odontograma</a>
+                  <td></td>
+                  <td align="center" >{{odontograma.id}}
+                    {% if consulta.odontograma != None %}
+                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma_detail' consulta.odontograma.id %}')">Ver Odontograma</a>
                     {% else %}
-                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma' expediente.paciente.id %}')">{{ondotograma}}Crear Odontograma</a>
+                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma' consulta.id %}')">Crear Odontograma</a>
                     {% endif %}
                   </td>
                 </tr>

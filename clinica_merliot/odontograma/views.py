@@ -28,7 +28,8 @@ def odontograma(request, paciente_id):
     de esto.
     '''
     template = 'Odonto/testOdonto.html'
-    paciente = get_object_or_404(Paciente, pk=paciente_id)
+    consulta = get_object_or_404(Consulta, pk=paciente_id)
+    paciente = get_object_or_404(Paciente, pk=consulta.paciente.id)
     tratamientos = Tratamiento.objects.all()
     medico = get_object_or_404(Doctor, pk = request.user.doctor.pk)
     # initial = [{
@@ -49,11 +50,14 @@ def odontograma(request, paciente_id):
             odontograma.paciente = paciente
             odontograma.medico = medico
             odontograma.save()
+            consulta.odontograma = odontograma
+            consulta.save()
             print(formset)
             if formset.is_valid():
                 for form in formset:
                     form.instance.odontograma = odontograma
                     form.save()
+
 
             #    try:
                     #cotizacion = odontograma.cotizacion_set.get()
@@ -185,10 +189,9 @@ def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
-    if consulta.odontograma == None:
-        odontograma = Odontograma.objects.latest('id')
-
-
+    if consulta.odontograma:
+        od = get_object_or_404(Odontograma, pk=consulta.odontograma.id)
+        print(od)
     edad = datetime.now().year - expediente.paciente.fechaNacimiento.year
 
     if request.method == 'POST':
@@ -196,11 +199,15 @@ def consulta(request, pk):
         form1 = nuevoExpedienteForm(request.POST, instance=expediente)
         try:
             if form.is_valid() and form1.is_valid():
-                consulta.horaFinal = datetime.now()
-                print(odontograma)
-                consulta.odontograma = odontograma
-                consulta = form.save()
-                #form1.save()
+                if consulta.horaFinal == None:
+                    form.instance.horaFinal = datetime.now()
+                print("Carga")
+                if od:
+                    print(od)
+                    consulta.odontograma = od;
+                    consulta.save()
+                    print(consulta.odontograma)
+                #form.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
                 return redirect('odontograma:listarConsultas')
             else:
