@@ -1,0 +1,13 @@
+/*
+Interrogatorio PDF
+*/
+
+#interrogatorioPDF table {
+    text-align: justify;
+    border: none;
+}
+
+footer .alert {
+    text-align: justify;
+    font-size: 12px;
+}

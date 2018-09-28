@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block navbar %}
+<ul>
+  <li class="active"><a href="/">Inicio</a></li>
+  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="#">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="container center">
+  <div class="about-grids">
+    <div class="contact-form">
+      <div class="col-md-14 about-left">
+<h2  align ="center">Odontogramas del paciente {{paciente}}</h2>
+
+<div class="row" align="center">
+
+  <div class="col-md-12 r">
+
+      {% if object_list %}
+  <table class="table table-bordered center" align="center">
+
+    <thead align ="center">
+
+      <tr align ="center">
+        <th align ="center">#</th>
+        <th align ="center">Fecha</th>
+        <th align ="center">Ver</th>
+
+      </tr>
+
+
+
+    </thead>
+
+    <tbody align ="center">
+      {% for odo in object_list %}
+      <tr>
+        <td>{{ odo.id }}</td>
+        <td>{{ odo.fechaCreacion}}</td>
+        <td><a class="button" href="{% url 'odontograma:odontograma_detail' odo.id %}">Ver</a></td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+
+  </table>
+  {% else %}
+  <p>No hay tratamientos con esos parametros</p> <a class="more-btn" href="/GestionExpedientes/agregarTratamiento/">Agregar</a>
+      {% endif %}
+  <div class="col-md-14 m">
+
+
+
+  </div>  </div>
+
+</div>
+</div>
+
+</div></div>
+
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+$(function() {
+  $.each($('.label'), function(){
+    var status = $(this);
+    if(status.text() == 'Recomendado') {
+      status.addClass(' label-warning');
+    } else if(status.text() == 'Autorizado') {
+      status.addClass(' label-primary');
+    } else if(status.text() == 'En Proceso') {
+      status.addClass(' label-info');
+    } else {
+      status.addClass(' label-default');
+    }
+  })
+})
+</script>
+{% endblock javascript %}

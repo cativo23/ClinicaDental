@@ -23,7 +23,7 @@
             <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
           </form>
           <h1 align = "center">CONSULTAS</h1>
-          <form id="searchform" action="{% url 'gestionExp:listarConsultas' %}" method="get" accept-charset="utf-8" style="padding-left: 30px" >
+          <form id="searchform" action="{% url 'odontograma:listarConsultas' %}" method="get" accept-charset="utf-8" style="padding-left: 30px" >
             <input value="Buscar" type="submit" >
             <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
           </form>
@@ -54,7 +54,7 @@
               <tbody>
                 {% for consulta in object_list %}
                 <tr>
-                  <td><a class="button" href="{% url 'gestionExp:detalleConsulta' consulta.id %}">{{ consulta.paciente }}</a></td>
+                  <td><a class="button" href="{% url 'odontograma:detalleConsulta' consulta.id %}">{{ consulta.paciente }}</a></td>
                   <td>{{ consulta.doctor }}</td>
                   <td>{{ consulta.fechaConsulta }}</td>
                 </tr>

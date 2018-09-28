@@ -30,7 +30,7 @@
       <div class="col-md-14 about-left">
 
         <div class="contact-form">
-          <form id="searchform" action="{% url 'gestionExp:listarTratamientos' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
+          <form id="searchform" action="{% url 'odontograma:listarTratamientos' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
       <input value="Buscar" type="submit">
       <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
     </div>
@@ -59,7 +59,7 @@
           <tbody>
             {% for tratamiento in object_list %}
             <tr>
-              <td><a class="button" href="{% url 'gestionExp:detalleTratamiento' tratamiento.id %}">{{ tratamiento.nombreTratamiento }}</a></td>
+              <td><a class="button" href="{% url 'odontograma:detalleTratamiento' tratamiento.id %}">{{ tratamiento.nombreTratamiento }}</a></td>
               <td>{{ tratamiento.precioBase}}</td>
             </tr>
             {% endfor %}

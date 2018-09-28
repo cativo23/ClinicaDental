@@ -110,14 +110,27 @@
                 <tr><td><br></td></tr>
                 <tr>
                     <td></td>
-                    <td><h2>ODONTOGRAMA</h2></td>
+                    <td align="center"><h2>ODONTOGRAMA</h2></td>
                 </tr>
 
-
-                <tr><td><br></td></tr>
+                <tr>
+                  <td align="center">{{odontograma.id}}
+                    {% if odontograma != None %}
+                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma_detail' odontograma.id %}')">Ver Odontograma</a>
+                    {% else %}
+                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma' expediente.paciente.id %}')">{{ondotograma}}Crear Odontograma</a>
+                    {% endif %}
+                  </td>
+                </tr>
+                <script>
+                function popup(page) {
+                  var w = window.open(page, "popup_test", "titlebar=no, menubar=no, statusbar=no, toolbar=no");
+                  w.resizeTo(1000,500);
+                }
+                </script></td>
                 <tr>
                     <td></td>
-                    <td><input value="Enviar" type="submit"></td>
+                    <td align="center"><input value="Enviar" type="submit"></td>
                 </tr>
 
                 </form>

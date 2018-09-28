@@ -2,6 +2,7 @@ from django import forms
 from myauth.models import MyUser
 
 
+
 class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
@@ -14,7 +15,9 @@ class UserChangeForm(forms.ModelForm):
     email = forms.EmailField(label='Email',
                              help_text='Un correo valido porfavor',
                              required=True, )
+    sex = forms.ChoiceField(label='Sexo',
+                            required=True, )
 
     class Meta:
         model = MyUser
-        fields = ('username', 'avatar', 'email', )
+        fields = ('username', 'avatar', 'email',  'sex',)
