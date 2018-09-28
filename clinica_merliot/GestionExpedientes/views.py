@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import nuevoExpedienteForm, nuevoTratamientoForm, nuevoPacienteForm, ConsultaForm, ExpForm, NuevaConsultaForm
 from django.contrib import messages
-from .models import Expediente, Paciente, Tratamiento, Consulta
+from .models import Expediente, Paciente, Tratamiento, Consulta,Cita
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
@@ -273,3 +273,28 @@ def agregarConsulta(request):
     }
 
     return render(request, template, context)
+
+    
+class CitaList(LoginRequiredMixin, ListView):
+    model = Cita
+    template_name = 'GestionExpedientes/cita.html'
+    ordering = '-paciente'
+
+    def get_queryset(self):
+        qs = Cita.objects.all()
+
+        keywords = self.request.GET.get('q')
+        if keywords:
+            query = SearchQuery(keywords)
+            vector = SearchVector('paciente__paciente__nombresPaciente', 'paciente__paciente__apellidosPaciente', 'doctor__nombreDoctor')
+            qs = Consulta.objects.annotate(search=vector).filter(search=query)
+            qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
+
+        return qs
+
+
+class CitaDetail(LoginRequiredMixin, DetailView):
+    model = Cita
+    template_name = 'GestionExpedientes/detalleCita.html'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="tratamiento">
+    <div class="container center">
+        <div class="about-grids">
+            <div class="col-md-14">
+
+                <div class="contact-form">
+                    <form action="/" method="get" align ="center">
+                        <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
+                    </form>
+                    <h1 align="center">Citas</h1>
+                    <form id="searchform" action="{% url 'gestionExp:listarCita' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
+                        <input value="Buscar" type="submit">
+                        <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+                    </form>
+                    <br>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                    <p style="color: green"> <u>{{ message }}</u></p>
+                        {% else %}
+                    <p style="color: red"><u>{{ message }}</u> </p>
+                    {% endif %}
+                    {% endfor %}
+                    <p></p>
+                    {% endif %}
+                    <div style ="padding-left:30px; padding-right: 30px" >
+                        {% if object_list %}
+                         <table id="customers">
+                             <thead>
+                                 <tr>
+                                   <td><b>Asunto</b></td>
+                                   <td><b>Paciente</b></td>
+                                   <td><b>Doctor</b></td>
+                                   <td><b>Fecha Cita</b></td>
+                                   <td><b>Hora</b></td>
+                                   <td><b>Estado</b></td>
+                                   <td><b>Actualizar:</b></td>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 {% for cita in object_list %}
+                                 <tr>
+                                   <td><a class="button" href="{% url 'gestionExp:detalleCita' cita.id %}">{{ cita.asuntoCita }}</a></td>
+                                   <td>{{ cita.paciente.paciente.nombresPaciente}}</td>
+                                   <td>{{ cita.doctor.nombreDoctor}}</td>
+                                   <td>{{ cita.fechaCita}}</td>
+                                   <td>{{ cita.horaCita }}</td>
+                                   <td>{{ cita.estado }}</td>
+                                   <td><a  href="" class="btn btn-default btn-xs">
+                                     <span class="glyphicon glyphicon-pencil"></span></a></td>
+                                 </tr>
+                                 {% endfor %}
+                             </tbody>
+                         </table>
+                         {% else %}
+                         <p>No hay Citas con esos parametros</p>
+                         {% endif %}
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+</div>
+<br>
+{% endblock %}

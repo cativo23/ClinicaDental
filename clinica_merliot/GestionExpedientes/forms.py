@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import TextInput
-from .models import Expediente, Paciente, Tratamiento, Consulta
+from .models import Expediente, Paciente, Tratamiento, Consulta, Cita
 
 
 class ExpForm(forms.ModelForm):
@@ -74,3 +74,27 @@ class NuevaConsultaForm(forms.ModelForm):
             'paciente',
             'observacionCons',
         ]
+
+class NuevaCitaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = [
+            'asuntoCita',
+            'doctor',
+            'paciente',
+            'fechaCita',
+            'horaCita',
+            'observacionCita',
+            'estado',
+        ]
+
+        labels = {
+            'asuntoCita': 'Asunto de la Cita',
+            'doctor': 'Doctor Asignado',
+            'paciente': 'Nombre Paciente',
+            'fechaCita': 'Fecha de proxima cita',
+            'horaCita': 'Hora de Cita',
+            'observacionCita': 'Observaciones',
+            'estado': 'Estado de la cita',
+        }
+
