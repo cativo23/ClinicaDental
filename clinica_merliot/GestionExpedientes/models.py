@@ -103,7 +103,7 @@ class Cita(models.Model):
         (PENDIENTE, 'Pendiente'),
         (NO_ASISTIO,'No Asistio'),
         )
-    asuntoCita=models.TextField('Asunto de la cita', max_length=50,blank=False,null=False)
+    asuntoCita=models.CharField('Asunto de la cita', max_length=50,blank=False,null=False)
     paciente = models.ForeignKey(Expediente, on_delete=models.PROTECT)
     doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT)
     fechaCita = models.DateField('Fecha de Cita',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)

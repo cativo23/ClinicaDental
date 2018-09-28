@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .forms import nuevoExpedienteForm, nuevoTratamientoForm, nuevoPacienteForm, ConsultaForm, ExpForm, NuevaConsultaForm
+from .forms import nuevoExpedienteForm, nuevoTratamientoForm, nuevoPacienteForm, ConsultaForm, ExpForm, NuevaConsultaForm, NuevaCitaForm
 from django.contrib import messages
 from .models import Expediente, Paciente, Tratamiento, Consulta,Cita
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -298,3 +298,28 @@ class CitaDetail(LoginRequiredMixin, DetailView):
     template_name = 'GestionExpedientes/detalleCita.html'
     slug_field = 'id'
     slug_url_kwarg = 'id'
+
+@login_required
+def agregarCita(request):
+    template = 'GestionExpedientes/agregarCita.html'
+    if request.method == 'POST':
+        form = NuevaCitaForm(request.POST)
+
+        try:
+            print(form.is_valid())
+            if form.is_valid():
+                cita = form.save()
+                messages.success(request, "La cita fue creada correctamente!")
+                return redirect('gestionExp:listarCita')
+
+        except Exception as e:
+            messages.warning(request, 'La cita no se creo debido a un error: {}'.format(e))
+    else:
+        form = NuevaCitaForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, template, context)
+
