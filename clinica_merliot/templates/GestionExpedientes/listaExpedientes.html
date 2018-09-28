@@ -5,7 +5,7 @@
   <li class="active"><a href="/">Inicio</a></li>
   <li ><a href="/GestionExpedientes/">Expedientes</a></li>
   <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
+  <li><a href="{% url 'inv:principalProducto' %}">Inventario</a></li>
   <li><a href="/auth/settings/">Modificar Perfil</a></li>
   <li><a href="/auth/logout/">Salir</a></li>
   <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
@@ -15,69 +15,64 @@
 {% block content %}
 
 <div class="tratamiento">
-  <div class="container center">
-    <div class="about-grids">
-      <div class="contact-form">
-      <div class="col-md-14 about-left">
-      <form action="/GestionExpedientes/" method="get" align="center">
-        <input type="submit" value="regresar"  id="frm1_submit" />
-      </form>
-      <br>
-      <h1 align="center">EXPEDIENTES</h1>
-    </div>
-    </div>
-      <div class="col-md-14 about-left">
-
-        <div class="contact-form">
-          <form id="searchform" action="{% url 'gestionExp:listarExpedientes' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
-      <input value="Buscar" type="submit">
-      <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-    </form>
-  </div>
-    <br>
-          {% if messages %}
-     {% for message in messages %}
-     {% if message.tags == 'success' %}
-     <p style="color: green"> <u>{{ message }}</u></p>
-         {% else %}
-     <p style="color: red"><u>{{ message }}</u> </p>
-     {% endif %}
-     {% endfor %}
-     <p></p>
-     {% endif %}
-
-     <div style="padding-left: 30px; padding-right: 30px" >
-       {% if object_list %}
-       <table id="customers">
-          <thead>
-            <tr>
-              <td><b>Paciente</b></td>
-              <td><b>Fecha Nacimiento</b></td>
-              <td><b>Telefono</b></td>
-              <td><b>Direccion</b></td>
-              <td><b>Fecha Creación</b></td>
-            </tr>
-          </thead>
-          <tbody>
-            {% for expediente in object_list %}
-            <tr>
-              <td><a class="button" href="{% url 'gestionExp:detalleExpediente' expediente.id %}">{{ expediente.paciente }}</a></td>
-              <td>{{ expediente.paciente.fechaNacimiento}}</td>
-              <td>{{ expediente.paciente.telefonoCasa}}</td>
-              <td>{{ expediente.paciente.direccionCasa}}</td>
-              <td>{{ expediente.fechaCreacion }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <p>No hay paciente con esos parametros</p>
-      {% endif %}
-     </div>
+    <div class="container center">
+        <div class="about-grids">
+            <div class="contact-form">
+                <div class="col-md-14 about-left">
+                    <form action="/GestionExpedientes/" method="get" align="center">
+                        <input type="submit" value="regresar"  id="frm1_submit" />
+                    </form>
+                    <br>
+                    <h1 align="center">EXPEDIENTES</h1>
+                </div>
+            </div>
+            <div class="col-md-14 about-left">
+                <div class="contact-form">
+                    <form id="searchform" action="{% url 'gestionExp:listarExpedientes' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
+                        <input value="Buscar" type="submit">
+                        <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+                    </form>
+                </div>
+                <br>
+                {% if messages %}{% for message in messages %}{% if message.tags == 'success' %}
+                <p style="color: green"> <u>{{ message }}</u></p>
+                {% else %}
+                <p style="color: red"><u>{{ message }}</u> </p>
+                {% endif %}
+                {% endfor %}
+                <p></p>
+                {% endif %}
+                <div style="padding-left: 30px; padding-right: 30px" >
+                    {% if object_list %}
+                    <table id="customers">
+                        <thead>
+                            <tr>
+                                <td><b>Paciente</b></td>
+                                <td><b>Fecha Nacimiento</b></td>
+                                <td><b>Telefono</b></td>
+                                <td><b>Direccion</b></td>
+                                <td><b>Fecha Creación</b></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expediente in object_list %}
+                            <tr>
+                                <td><a class="button" href="{% url 'gestionExp:detalleExpediente' expediente.id %}">{{ expediente.paciente }}</a></td>
+                                <td>{{ expediente.paciente.fechaNacimiento}}</td>
+                                <td>{{ expediente.paciente.telefonoCasa}}</td>
+                                <td>{{ expediente.paciente.direccionCasa}}</td>
+                                <td>{{ expediente.fechaCreacion }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>No hay paciente con esos parametros</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <br>
 {% endblock %}

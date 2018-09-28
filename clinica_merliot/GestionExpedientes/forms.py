@@ -1,6 +1,9 @@
 from django import forms
 from django.forms import TextInput
-from .models import Expediente, Paciente, Tratamiento, Consulta, Cita
+
+
+from .models import Expediente, Paciente,  Cita
+
 
 
 class ExpForm(forms.ModelForm):
@@ -36,44 +39,17 @@ class nuevoExpedienteForm(forms.ModelForm):
 
 
 
+
 class nuevoPacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         fields = '__all__'
 
-
-class nuevoTratamientoForm(forms.ModelForm):
-    class Meta:
-        model = Tratamiento
-        fields = [
-            'nombreTratamiento',
-            'descripcionTratamiento',
-            'precioBase',
-        ]
-        labels = {
-            'nombreTratamiento': 'Nombre del Tratamiento',
-            'descripcionTratamiento': 'Descripcion',
-            'precioBase': 'Precio Base',
+        widgets = {'fechaNacimiento': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'datepicker'}),
+                   'telefonoCasa': forms.TextInput(attrs={'class':'telefono',}),
+                   'telefonoTrabajo': forms.TextInput(attrs={'class':'telefono',})
         }
 
-
-class ConsultaForm(forms.ModelForm):
-    class Meta:
-        model = Consulta
-        fields = [
-            'doctor',
-            'observacionCons'
-        ]
-
-
-class NuevaConsultaForm(forms.ModelForm):
-    class Meta:
-        model = Consulta
-        fields = [
-            'doctor',
-            'paciente',
-            'observacionCons',
-        ]
 
 class NuevaCitaForm(forms.ModelForm):
     class Meta:
@@ -97,4 +73,3 @@ class NuevaCitaForm(forms.ModelForm):
             'observacionCita': 'Observaciones',
             'estado': 'Estado de la cita',
         }
-

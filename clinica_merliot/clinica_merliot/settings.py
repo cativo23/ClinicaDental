@@ -34,6 +34,7 @@ AUTH_USER_MODEL = 'myauth.MyUser'
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.postgres',
     'django.contrib.auth',
@@ -42,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'GestionExpedientes',
+    'inventario',
     'django.forms',
     'myauth',
+    'odontograma',
 ]
 
 MIDDLEWARE = [
@@ -118,12 +121,11 @@ LANGUAGE_CODE = 'es-SV'
 
 TIME_ZONE = 'America/El_Salvador'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -139,8 +141,9 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-DATE_INPUT_FORMATS = ('%m/%d/%Y')
-DATETIME_INPUT_FORMATS = ('%m/%d/%Y %H:%M:%S %p')
+DATE_INPUT_FORMATS = ['%m/%d/%Y']
+DATETIME_INPUT_FORATS = ['%m/%d/%Y H:M:S p']
+DATE_FORMAT = 'm/d/Y'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
