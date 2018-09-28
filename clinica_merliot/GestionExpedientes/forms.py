@@ -1,6 +1,9 @@
 from django import forms
 from django.forms import TextInput
-from .models import Expediente, Paciente
+
+
+from .models import Expediente, Paciente,  Cita
+
 
 
 class ExpForm(forms.ModelForm):
@@ -45,4 +48,28 @@ class nuevoPacienteForm(forms.ModelForm):
         widgets = {'fechaNacimiento': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'datepicker'}),
                    'telefonoCasa': forms.TextInput(attrs={'class':'telefono',}),
                    'telefonoTrabajo': forms.TextInput(attrs={'class':'telefono',})
+        }
+
+
+class NuevaCitaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = [
+            'asuntoCita',
+            'doctor',
+            'paciente',
+            'fechaCita',
+            'horaCita',
+            'observacionCita',
+            'estado',
+        ]
+
+        labels = {
+            'asuntoCita': 'Asunto de la Cita',
+            'doctor': 'Doctor Asignado',
+            'paciente': 'Nombre Paciente',
+            'fechaCita': 'Fecha de proxima cita',
+            'horaCita': 'Hora de Cita',
+            'observacionCita': 'Observaciones',
+            'estado': 'Estado de la cita',
         }

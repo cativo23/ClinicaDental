@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+
+from .forms import nuevoExpedienteForm, nuevoPacienteForm, ExpForm, NuevaCitaForm
 from django.contrib import messages
+from .models import Expediente, Paciente,Cita
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
@@ -130,6 +134,55 @@ def editarExpediente(request, pk):
         'form': form,
         'form1': form1,
         'expediente': expediente
+    }
+
+    return render(request, template, context)
+
+
+class CitaList(LoginRequiredMixin, ListView):
+    model = Cita
+    template_name = 'GestionExpedientes/cita.html'
+    ordering = '-paciente'
+
+    def get_queryset(self):
+        qs = Cita.objects.all()
+
+        keywords = self.request.GET.get('q')
+        if keywords:
+            query = SearchQuery(keywords)
+            vector = SearchVector('paciente__paciente__nombresPaciente', 'paciente__paciente__apellidosPaciente', 'doctor__nombreDoctor')
+            qs = Consulta.objects.annotate(search=vector).filter(search=query)
+            qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
+
+        return qs
+
+
+class CitaDetail(LoginRequiredMixin, DetailView):
+    model = Cita
+    template_name = 'GestionExpedientes/detalleCita.html'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
+
+@login_required
+def agregarCita(request):
+    template = 'GestionExpedientes/agregarCita.html'
+    if request.method == 'POST':
+        form = NuevaCitaForm(request.POST)
+
+        try:
+            print(form.is_valid())
+            if form.is_valid():
+                cita = form.save()
+                messages.success(request, "La cita fue creada correctamente!")
+                return redirect('gestionExp:listarCita')
+
+        except Exception as e:
+            messages.warning(request, 'La cita no se creo debido a un error: {}'.format(e))
+    else:
+        form = NuevaCitaForm()
+
+    context = {
+        'form': form
     }
 
     return render(request, template, context)

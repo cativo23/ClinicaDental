@@ -18,15 +18,15 @@
   <div class="container center" align="center">
       <div class="contact-form">
         <div>
-            <form action="/odo/consultas/" method="get">
-                <input type="submit" value="Consultas"  id="frm1_submit" />
+            <form action="/GestionExpedientes/cita/" method="get">
+                <input type="submit" value="Cita"  id="frm1_submit" />
             </form>
         </div>
       </div>
     <table>
         <tr>
-            <td><h1>Consulta de:</h1></td>
-            <td><h1>{{ consulta.paciente.paciente.nombresPaciente }}</h1></td>
+            <td><h1>Cita de:</h1></td>
+            <td><h1>{{ cita.paciente.paciente.nombresPaciente }}</h1></td>
         </tr>
         <tr><td><br></td></tr>
         <tr>
@@ -34,37 +34,37 @@
                 <b>Doctor que atendio: </b>
             </td>
             <td>
-                {{consulta.doctor}}
+                {{cita.doctor}}
             </td>
         </tr>
 
         <tr><td><br></td></tr>
         <tr>
             <td align="right">
-                <b>Fecha: </b>
+                <b>Fecha Cita: </b>
             </td>
             <td>
-                {{consulta.fechaConsulta}}
+                {{cita.fechaCita}}
             </td>
         </tr>
 
         <tr><td><br></td></tr>
         <tr>
             <td align="right">
-                <b>Hora Inicio: </b>
+                <b>Hora de Cita: </b>
             </td>
             <td>
-                {{consulta.horaInicio}}
+                {{cita.horaCita}}
             </td>
         </tr>
 
         <tr><td><br></td></tr>
         <tr>
             <td align="right">
-                <b>Hora Final: </b>
+                <b>Estado Cita: </b>
             </td>
             <td>
-                {{consulta.horaFinal}}
+                {{cita.estado}}
             </td>
         </tr>
 
@@ -74,12 +74,12 @@
                 <b>Observaciones: </b>
             </td>
             <td>
-                {{consulta.observacionCons}}
+                {{cita.observacionCita}}
             </td>
         </tr>
         <tr><td><br></td></tr>
     </table>
-    <a class="more-btn" href="{% url 'odontograma:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
+    <a class="more-btn" href=""><span class="glyphicon glyphicon-pencil"></span> Modificar Cita</a>
   </div>
 </div>
 <br>

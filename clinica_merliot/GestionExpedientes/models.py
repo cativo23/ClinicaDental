@@ -66,3 +66,33 @@ class Expediente(models.Model):
         ordering = ['paciente']
         verbose_name = 'Expediente'
         verbose_name_plural = 'Expedientes'
+
+
+
+class Cita(models.Model):
+    APLICADA = 'Aplicada'
+    PENDIENTE = "Pendiente"
+    NO_ASISTIO = 'No Asistio'
+    ESTADO_CHOICES = (
+        (APLICADA, 'Aplicada'),
+        (PENDIENTE, 'Pendiente'),
+        (NO_ASISTIO,'No Asistio'),
+        )
+    asuntoCita=models.CharField('Asunto de la cita', max_length=50,blank=False,null=False)
+    paciente = models.ForeignKey(Expediente, on_delete=models.PROTECT)
+    doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT)
+    fechaCita = models.DateField('Fecha de Cita',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)
+    horaCita = models.TimeField('Hora de Cita', blank=False, null=False)
+    observacionCita = models.TextField('Observaciones', max_length=250, blank=True, null=True)
+    estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default=None, blank=False, null=False)
+    
+
+    def __str__(self):
+        return 'Cita de {} el dia {}'.format(self.paciente.paciente.nombresPaciente, self.fechaCita)
+
+    class Meta:
+        ordering = ['fechaCita', 'horaCita']
+        verbose_name = 'Cita'
+        verbose_name_plural = 'Citas'
+
+
