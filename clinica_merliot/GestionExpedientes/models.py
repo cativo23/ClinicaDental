@@ -109,7 +109,7 @@ class Cita(models.Model):
     fechaCita = models.DateField('Fecha de Cita',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)
     horaCita = models.TimeField('Hora de Cita', blank=False, null=False)
     observacionCita = models.TextField('Observaciones', max_length=250, blank=True, null=True)
-    estado = models.CharField(max_length=3, choices=ESTADO_CHOICES, default=None, blank=False, null=False)
+    estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default=None, blank=False, null=False)
     
 
     def __str__(self):
