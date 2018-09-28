@@ -31,12 +31,21 @@ class MyUserManager(BaseUserManager):
 
 
 class MyUser(AbstractBaseUser):
+    MALE= 'M'
+    FEMALE = "F"
+    NO = "N"
+    SEX_CHOICES = (
+        (MALE, 'Masculino'),
+        (FEMALE, 'Femenino'),
+        (NO, "No decir"),
+    )
     username = models.CharField('Nombre de usuario', max_length=25, unique=True)
     email = models.EmailField(
         verbose_name='email address',
         max_length=100,
         unique=True,
     )
+    sex = models.CharField(max_length=2, choices=SEX_CHOICES, blank=False, null=False, default=NO)
     avatar = models.ImageField(blank=True, null=True, upload_to='profiles/')
     is_admin = models.BooleanField(default=False)
 
@@ -77,8 +86,8 @@ class MyUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
-    def image_(self):
-        return '<a href="/media/{0}"><img src="/media/{0}" style="height:100px;width:100px;"  ></a>'.format(self.avatar)
+    #def avatar(self):
+    #    return '<a href="{0}{1}"><img src="{0}{1}" style="height:100px;width:100px;"  ></a>'.format(settings.MEDIA_URL, self.avatar.url)
 
-    image_.short_description = 'Image'
-    image_.allow_tags = True
+#    //avatar.short_description = 'Image'
+#    avatar.allow_tags = True

@@ -20,7 +20,7 @@
 <div class="Expedientes">
   <div class="container">
     <div class="">
-      <p><h1 align="center">Bienvenido(a) {{user.doctor}} !</h1></p>
+      <p><h1 align="center">{% ifequal user.sex "M"  %}Bienvenido {% else %} Bienvenida{% endifequal %} {{user.doctor}} !</h1></p>
     </div>
     <div class="top-grids text-center">
       <div class="container">
@@ -30,7 +30,7 @@
 						<span class="t-icon2"> </span>
 						<h3>Nueva Consulta</h3>
 						 <p>Inicie una nueva consulta</p>
-             <a class="more-btn" href="{% url 'gestionExp:nuevaConsulta' %}">Ir</a>
+             <a class="more-btn" href="{% url 'odontograma:nuevaConsulta' %}">Ir</a>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -38,7 +38,7 @@
 						<span class="t-icon1"> </span>
             <h3>Ver Consultas</h3>
             <p>Va las consultas</p>
-            <a class="more-btn" href="{% url 'gestionExp:listarConsultas' %}">Ir</a>
+            <a class="more-btn" href="{% url 'odontograma:listarConsultas' %}">Ir</a>
 					</div>
 				</div>
 				<div class="clearfix"> </div>
@@ -78,7 +78,7 @@
 						<span class="t-icon2"> </span>
 						<h3>Tratamientos</h3>
 						 <p>Vea los tratamientos disponibles</p>
-             <a class="more-btn" href="/GestionExpedientes/tratamientos/">Ir</a>
+             <a class="more-btn" href="/odo/tratamientos/">Ir</a>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -86,7 +86,7 @@
 						<span class="t-icon1"> </span>
             <h3>Agregar Tratamientos</h3>
             <p>Aqui puede agregar nuevos Expedientes</p>
-            <a class="more-btn" href="{% url 'gestionExp:agregarTratamiento' %}">Ir</a>
+            <a class="more-btn" href="{% url 'odontograma:agregarTratamiento' %}">Ir</a>
 					</div>
 				</div>
 				<div class="clearfix"> </div>
