@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.shortcuts import get_object_or_404
 from datetime import date, datetime
+from django.urls import reverse
 
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect, get_object_or_404, render
@@ -184,16 +185,21 @@ def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
+    if consulta.odontograma == None:
+        odontograma = Odontograma.objects.latest('id')
+
 
     edad = datetime.now().year - expediente.paciente.fechaNacimiento.year
 
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
-        form1 = nuevoExpedienteForm(request.POST, instance=expediente, initial={'odontograma':None})
+        form1 = nuevoExpedienteForm(request.POST, instance=expediente)
         try:
             if form.is_valid() and form1.is_valid():
-                consulta = form.save()
                 consulta.horaFinal = datetime.now()
+                print(odontograma)
+                consulta.odontograma = odontograma
+                consulta = form.save()
                 #form1.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
                 return redirect('odontograma:listarConsultas')
@@ -254,3 +260,32 @@ def agregarTratamiento(request):
     else:
         form = nuevoTratamientoForm()
     return render(request, 'GestionExpedientes/agregarTratamiento.html', {'form': form, })
+
+
+class OdontogramaList(LoginRequiredMixin, ListView):
+    model = Odontograma
+    template_name = 'Odonto/odos.html'
+    ordering = '-fechaCreacion'
+    slug_field = 'id'
+
+    def get_queryset(self):
+
+        qs = Odontograma.objects.filter(paciente=self.kwargs['slug'])
+
+        keywords = self.request.GET.get('q')
+        if keywords:
+            query = SearchQuery(keywords)
+            vector = SearchVector('paciente__nombresPaciente', 'paciente__paciente__apellidosPaciente', 'doctor__nombreDoctor')
+            qs = Consulta.objects.annotate(search=vector).filter(search=query)
+            qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
+
+        return qs
+
+
+    def get_context_data(self, **kwargs):
+        context = super(OdontogramaList, self).get_context_data(**kwargs)
+        paciente = get_object_or_404(Paciente, pk=self.kwargs['slug'])
+
+        context.update({'paciente': paciente,
+                        })
+        return context

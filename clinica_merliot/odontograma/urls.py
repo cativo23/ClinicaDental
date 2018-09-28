@@ -14,4 +14,5 @@ urlpatterns = [
     path('tratamientos/', views.TratamientoList.as_view(), name='listarTratamientos'),
     path('tratamientos/<pk>/edit/', views.editarTratamiento, name='editarTratamiento'),
     path('tratamientos/<slug:id>/', views.TratamientoDetail.as_view(), name='detalleTratamiento'),
+    path('<slug:slug>/odontos/', views.OdontogramaList.as_view(), name='odoList'),
     ]

@@ -134,7 +134,11 @@
             <tr><td><br></td></tr>
 
             <tr>
-                <td></td>
+                <td><td>
+                    <a class="more-btn" href="{% url 'odontograma:odoList' expediente.paciente.id %}">
+                  Ver Odontogramas
+                    </a>
+                </td></td>
                 <td>
                     <a class="more-btn" href="{% url 'gestionExp:editarExpediente' expediente.id %}">
                         <span class="glyphicon glyphicon-pencil"></span> Modificar Expediente

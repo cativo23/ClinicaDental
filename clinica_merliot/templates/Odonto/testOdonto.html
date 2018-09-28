@@ -15,6 +15,13 @@
   // aligns the submit button
   $('.normalized-btn').addClass(' pull-right')
 </script>
+
+<script>
+    window.onunload = refreshParent;
+    function refreshParent() {
+        window.opener.location.reload();
+    }
+</script>
 {% endblock %}
 
 {% block navbar %}
@@ -33,6 +40,8 @@
 <div class="tratamiento">
   <div class="container center">
     <div class="about-grids">
+      <div class="contact-form">
+      <div class="col-md-14 about-left">
 <h2 class="page-header">Odontograma</h2>
 
 <div class="form-inline">
@@ -137,6 +146,9 @@
   {% crispy form %}
 
 </form>
+</div>
+
+</div>
 </div>
 
 </div>
