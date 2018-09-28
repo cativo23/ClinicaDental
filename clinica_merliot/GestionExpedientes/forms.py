@@ -98,3 +98,5 @@ class NuevaCitaForm(forms.ModelForm):
             'estado': 'Estado de la cita',
         }
 
+    widgets = {'fechaCita': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'datepicker'}),}
+

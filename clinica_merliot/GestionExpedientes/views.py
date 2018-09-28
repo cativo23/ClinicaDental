@@ -323,3 +323,28 @@ def agregarCita(request):
 
     return render(request, template, context)
 
+@login_required
+def editarCita(request, pk):
+    template = 'GestionExpedientes/editarCita.html'
+    cita = get_object_or_404(Cita, pk=pk)
+
+    if request.method == 'POST':
+        form = NuevaCitaForm(request.POST, instance = cita)
+
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, "La cita fue modificada correctamente!")
+                return redirect('gestionExp:listarCita')
+
+        except Exception as e:
+            messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
+    else:
+        form = NuevaCitaForm(instance=cita)
+
+    context = {
+        'form': form,
+        'cita': cita
+    }
+
+    return render(request, template, context)
