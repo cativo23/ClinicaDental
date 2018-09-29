@@ -1,1 +1,1 @@
-web: gunicorn clinica_merliot.wsgi --log-file -
+web: gunicorn --pythonpath clinica_merliot clinica_merliot.wsgi --log-file -
