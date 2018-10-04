@@ -86,9 +86,9 @@ WSGI_APPLICATION = 'clinica_merliot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'myproject',
-        'USER': 'myprojectuser',
-        'PASSWORD': 'password',
+        'NAME': 'sistemaclinicamerliot3',
+        'USER': 'clinicauser',
+        'PASSWORD': 'clinicaDental',
         'HOST': 'localhost',
         'PORT': '',
     }
