@@ -189,6 +189,7 @@ def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
+    od = None
     if consulta.odontograma:
         od = get_object_or_404(Odontograma, pk=consulta.odontograma.id)
         print(od)
@@ -202,11 +203,11 @@ def consulta(request, pk):
                 if consulta.horaFinal == None:
                     form.instance.horaFinal = datetime.now()
                 print("Carga")
-                if od:
-                    print(od)
-                    consulta.odontograma = od;
-                    consulta.save()
-                    print(consulta.odontograma)
+                print("Jo")
+                print(od)
+                consulta.odontograma = od;
+                consulta.save()
+                print(consulta.odontograma)
                 #form.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
                 return redirect('odontograma:listarConsultas')
@@ -215,7 +216,7 @@ def consulta(request, pk):
                 print (form.errors)
 
         except Exception as e:
-            messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
+            messages.warning(request, 'Error: {}'.format(e))
     else:
         form = ConsultaForm(instance=consulta)
         form1 = nuevoExpedienteForm(instance=expediente)
