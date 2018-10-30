@@ -151,7 +151,7 @@ class CitaList(LoginRequiredMixin, ListView):
         if keywords:
             query = SearchQuery(keywords)
             vector = SearchVector('paciente__paciente__nombresPaciente', 'paciente__paciente__apellidosPaciente', 'doctor__nombreDoctor')
-            qs = Consulta.objects.annotate(search=vector).filter(search=query)
+            qs = Cita.objects.annotate(search=vector).filter(search=query)
             qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
 
         return qs

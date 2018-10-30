@@ -2,6 +2,7 @@ from django import forms
 from django.forms import TextInput
 
 
+
 from .models import Expediente, Paciente,  Cita
 
 
@@ -64,6 +65,8 @@ class NuevaCitaForm(forms.ModelForm):
             'estado',
         ]
 
+
+
         labels = {
             'asuntoCita': 'Asunto de la Cita',
             'doctor': 'Doctor Asignado',
@@ -75,5 +78,9 @@ class NuevaCitaForm(forms.ModelForm):
         }
 
         widgets = {'fechaCita': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'datepicker2'}),}
+
+
+
+        
 
 
