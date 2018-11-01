@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import TextInput
-
+import re
 
 
 from .models import Expediente, Paciente,  Cita
@@ -53,34 +53,36 @@ class nuevoPacienteForm(forms.ModelForm):
 
 
 class NuevaCitaForm(forms.ModelForm):
+
+    APLICADA = 'Aplicada'
+    PENDIENTE = 'Pendiente'
+    NO_ASISTIO = 'No Asistio'
+    ESTADO_CHOICES = (
+        (APLICADA, 'Aplicada'),
+        (PENDIENTE, 'Pendiente'),
+        (NO_ASISTIO,'No Asistio'),
+        )
+
+    asuntoCita=forms.CharField(max_length=20, label="Asundo de Cita")
+    fechaCita=forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker2'}), label="Fecha Cita")
+    horaCita=forms.TimeField(required=True, label="Hora de Cita")
+   # observaciones=forms.CharField(max_length=20, label="observaciones")
+    estado=forms.ChoiceField(choices=ESTADO_CHOICES, label="Estado Cita")
+
+
     class Meta:
         model = Cita
-        fields = [
-            'asuntoCita',
-            'doctor',
-            'paciente',
-            'fechaCita',
-            'horaCita',
-            'observacionCita',
-            'estado',
-        ]
-
-
-
-        labels = {
-            'asuntoCita': 'Asunto de la Cita',
-            'doctor': 'Doctor Asignado',
-            'paciente': 'Nombre Paciente',
-            'fechaCita': 'Fecha de proxima cita',
-            'horaCita': 'Hora de Cita',
-            'observacionCita': 'Observaciones',
-            'estado': 'Estado de la cita',
-        }
-
-        widgets = {'fechaCita': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'datepicker2'}),}
-
-
+        fields = '__all__'
 
         
+        
+    def clean_asuntoCita(self):
+                asuntoCita = self.cleaned_data.get('asuntoCita')
+                if(re.match("[a-zA-Z]",asuntoCita)==None):
+                    raise forms.ValidationError("El asunto de la cita debe iniciar con un caracter")
+                    # "\w*" verifica que todos los caracteres sean alfanumericos # \w es lo mismo que [a-z0-9-A-Z]
+                elif (re.match("\w*",asuntoCita)) ==None:
+                    raise forms.ValidationError("Deben de ser caracters alfanumerico")
+                return asuntoCita
 
 
