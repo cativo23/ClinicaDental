@@ -74,7 +74,23 @@ class NuevaCitaForm(forms.ModelForm):
         model = Cita
         fields = '__all__'
 
-        
+
+    def clean(self):
+        '''
+        Revisar que el paciente no tenga cita ese dia
+        '''
+        cleaned_data = super(NuevaCitaForm, self).clean()
+        user_exists = (Cita.objects.filter(paciente=self.cleaned_data['paciente'],fechaCita = cleaned_data.get('fechaCita')).count() > 0)
+
+        if user_exists:
+            self.add_error('fechaCita', 'El paciente ya posee una Cita en esta Fecha')
+
+        hora_exists= (Cita.objects.filter(fechaCita=self.cleaned_data['fechaCita'],horaCita = cleaned_data.get('horaCita')).count() > 0)
+
+        if hora_exists:
+            self.add_error('horaCita', 'Esta hora ya esta reservada')
+
+    
         
     def clean_asuntoCita(self):
                 asuntoCita = self.cleaned_data.get('asuntoCita')
@@ -86,3 +102,6 @@ class NuevaCitaForm(forms.ModelForm):
                 return asuntoCita
 
 
+
+    
+   
