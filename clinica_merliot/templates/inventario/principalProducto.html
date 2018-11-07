@@ -35,30 +35,32 @@
 
 
         <div style="padding-left: 30px; padding-right: 30px" >
-            {% if object_list %}
-            <table id="customers">
-                <thead>
-                    <tr>
-                        <td><b>Nombre del producto</b></td>
-                        <td><b>Marca del producto</b></td>
-                        <td><b>Existencias</b></td>
-                        <td><b>Precio al que fue adquirido</b></td>
-                    </tr>
-                </thead>
-               <tbody>
-                 {% for producto in object_list %}
-                 <tr>
-                   <td><a class="button" href="{% url 'inv:editarProducto' producto.id %}">{{producto.nombre_producto}}</a></td>
-                   <td>{{ producto.marca_producto}}</td>
-                   <td>{{ producto.existencia_producto}}</td>
-                   <td>{{ producto.precio_producto }}</td>
-                 </tr>
-                 {% endfor %}
-               </tbody>
-             </table>
-             {% else %}
-             <p>No hay productos con esos parametros con esos parametros</p>
-           {% endif %}
+            <div style="display:block; max-height:200px; overflow-y:auto; -ms-overflow-style:-ms-autohiding-scrollbar;">
+                {% if object_list %}
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <td><b>Nombre del producto</b></td>
+                            <td><b>Marca del producto</b></td>
+                            <td><b>Existencias</b></td>
+                            <td><b>Precio al que fue adquirido</b></td>
+                        </tr>
+                    </thead>
+                   <tbody>
+                     {% for producto in object_list %}
+                     <tr>
+                       <td><a class="button" href="{% url 'inv:editarProducto' producto.id %}">{{producto.nombre_producto}}</a></td>
+                       <td>{{ producto.marca_producto}}</td>
+                       <td>{{ producto.existencia_producto}}</td>
+                       <td>{{ producto.precio_producto }}</td>
+                     </tr>
+                     {% endfor %}
+                   </tbody>
+                 </table>
+                 {% else %}
+                 <p>No hay productos con esos parametros con esos parametros</p>
+               {% endif %}
+            </div>
         </div>
         <div class="contact-form" style = "padding:30px ">
             <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">
@@ -104,32 +106,34 @@
             <hr style="border-width: 1px;border-color:grey;"> <!-- tabla tres-->
             <h1>ENTRADA</h1>
             <hr style="border-width: 1px;border-color:grey;"> <!-- tabla dos-->
-
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla dos-->
         </div>
 
         <div style="padding-left: 30px; padding-right: 30px" >
-            <table id="customers">
-                <thead>
-                    <tr>
-                        <td><b>Nombre del producto</b></td>
-                        <td><b>Marca del producto</b></td>
-                        <td><b>Cantidad</b></td>
-                        <td><b>Fecha</b></td>
-                    </tr>
-                </thead>
-               <tbody>
-                   {% for transaccion in transaccion_list %}
-                   {% if transaccion.tipo_transaccion == 'ENTRADA' or transaccion.tipo_transaccion == 'Entrada' %}
-                   <tr>
-                     <td>{{transaccion.producto.nombre_producto}}</td>
-                     <td>{{transaccion.producto.marca_producto}}</td>
-                     <td>{{transaccion.cantidad }}</td>
-                     <td>{{transaccion.fecha}}</td>
-                   </tr>
-                   {% endif %}
-                   {% endfor %}
-               </tbody>
-             </table>
+            <div style="display:block; max-height:200px; overflow-y:auto; -ms-overflow-style:-ms-autohiding-scrollbar;">
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <td><b>Nombre del producto</b></td>
+                            <td><b>Marca del producto</b></td>
+                            <td><b>Cantidad</b></td>
+                            <td><b>Fecha</b></td>
+                        </tr>
+                    </thead>
+                   <tbody>
+                       {% for transaccion in transaccion_list %}
+                       {% if transaccion.tipo_transaccion == 'ENTRADA' or transaccion.tipo_transaccion == 'Entrada' %}
+                       <tr>
+                         <td>{{transaccion.producto.nombre_producto}}</td>
+                         <td>{{transaccion.producto.marca_producto}}</td>
+                         <td>{{transaccion.cantidad }}</td>
+                         <td>{{transaccion.fecha}}</td>
+                       </tr>
+                       {% endif %}
+                       {% endfor %}
+                   </tbody>
+                 </table>
+            </div>
         </div>
         <div class="contact-form" style = "padding:30px ">
             <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">
@@ -178,28 +182,30 @@
 
 
         <div style="padding-left: 30px; padding-right: 30px" >
-            <table id="customers">
-                <thead>
-                    <tr>
-                        <td><b>Nombre del producto</b></td>
-                        <td><b>Marca del producto</b></td>
-                        <td><b>Cantidad</b></td>
-                        <td><b>Fecha</b></td>
-                    </tr>
-                </thead>
-               <tbody>
-                   {% for transaccion in transaccion_list %}
-                   {% if transaccion.tipo_transaccion == 'SALIDA' %}
-                   <tr>
-                     <td>{{transaccion.producto.nombre_producto}}</td>
-                     <td>{{transaccion.producto.marca_producto}}</td>
-                     <td>{{transaccion.cantidad }}</td>
-                     <td>{{transaccion.fecha}}</td>
-                   </tr>
-                   {% endif %}
-                   {% endfor %}
-               </tbody>
-             </table>
+            <div style="display:block; max-height:200px; overflow-y:auto; -ms-overflow-style:-ms-autohiding-scrollbar;">
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <td><b>Nombre del producto</b></td>
+                            <td><b>Marca del producto</b></td>
+                            <td><b>Cantidad</b></td>
+                            <td><b>Fecha</b></td>
+                        </tr>
+                    </thead>
+                   <tbody>
+                       {% for transaccion in transaccion_list %}
+                       {% if transaccion.tipo_transaccion == 'SALIDA' %}
+                       <tr>
+                         <td>{{transaccion.producto.nombre_producto}}</td>
+                         <td>{{transaccion.producto.marca_producto}}</td>
+                         <td>{{transaccion.cantidad }}</td>
+                         <td>{{transaccion.fecha}}</td>
+                       </tr>
+                       {% endif %}
+                       {% endfor %}
+                   </tbody>
+                 </table>
+            </div>
         </div>
         <div class="contact-form" style = "padding:30px ">
             <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">

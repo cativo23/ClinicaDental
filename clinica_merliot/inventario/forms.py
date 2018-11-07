@@ -48,14 +48,14 @@ class nuevaTransacion(forms.ModelForm):
         model = Transaccion
         fields = [
             'producto',
-            'tipo_transaccion',
+            # 'tipo_transaccion',
             'cantidad',
             'fecha',
         ]
 
         labels = {
             'producto':'Producto',
-            'tipo_transaccion':'Tipo de transaccion',
+            # 'tipo_transaccion':'Tipo de transaccion',
             'cantidad':'Cantidad',
             'fecha':'Fecha',
         }

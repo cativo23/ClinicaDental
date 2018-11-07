@@ -55,13 +55,23 @@ def ProductoListView(request):
         if 'entrada' in request.POST:
             form_transaccion = nuevaTransacion(request.POST)
             if form_transaccion.is_valid():
+                c = form_transaccion.cleaned_data['producto']
+                d = form_transaccion.cleaned_data['cantidad']
+                Producto.objects.filter(pk=c.id).update(existencia_producto=Producto.objects.values_list('existencia_producto', flat=True).get(pk=c.id) + d)
                 form_transaccion.save()
+                e = Transaccion.objects.latest('id')
+                Transaccion.objects.filter(pk=e.id).update(tipo_transaccion="ENTRADA")
             form_transaccion = nuevaTransacion()
 
         if 'salida' in request.POST:
             form_transaccion = nuevaTransacion(request.POST)
             if form_transaccion.is_valid():
+                c = form_transaccion.cleaned_data['producto']
+                d = form_transaccion.cleaned_data['cantidad']
+                Producto.objects.filter(pk=c.id).update(existencia_producto=Producto.objects.values_list('existencia_producto', flat=True).get(pk=c.id) - d)
                 form_transaccion.save()
+                e = Transaccion.objects.latest('id')
+                Transaccion.objects.filter(pk=e.id).update(tipo_transaccion="SALIDA")
             form_transaccion = nuevaTransacion()
 
         return render(request,'inventario/principalProducto.html' , context)
