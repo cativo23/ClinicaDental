@@ -16,6 +16,8 @@ class ExpForm(forms.ModelForm):
 
 
 class nuevoExpedienteForm(forms.ModelForm):
+
+
     class Meta:
         model = Expediente
 
@@ -41,6 +43,9 @@ class nuevoExpedienteForm(forms.ModelForm):
 
 
 class nuevoPacienteForm(forms.ModelForm):
+    nombresPaciente = forms.CharField(label="Nombres del Paciente", help_text="Ingrese los nombres del paciente")
+    apellidosPaciente = forms.CharField(label="Apellidos del paciente")
+
     class Meta:
         model = Paciente
         fields = '__all__'
@@ -75,5 +80,3 @@ class NuevaCitaForm(forms.ModelForm):
         }
 
         widgets = {'fechaCita': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'datepicker'}),}
-
-
