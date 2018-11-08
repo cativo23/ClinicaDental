@@ -19,6 +19,8 @@ from .models import Expediente, Paciente
 from odontograma.models import Consulta
 # Create your views here.
 
+from django.utils import timezone
+from django.shortcuts import render_to_response
 
 @login_required
 def index(request):
@@ -213,3 +215,7 @@ def editarCita(request, pk):
 
     return render(request, template, context)
 
+
+def cita_list(request):
+    citas = Cita.objects.filter(fechaCita=timezone.now())
+    return render(request,'cita_dia.html', {'citas': citas})

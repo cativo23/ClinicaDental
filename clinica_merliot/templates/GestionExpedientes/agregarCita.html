@@ -28,7 +28,7 @@
                       <th></th>
                       <th>
                           <div class="contact-form">
-                              <form action="/" method="get">{% csrf_token %}
+                              <form action="{% url 'gestionExp:listarCita' %}" method="get">{% csrf_token %}
                                 <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
                               </form>
                           </div>
