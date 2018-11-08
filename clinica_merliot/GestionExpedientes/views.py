@@ -218,4 +218,4 @@ def editarCita(request, pk):
 
 def cita_list(request):
     citas = Cita.objects.filter(fechaCita=timezone.now())
-    return render(request,'cita_dia.html', {'citas': citas})
+    return render(request,'GestionExpedientes/cita_dia.html', {'citas': citas})

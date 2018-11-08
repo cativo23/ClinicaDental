@@ -28,15 +28,15 @@
                         <input value="Buscar" type="submit">
                         <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
                     </form>
-                     <form action="{% url 'gestionExp:CitaDia'%}" method="get" style="padding-left: 30px">
-                  <input type="submit" value="Ver Citas del dia"  id="frm1_submit" />
-
-                  </form>
                      
                     <br>
-               <a href="{% url 'gestionExp:nuevaCita' %}"  class="btn btn-success" style="margin-left: 30px" style="padding:30px">
+                    <a href="{% url 'gestionExp:nuevaCita' %}"  class="btn btn-success" style="margin-left: 30px" style="padding:30px">
                     <span class="glyphicon glyphicon-plus">
                    </span> Nueva Cita</a>
+                    <a href="{% url 'gestionExp:prueba' %}"  class="btn btn-success" style="margin-left: 10px" style="padding:20px">
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>Cita del dia</a>
+                    
+               
                     <br>
                     {% if messages %}
                     {% for message in messages %}
