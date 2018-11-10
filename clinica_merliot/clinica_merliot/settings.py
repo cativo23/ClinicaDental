@@ -87,8 +87,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'SistemaClinicaMerliot3',
-        'USER': 'postgres',
-        'PASSWORD': 'l20120475',
+        'USER': 'clinicauser',
+        'PASSWORD': 'clinicaDental',
         'HOST': 'localhost',
         'PORT': '',
     }
