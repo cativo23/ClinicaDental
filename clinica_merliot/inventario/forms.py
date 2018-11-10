@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import TextInput
-from .models import Producto, Registro
+from .models import Producto,  Transaccion
 
 
 class nuevoProductoForm(forms.ModelForm):
@@ -41,4 +41,21 @@ class editarProductoForm(forms.ModelForm):
         labels = {
             'nombre_producto': 'Nombre',
             'marca_producto': 'Marca o proveedor',
+        }
+
+class nuevaTransacion(forms.ModelForm):
+    class Meta:
+        model = Transaccion
+        fields = [
+            'producto',
+            # 'tipo_transaccion',
+            'cantidad',
+            'fecha',
+        ]
+
+        labels = {
+            'producto':'Producto',
+            # 'tipo_transaccion':'Tipo de transaccion',
+            'cantidad':'Cantidad',
+            'fecha':'Fecha',
         }

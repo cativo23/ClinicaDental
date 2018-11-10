@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Producto, Registro
+from .models import Producto, Transaccion
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import ModelFormMixin
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.shortcuts import get_object_or_404
 from datetime import datetime
-from .forms import nuevoProductoForm, existenciaProductoForm, editarProductoForm, existenciaProductoForm
+from .forms import nuevoProductoForm, existenciaProductoForm, editarProductoForm, existenciaProductoForm, nuevaTransacion
 
 # Create your views here.
 
@@ -33,45 +33,51 @@ class ProductoList(LoginRequiredMixin, ListView):
         return qs
 
 
-class ProductoListView(ListView, ModelFormMixin):
-    model = Producto
-    template_name = 'inventario/principalProducto.html'
-    form_class = existenciaProductoForm
+def ProductoListView(request):
+    queryset_producto = Producto.objects.all()
+    queryset_transaccion = Transaccion.objects.all()
+    form_producto = nuevoProductoForm()
+    form_transaccion = nuevaTransacion()
+    context = {
+        'object_list':queryset_producto,
+        'form_producto':form_producto,
+        'form_transaccion': form_transaccion,
+        'transaccion_list':queryset_transaccion
+    }
 
-    def get(self, request, *args, **kwargs):
-        self.object = None
-        self.form = self.get_form(self.form_class)
-        return ListView.get(self, request, *args, **kwargs)
+    if request.method == 'POST':
+        if 'modalproducto' in request.POST:
+            form_producto = nuevoProductoForm(request.POST)
+            if form_producto.is_valid():
+                form_producto.save()
+            form_producto = nuevoProductoForm()
 
-    def post(self, request, *args, **kwargs):
-        id_producto = self.request.POST.get('identificador')
-        pro = get_object_or_404(Producto, pk=id_producto)
+        if 'entrada' in request.POST:
+            form_transaccion = nuevaTransacion(request.POST)
+            if form_transaccion.is_valid():
+                c = form_transaccion.cleaned_data['producto']
+                d = form_transaccion.cleaned_data['cantidad']
+                Producto.objects.filter(pk=c.id).update(existencia_producto=Producto.objects.values_list('existencia_producto', flat=True).get(pk=c.id) + d)
+                form_transaccion.save()
+                e = Transaccion.objects.latest('id')
+                Transaccion.objects.filter(pk=e.id).update(tipo_transaccion="ENTRADA")
+            form_transaccion = nuevaTransacion()
 
-        form = existenciaProductoForm(request.POST, instance=pro)
+        if 'salida' in request.POST:
+            form_transaccion = nuevaTransacion(request.POST)
+            if form_transaccion.is_valid():
+                c = form_transaccion.cleaned_data['producto']
+                d = form_transaccion.cleaned_data['cantidad']
+                Producto.objects.filter(pk=c.id).update(existencia_producto=Producto.objects.values_list('existencia_producto', flat=True).get(pk=c.id) - d)
+                form_transaccion.save()
+                e = Transaccion.objects.latest('id')
+                Transaccion.objects.filter(pk=e.id).update(tipo_transaccion="SALIDA")
+            form_transaccion = nuevaTransacion()
 
-        if request.POST.get("suma"):
-            #suma
-            pro.existencia_producto = pro.existencia_producto + form.instance.existencia_producto
+        return render(request,'inventario/principalProducto.html' , context)
 
-        else:
-            #resta
-            pro.existencia_producto = pro.existencia_producto - form.instance.existencia_producto
 
-        if form.is_valid():
-            form.save(commit=False)
-            form.save()
-            return redirect('inv:principalProducto')
-        return self.get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        qs = Producto.objects.all()
-        keywords = self.request.GET.get('q')
-        if keywords:
-            query = SearchQuery(keywords)
-            vector = SearchVector('nombre_producto', 'marca_producto')
-            qs = qs.annotate(search=vector).filter(search=query)
-            qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
-        return qs
+    return render(request,'inventario/principalProducto.html' , context)
 
 
 

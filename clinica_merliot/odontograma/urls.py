@@ -9,7 +9,9 @@ urlpatterns = [
     path('consultas/', views.ConsultasList.as_view(), name='listarConsultas'),
     path('consultas/<slug:id>/ver/', views.ConsultaDetail.as_view(), name='detalleConsulta'),
     path('consultas/<pk>/', views.consulta, name='verConsulta'),
+
     path('nuevaConsulta/', views.agregarConsulta, name='nuevaConsulta'),
+    
     path('agregarTratamiento/', views.agregarTratamiento, name='agregarTratamiento'),
     path('tratamientos/', views.TratamientoList.as_view(), name='listarTratamientos'),
     path('tratamientos/<pk>/edit/', views.editarTratamiento, name='editarTratamiento'),

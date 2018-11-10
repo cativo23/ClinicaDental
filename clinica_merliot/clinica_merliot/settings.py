@@ -86,9 +86,9 @@ WSGI_APPLICATION = 'clinica_merliot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sistemaclinicamerliot3',
-        'USER': 'clinicauser',
-        'PASSWORD': 'clinicaDental',
+        'NAME': 'SistemaClinicaMerliot3',
+        'USER': 'postgres',
+        'PASSWORD': 'l20120475',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -137,6 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
 STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
