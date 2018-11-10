@@ -16,7 +16,7 @@ class ExpForm(forms.ModelForm):
 
 
 class nuevoExpedienteForm(forms.ModelForm):
-
+    
 
     class Meta:
         model = Expediente
