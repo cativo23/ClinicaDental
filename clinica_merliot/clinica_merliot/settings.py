@@ -121,9 +121,9 @@ LANGUAGE_CODE = 'es-SV'
 
 TIME_ZONE = 'America/El_Salvador'
 
-USE_I18N = False
+USE_I18N = True
 
-USE_L10N = False
+USE_L10N = True
 
 USE_TZ = False
 
@@ -141,9 +141,9 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-DATE_INPUT_FORMATS = ['%m/%d/%Y']
-DATETIME_INPUT_FORATS = ['%m/%d/%Y H:M:S p']
-DATE_FORMAT = 'm/d/Y'
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
+DATETIME_INPUT_FORATS = ['%d/%m/%Y H:M:S p']
+DATE_FORMAT = 'd/m/Y'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

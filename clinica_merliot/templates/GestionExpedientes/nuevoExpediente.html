@@ -20,6 +20,16 @@
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
+              {% if messages %}
+   {% for message in messages %}
+   {% if message.tags == 'success' %}
+   <p style="color: green"> <u>{{ message }}</u></p>
+   {% else %}
+   <p style="color: red"><u>{{ message }}</u> </p>
+   {% endif %}
+   {% endfor %}
+   <p></p>
+   {% endif %}
               <div class="x_title">
                 <h2>Ingrese los datos del paciente</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -34,23 +44,61 @@
                 <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post"> {% csrf_token %}
                   {% for field in form2 %}
                   <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.is_requiered %}<span class="required">*</span>{% endif %}
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="{{ field.id_for_label }}"
-                        maxlength="{{field.max_length}}" name="{{field.name}}"
-                        {% if field.field.required %} required="required"{% endif %} {% if field.help_text %}
-                        placeholder="{{ field.help_text|safe }}"
+                       {% if field.field.widget.input_type == "select" %}
+                       <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                         <option value="none">---</option>
+                         {% for choice in field.field.choices %}
+                           <option value="{{choice.0}}">{{choice.1}}</option>
+                         {% endfor %}
+                       </select>
+                       {% else %}
+                       <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }}"
+                       {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                       {% if field.field.required %} required="required"{% endif %}
+                       {% if field.help_text %}
+                       placeholder="{{ field.help_text|safe }}"
+                       {% endif %}
+                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12">
                         {% endif %}
-                        class="form-control col-md-7 col-xs-12">
                     </div>
+                    {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
                   </div>
               {% endfor %}
+              {% for field in form1 %}
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                   {% if field.field.widget.input_type == "select" %}
+                   <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                     <option value="none">---</option>
+                     {% for choice in field.field.choices %}
+                       <option value="{{choice.0}}">{{choice.1}}</option>
+                     {% endfor %}
+                   </select>
+                   {% else %}
+                   <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }}"
+                   {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                   {% if field.field.required %} required="required"{% endif %}
+                   {% if field.help_text %}
+                   placeholder="{{ field.help_text|safe }}"
+                   {% endif %}
+                   class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12">
+                    {% endif %}
+                </div>
+                {% for error in field.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
+              </div>
+          {% endfor %}
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                      <button class="btn btn-primary" type="button">Cancel</button>
-    		  <button class="btn btn-primary" type="reset">Reset</button>
                       <button type="submit" class="btn btn-success">Submit</button>
                     </div>
                   </div>
@@ -62,10 +110,14 @@
         </div>
       </div>
     </div>
-
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
-  <script src="/static/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+  <script type="text/javascript">
+			$(document).ready(function(){
+				$('.telefono').mask('0000-0000', {placeholder: "Formato: xxxx-xxxx"});
+			});
+		</script>
+    <script type="text/javascript">$("#date").datepicker({ dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true }); </script>
 {% endblock javascripts %}
