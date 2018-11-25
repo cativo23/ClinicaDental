@@ -16,7 +16,7 @@ class ExpForm(forms.ModelForm):
 
 
 class nuevoExpedienteForm(forms.ModelForm):
-    
+
 
     class Meta:
         model = Expediente
@@ -54,7 +54,7 @@ class nuevoPacienteForm(forms.ModelForm):
         model = Paciente
         fields = '__all__'
 
-        widgets = {'fechaNacimiento': forms.DateInput(format=('%d/%b/%Y'), attrs={'class':'datepicker', 'type':'date',}),
+        widgets = {'fechaNacimiento': forms.DateInput(format=('%d/%b/%Y'), attrs={'class':'datepicker', 'type':'text', 'id':'datepicker'}),
                    'telefonoCasa': forms.TextInput(attrs={'class':'telefono',}),
                    'telefonoTrabajo': forms.TextInput(attrs={'class':'telefono',}),
                    'sexo': forms.Select(attrs={'class':'select2_single form-control',}),
@@ -99,8 +99,8 @@ class NuevaCitaForm(forms.ModelForm):
         if hora_exists:
             self.add_error('horaCita', 'Esta hora ya esta reservada')
 
-    
-        
+
+
     def clean_asuntoCita(self):
                 asuntoCita = self.cleaned_data.get('asuntoCita')
                 if(re.match("[a-zA-Z]",asuntoCita)==None):
@@ -109,8 +109,3 @@ class NuevaCitaForm(forms.ModelForm):
                 elif (re.match("\w*",asuntoCita)) ==None:
                     raise forms.ValidationError("Deben de ser caracters alfanumerico")
                 return asuntoCita
-
-
-
-    
-   
