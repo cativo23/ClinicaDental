@@ -123,22 +123,21 @@ def editarExpediente(request, pk):
             if form.is_valid() and form1.is_valid():
                 form.save()
                 form1.save()
-                messages.success(request, "El EXPEDIENTE FUE MODIFICADO CORRECTAMENTE!")
-                return redirect('gestionExp:listar2Expedientes')
+                mes = "El expediente de %s fue modificado correctamente!"%expediente
+                messages.success(request, mes)
+                return redirect('gestionExp:listarExpedientes')
 
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
     else:
         form = nuevoPacienteForm(instance=expediente)
         form1 = ExpForm(instance=expediente.expediente)
-
-    context = {
+        context = {
         'form': form,
         'form1': form1,
         'expediente': expediente
-    }
-
-    return render(request, template, context)
+        }
+        return render(request, template, context)
 
 
 class CitaList(LoginRequiredMixin, ListView):

@@ -1,154 +1,348 @@
-{% extends "base.html" %}
+{% extends "app/base_site.html" %}
 
-{% block navbar %}
-<ul>
-  <li><a href="/">Inicio</a></li>
-  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block title %} {{expediente}} {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
 
 {% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>{{expediente}}</h3>
+          </div>
 
-<div class="tratamiento">
-  <div class="container center">
-    <div class="about-grids">
-      <div class="contact-form">
-        <div class="col-md-14 about-left" align="center">
-        <form action="/GestionExpedientes/expedientes/" method="get">
-          <input type="submit" value="Expedientes"  id="frm1_submit" />
-        </form>
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>{{expediente}}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                  <div class="profile_img">
+                    <div id="crop-avatar">
+                      <!-- Current avatar -->
+                      <img class="img-responsive avatar-view" src="/static/images/picture.jpg" alt="Avatar" title="Change the avatar">
+                    </div>
+                  </div>
+                  <h3>{{expediente.paciente}}</h3>
+
+                  <ul class="list-unstyled user_data">
+                    <li><i class="fa {% if expediente.paciente.sexo == 'M' %}fa-male {% else %}fa-female{% endif %} user-profile-icon"></i> {{expediente.paciente.sexo|default_if_none:"---"}}
+                    </li>
+
+                    <li><i class="fa fa-birthday-cake user-profile-icon"></i>{{expediente.paciente.fechaNacimiento}} ({{ahorita}} años)
+                    </li>
+
+                    <li><i class="fa fa-map-marker user-profile-icon"></i> {{expediente.paciente.direccionCasa|default_if_none:"---"}}
+                    </li>
+                    <li><i class="fa fa-mobile user-profile-icon"></i>{{expediente.paciente.telefonoCasa|default_if_none:"---"}}
+                    </li>
+
+                    <li>
+                      <i class="fa fa-briefcase user-profile-icon"></i> {{expediente.paciente.ocupacion|default_if_none:"---"}}
+                    </li>
+                    <li><i class="fa fa-phone user-profile-icon"></i>{{expediente.paciente.telefonoTrabajo|default_if_none:"---"}}
+                    </li>
+
+                    <li class="m-top-xs">
+                      <i class="fa fa-external-link user-profile-icon"></i>
+                      {{expediente.paciente.direccionTrabajo|default_if_none:"---"}}
+                    </li>
+                  </ul>
+
+                  <a class="btn btn-success" href="{% url 'GestionExpedientes:editarExpediente' expediente.id %}"><i class="fa fa-edit m-right-xs"></i>Modificar Expediente</a>
+                  <br />
+
+                  <!-- start skills -->
+                  <h4>Cobros</h4>
+                  <ul class="list-unstyled user_data">
+                    <li>
+                      <p>Total pagado</p>
+                      <div class="progress progress_sm">
+                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                      </div>
+                    </li>
+                    <li>
+                      <p>Total Debe</p>
+                      <div class="progress progress_sm">
+                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="70"></div>
+                      </div>
+                    </li>
+                  </ul>
+                  <!-- end of skills -->
+
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+
+                  <div class="profile_title">
+                    <div class="col-md-6">
+                      <p class="lead">Observaciones:</p>
+                      <p>{{expediente.observacionExp}}</p>
+
+
+                      <h2>Odontograma</h2>
+
+                      Poner div odo
+                    </div>
+                  </div>
+                  <!-- start of user-activity-graph -->
+                  <div id="graph_bar" style="width:100%; height:280px;"></div>
+                  <!-- end of user-activity-graph -->
+
+                  <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                      <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Procedimientos Hechos</a>
+                      </li>
+                      <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Citas</a>
+                      </li>
+                      <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Consultas</a>
+                      </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                      <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                        <!-- start recent activity -->
+                        <ul class="messages">
+                          <li>
+                            <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
+                            <div class="message_date">
+                              <h3 class="date text-info">24</h3>
+                              <p class="month">Mayo</p>
+                            </div>
+                            <div class="message_wrapper">
+                              <h4 class="heading">Nombre Procedimiento</h4>
+                              <blockquote class="message">Detalle Procedimiento</blockquote>
+                              <br />
+                            </div>
+                          </li>
+                        </ul>
+                        <!-- end recent activity -->
+
+                      </div>
+                      <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                        <!-- start user projects -->
+                        <table class="data table table-striped no-margin">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Dia</th>
+                              <th class="hidden-phone">Hora</th>
+                              <th>Asunto</th>
+                              <th>Estado</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>New Company Takeover Review</td>
+                              <td>Deveint Inc</td>
+                              <td class="hidden-phone">18</td>
+                              <td class="vertical-align-mid">
+                                Estado
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- end user projects -->
+
+                      </div>
+                      <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                        <table class="data table table-striped no-margin">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Dia</th>
+                              <th class="hidden-phone">Duración</th>
+                              <th>Observaciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>New Company Takeover Review</td>
+                              <td>Deveint Inc</td>
+                              <td class="hidden-phone">18</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-      <div class="col-12">
-        <h1 align="center">{{ expediente }}</h1>
-        <br>
-        <table align="center">
-            <tr>
-                <td align="right"><b>Nombres:</b></td>
-                <td>{{expediente.paciente.nombresPaciente}}</td>
-            </tr>
-            <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Apellidos:</b></td>
-                <td>{{expediente.paciente.apellidosPaciente}}</td>
-            </tr>
-            <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Ocupacion:</b></td>
-                <td>{{expediente.paciente.ocupacion}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+    <div class="tratamiento">
+      <div class="container center">
+        <div class="about-grids">
+          <div class="contact-form">
+            <div class="col-md-14 about-left" align="center">
+            <form action="/GestionExpedientes/expedientes/" method="get">
+              <input type="submit" value="Expedientes"  id="frm1_submit" />
+            </form>
+          </div>
+        </div>
+          <div class="col-12">
+            <h1 align="center">{{ expediente }}</h1>
+            <br>
+            <table align="center">
+                <tr>
+                    <td align="right"><b>Nombres:</b></td>
+                    <td>{{expediente.paciente.nombresPaciente}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Sexo:</b></td>
-                <td>{{expediente.paciente.sexo}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Apellidos:</b></td>
+                    <td>{{expediente.paciente.apellidosPaciente}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Edad: </b></td>
-                <td> {{ahorita}} años</td>
-            </tr>
-            <tr>
-                <td align="right"><b>Fecha de Nacimiento:</b></td>
-                <td>{{expediente.paciente.fechaNacimiento}}</td>
-            </tr>
-            <tr><td><br><br></td></tr>
+                <tr>
+                    <td align="right"><b>Ocupacion:</b></td>
+                    <td>{{expediente.paciente.ocupacion}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Direccion Casa:</b></td>
-                <td>{{expediente.paciente.direccionCasa}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Sexo:</b></td>
+                    <td>{{expediente.paciente.sexo}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td  align="right"><b>Direccion Trabajo:</b></td>
-                <td>{{expediente.paciente.direccionTrabajo }}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Edad: </b></td>
+                    <td> {{ahorita}} años</td>
+                </tr>
+                <tr>
+                    <td align="right"><b>Fecha de Nacimiento:</b></td>
+                    <td>{{expediente.paciente.fechaNacimiento}}</td>
+                </tr>
+                <tr><td><br><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Telefono Casa:</b></td>
-                <td>{{expediente.paciente.telefonoCasa}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Direccion Casa:</b></td>
+                    <td>{{expediente.paciente.direccionCasa}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Telefono Trabajo:</b></td>
-                <td>{{expediente.paciente.telefonoTrabajo}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td  align="right"><b>Direccion Trabajo:</b></td>
+                    <td>{{expediente.paciente.direccionTrabajo }}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            {% if expediente.paciente.referencia %}
-            <tr>
-                <td align="right"><b>Telefono Casa:</b></td>
-                <td>{{expediente.paciente.referencia}}</td>
-            </tr>
-            <tr><td><br></td></tr>
-            {% endif %}
+                <tr>
+                    <td align="right"><b>Telefono Casa:</b></td>
+                    <td>{{expediente.paciente.telefonoCasa}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            {% if expediente.tratamientos %}
+                <tr>
+                    <td align="right"><b>Telefono Trabajo:</b></td>
+                    <td>{{expediente.paciente.telefonoTrabajo}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Tratamientos:</b></td>
+                {% if expediente.paciente.referencia %}
+                <tr>
+                    <td align="right"><b>Telefono Casa:</b></td>
+                    <td>{{expediente.paciente.referencia}}</td>
+                </tr>
+                <tr><td><br></td></tr>
+                {% endif %}
 
-            </tr>
-            {% for tratamiento in expediente.tratamientos.all  %}
-            <tr>
-                <td></td>
-                <td><b>{{tratamiento.nombreTratamiento}}</b>: {{tratamiento.precioBase}}</td>
-            </tr>
-            {% endfor %}
-            <tr><td><br></td></tr>
-            {% endif %}
+                {% if expediente.tratamientos %}
 
-            <tr>
-                <td align="right"><b>Fecha Creacion:</b></td>
-                <td>{{expediente.fechaCreacion}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Tratamientos:</b></td>
 
-            <tr>
-                <td align="right"><b>Total Pagado:</b></td>
-                <td>{{expediente.pagado}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                </tr>
+                {% for tratamiento in expediente.tratamientos.all  %}
+                <tr>
+                    <td></td>
+                    <td><b>{{tratamiento.nombreTratamiento}}</b>: {{tratamiento.precioBase}}</td>
+                </tr>
+                {% endfor %}
+                <tr><td><br></td></tr>
+                {% endif %}
 
-            <tr>
-                <td align="right"><b>Total debe:</b> </td>
-                <td>{{expediente.saldo}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Fecha Creacion:</b></td>
+                    <td>{{expediente.fechaCreacion}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td align="right"><b>Observaciones: </b> </td>
-                <td>{{expediente.observacionExp}}</td>
-            </tr>
-            <tr><td><br></td></tr>
+                <tr>
+                    <td align="right"><b>Total Pagado:</b></td>
+                    <td>{{expediente.pagado}}</td>
+                </tr>
+                <tr><td><br></td></tr>
 
-            <tr>
-                <td><td>
-                    <a class="more-btn" href="{% url 'odontograma:odoList' expediente.paciente.id %}">
-                  Ver Odontogramas
-                    </a>
-                </td></td>
-                <td>
-                    <a class="more-btn" href="{% url 'gestionExp:editarExpediente' expediente.id %}">
-                        <span class="glyphicon glyphicon-pencil"></span> Modificar Expediente
-                    </a>
-                </td>
-            </tr>
-        </table>
+                <tr>
+                    <td align="right"><b>Total debe:</b> </td>
+                    <td>{{expediente.saldo}}</td>
+                </tr>
+                <tr><td><br></td></tr>
+
+                <tr>
+                    <td align="right"><b>Observaciones: </b> </td>
+                    <td>{{expediente.observacionExp}}</td>
+                </tr>
+                <tr><td><br></td></tr>
+
+                <tr>
+                    <td><td>
+                        <a class="more-btn" href="{% url 'odontograma:odoList' expediente.paciente.id %}">
+                      Ver Odontogramas
+                        </a>
+                    </td></td>
+                    <td>
+                        <a class="more-btn" href="{% url 'gestionExp:editarExpediente' expediente.id %}">
+                            <span class="glyphicon glyphicon-pencil"></span> Modificar Expediente
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </div>
+      </div>
     </div>
-    </div>
-  </div>
-</div>
-<br>
-{% endblock %}
+    <br>
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}

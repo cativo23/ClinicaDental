@@ -202,9 +202,6 @@ def consulta(request, pk):
             if form.is_valid() and form1.is_valid():
                 if consulta.horaFinal == None:
                     form.instance.horaFinal = datetime.now()
-                print("Carga")
-                print("Jo")
-                print(od)
                 consulta.odontograma = od;
                 consulta.save()
                 print(consulta.odontograma)
@@ -248,7 +245,8 @@ def agregarConsulta(request):
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
     else:
-        form = NuevaConsultaForm()
+        data = {'doctor': request.user.doctor}
+        form = NuevaConsultaForm(initial = data)
 
     context = {
         'form': form
