@@ -1,78 +1,106 @@
-{% extends "base.html" %}
+{% extends "app/base_site.html" %}
 
-{% block navbar %}
-<ul>
-  <li class="active"><a href="/">Inicio</a></li>
-  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="{% url 'inv:principalProducto' %}">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{% endblock stylesheets %}
 
 {% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>EXPEDIENTES</h3>
+          </div>
 
-<div class="tratamiento">
-    <div class="container center">
-        <div class="about-grids">
-            <div class="contact-form">
-                <div class="col-md-14 about-left">
-                    <form action="/GestionExpedientes/" method="get" align="center">
-                        <input type="submit" value="regresar"  id="frm1_submit" />
-                    </form>
-                    <br>
-                    <h1 align="center">EXPEDIENTES</h1>
-                </div>
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Ir</button>
+                </span>
+              </div>
             </div>
-            <div class="col-md-14 about-left">
-                <div class="contact-form">
-                    <form id="searchform" action="{% url 'gestionExp:listarExpedientes' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
-                        <input value="Buscar" type="submit">
-                        <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-                    </form>
-                </div>
-                <br>
-                {% if messages %}{% for message in messages %}{% if message.tags == 'success' %}
-                <p style="color: green"> <u>{{ message }}</u></p>
-                {% else %}
-                <p style="color: red"><u>{{ message }}</u> </p>
-                {% endif %}
-                {% endfor %}
-                <p></p>
-                {% endif %}
-                <div style="padding-left: 30px; padding-right: 30px" >
-                    {% if object_list %}
-                    <table id="customers">
-                        <thead>
-                            <tr>
-                                <td><b>Paciente</b></td>
-                                <td><b>Fecha Nacimiento</b></td>
-                                <td><b>Telefono</b></td>
-                                <td><b>Direccion</b></td>
-                                <td><b>Fecha Creación</b></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for expediente in object_list %}
-                            <tr>
-                                <td><a class="button" href="{% url 'gestionExp:detalleExpediente' expediente.id %}">{{ expediente.paciente }}</a></td>
-                                <td>{{ expediente.paciente.fechaNacimiento}}</td>
-                                <td>{{ expediente.paciente.telefonoCasa}}</td>
-                                <td>{{ expediente.paciente.direccionCasa}}</td>
-                                <td>{{ expediente.fechaCreacion }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% else %}
-                    <p>No hay paciente con esos parametros</p>
-                    {% endif %}
-                </div>
-            </div>
+          </div>
         </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Listados de expedientes</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="contact-form">
+                  <div class="x_content">
+                    <p class="text-muted font-13 m-b-30">
+                      Listado de pacientes
+                    </p>
+                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                      <thead>
+                          <tr>
+                              <td><b>Paciente</b></td>
+                              <td><b>Fecha Nacimiento</b></td>
+                              <td><b>Telefono</b></td>
+                              <td><b>Direccion</b></td>
+                              <td><b>Fecha Creación</b></td>
+                          </tr>
+                      </thead>
+
+
+                      <tbody>
+                          {% for expediente in object_list %}
+                          <tr>
+                              <td><a href="{% url 'gestionExp:detalleExpediente' expediente.id %}">{{ expediente.paciente }}</a></td>
+                              <td>{{ expediente.paciente.fechaNacimiento}}</td>
+                              <td>{{ expediente.paciente.telefonoCasa}}</td>
+                              <td>{{ expediente.paciente.direccionCasa}}</td>
+                              <td>{{ expediente.fechaCreacion }}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-<br>
 {% endblock %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+  <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+{% endblock javascripts %}

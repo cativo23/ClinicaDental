@@ -10,7 +10,6 @@
 		<title>Sistema Informatico Gestion Odontologica Clinica Dental Merliot </title>
 
 		<link rel="shortcut icon" type="image/png" href="{% static 'images/logo.jpg' %}"/>
-		<link href="{% static "css/bootstrap.css" %}" rel='stylesheet' type='text/css' />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -18,18 +17,19 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
 		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  	<link rel="stylesheet" href="{% static 'css/local.css'%}">
+  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  		<link rel="stylesheet" href="{% static 'css/local.css'%}">
+		<link href="{% static "css/bootstrap.css" %}" rel='stylesheet' type='text/css' />
+
+		<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$('.telefono').mask('0000-0000', {placeholder: "Ingrese Telefono"});
 			});
 		</script>
-		<script>
-		$( function() {
-			$( ".datepicker" ).datepicker();
-		} );
-		</script>
+		
 
 		{% block javascript %}
 
@@ -145,5 +145,9 @@
 			</div>
 		</div>
 		<!-- /footer -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js"></script>
 	</body>
 </html>

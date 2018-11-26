@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<ul>
+  <li><a href="/">Inicio</a></li>
+  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
+  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
+  <li><a href="#">Inventario</a></li>
+  <li><a href="/auth/settings/">Modificar Perfil</a></li>
+  <li><a href="/auth/logout/">Salir</a></li>
+  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<div>
+
+<h1> Citas Del Dia </h1>
+
+</div>
+
+{% for cita in citas%} 
+<div>
+  <p>{{ cita.asuntoCita }}</p>
+  <p>{{ cita.paciente.paciente.nombresPaciente}}</p>
+  <p>{{ cita.doctor.nombreDoctor }}</p>
+  <p>{{ cita.fechaCita }}</p>
+  <p>{{ cita.horaCita}}</p>
+  <p>{{ cita.horaCita}}</p>
+  <p>{{ cita.estado}}</p>
+ 
+</div>
+  {% endfor %}
+<br>
+{% endblock %}

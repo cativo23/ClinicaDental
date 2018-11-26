@@ -40,7 +40,7 @@ class Paciente(models.Model):
     direccionTrabajo = models.CharField('Direccion Trabajo', max_length=150, blank=True, null=True)
     telefonoCasa = models.CharField('Telefono Casa', max_length=9, help_text='Formato: XXXX-XXXX', blank=True, null=True)
     telefonoTrabajo = models.CharField('Telefono Trabajo', max_length=9, help_text='Formato: XXXX-XXXX', blank=True, null=True)
-    referencia = models.CharField('Responsable', max_length=60, help_text='(En caso de ser ninio)', blank=True, null=True)
+    referencia = models.CharField('Responsable', max_length=60, help_text='(En caso de ser niño)', blank=True, null=True)
 
     def __str__(self):
         return self.apellidosPaciente + ", " + self.nombresPaciente
@@ -81,11 +81,11 @@ class Cita(models.Model):
     asuntoCita=models.CharField('Asunto de la cita', max_length=50,blank=False,null=False)
     paciente = models.ForeignKey(Expediente, on_delete=models.PROTECT)
     doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT)
-    fechaCita = models.DateField('Fecha de Cita',  help_text='Formato: AAAA-MM-DD', blank=False, null=False)
+    fechaCita = models.DateField('Fecha de Cita', help_text='Formato: AAAA-MM-DD', blank=False, null=False)
     horaCita = models.TimeField('Hora de Cita', blank=False, null=False)
     observacionCita = models.TextField('Observaciones', max_length=250, blank=True, null=True)
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default=None, blank=False, null=False)
-    
+
 
     def __str__(self):
         return 'Cita de {} el dia {}'.format(self.paciente.paciente.nombresPaciente, self.fechaCita)
@@ -94,5 +94,3 @@ class Cita(models.Model):
         ordering = ['fechaCita', 'horaCita']
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
-
-

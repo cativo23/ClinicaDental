@@ -18,52 +18,230 @@
               <input type="submit" value="regresar"  id="frm1_submit" />
             </form>
             <form action="agregarProducto/" method="get" align="center" style = "display:inline">
-              <input type="submit" value="agregar producto"  id="frm1_submit" />
+              <input type="submit" value="RESUMEN"  id="frm1_submit" />
             </form>
-            <form id="searchform" action="{% url 'inv:principalProducto' %}" method="get" accept-charset="utf-8" style = "display:inline">
-                <input value="Buscar" type="submit">
-                <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-            </form>
+
         </div>
         <br>
         <div style="padding-left: 30px; padding-right: 30px" >
-            {% if object_list %}
-            <table id="customers">
-                <thead>
-                    <tr>
-                        <td><b>Nombre del producto</b></td>
-                        <td><b>Marca del producto</b></td>
-                        <td><b>Existencias</b></td>
-                        <td><b>Precio al que fue adquirido</b></td>
-                        <td><b>Suma/Resta de existencias</b></td>
-                    </tr>
-                </thead>
-               <tbody>
-                 {% for producto in object_list %}
-                 <tr>
-                   <td><a class="button" href="{% url 'inv:editarProducto' producto.id %}">{{producto.nombre_producto}}</a></td>
-                   <td>{{ producto.marca_producto}}</td>
-                   <td>{{ producto.existencia_producto}}</td>
-                   <td>{{ producto.precio_producto }}</td>
-                   <td>
-                       <form id="searchform" action="{% url 'inv:principalProducto' %}" method="post" accept-charset="utf-8">
-                           {% csrf_token %}
-                           <input type ="hidden" name="identificador" value="{{producto.id}}">
-                           <input value="+" name="suma" type="submit">
-                           <input value="-" name="resta" type="submit">
-                           {% for field in form%}
-                           {{field}}
-                           {% endfor %}
-                       </form>
-                   </td>
-                 </tr>
-                 {% endfor %}
-               </tbody>
-             </table>
-             {% else %}
-             <p>No hay productos con esos parametros con esos parametros</p>
-           {% endif %}
+            <hr style="border-width: 1px;border-color:grey;"> <!-- -->
         </div>
+
+        <div style="padding-left: 30px; padding-right: 30px" >
+            <h1>PRODUCTO</h1>
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla uno-->
+
+        </div>
+
+
+        <div style="padding-left: 30px; padding-right: 30px" >
+            <div style="display:block; max-height:200px; overflow-y:auto; -ms-overflow-style:-ms-autohiding-scrollbar;">
+                {% if object_list %}
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <td><b>Nombre del producto</b></td>
+                            <td><b>Marca del producto</b></td>
+                            <td><b>Existencias</b></td>
+                            <td><b>Precio al que fue adquirido</b></td>
+                        </tr>
+                    </thead>
+                   <tbody>
+                     {% for producto in object_list %}
+                     <tr>
+                       <td><a class="button" href="{% url 'inv:editarProducto' producto.id %}">{{producto.nombre_producto}}</a></td>
+                       <td>{{ producto.marca_producto}}</td>
+                       <td>{{ producto.existencia_producto}}</td>
+                       <td>{{ producto.precio_producto }}</td>
+                     </tr>
+                     {% endfor %}
+                   </tbody>
+                 </table>
+                 {% else %}
+                 <p>No hay productos con esos parametros con esos parametros</p>
+               {% endif %}
+            </div>
+        </div>
+        <div class="contact-form" style = "padding:30px ">
+            <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">
+              <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#myModal">+</button>
+            </form>
+        </div>
+
+
+        <!--MODAL-->
+        <div class="col-md-12">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Agregar Producto</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{% url 'inventario:principalProducto' %}" method="post">{% csrf_token %}
+                            <div class="modal-body">
+                                <table>
+                                    {% for field in form_producto %}
+                                    <tr><td>{{field.label_tag}}</td><td>{{field}}</td></tr>
+                                    <tr><td><br></td></tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                              <button type="submit" method="post" name="modalproducto" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MODAL-->
+
+
+
+        <div style="padding-left: 30px; padding-right: 30px" >
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla tres-->
+            <h1>ENTRADA</h1>
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla dos-->
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla dos-->
+        </div>
+
+        <div style="padding-left: 30px; padding-right: 30px" >
+            <div style="display:block; max-height:200px; overflow-y:auto; -ms-overflow-style:-ms-autohiding-scrollbar;">
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <td><b>Nombre del producto</b></td>
+                            <td><b>Marca del producto</b></td>
+                            <td><b>Cantidad</b></td>
+                            <td><b>Fecha</b></td>
+                        </tr>
+                    </thead>
+                   <tbody>
+                       {% for transaccion in transaccion_list %}
+                       {% if transaccion.tipo_transaccion == 'ENTRADA' or transaccion.tipo_transaccion == 'Entrada' %}
+                       <tr>
+                         <td>{{transaccion.producto.nombre_producto}}</td>
+                         <td>{{transaccion.producto.marca_producto}}</td>
+                         <td>{{transaccion.cantidad }}</td>
+                         <td>{{transaccion.fecha}}</td>
+                       </tr>
+                       {% endif %}
+                       {% endfor %}
+                   </tbody>
+                 </table>
+            </div>
+        </div>
+        <div class="contact-form" style = "padding:30px ">
+            <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">
+              <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal_entrada">+</button>
+            </form>
+        </div>
+
+        <!--MODAL-->
+        <div class="col-md-12">
+            <div class="modal fade" id="modal_entrada" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Agregar entrada</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{% url 'inventario:principalProducto' %}" method="post">{% csrf_token %}
+                            <div class="modal-body">
+                                <table>
+                                    {% for field in form_transaccion %}
+                                    <tr><td>{{field.label_tag}}</td><td>{{field}}</td></tr>
+                                    <tr><td><br></td></tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                              <button type="submit" method="post" name="entrada" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MODAL-->
+
+
+        <div style="padding-left: 30px; padding-right: 30px" >
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla tres-->
+            <h1>SALIDA</h1>
+            <hr style="border-width: 1px;border-color:grey;"> <!-- tabla tres-->
+        </div>
+
+
+
+        <div style="padding-left: 30px; padding-right: 30px" >
+            <div style="display:block; max-height:200px; overflow-y:auto; -ms-overflow-style:-ms-autohiding-scrollbar;">
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <td><b>Nombre del producto</b></td>
+                            <td><b>Marca del producto</b></td>
+                            <td><b>Cantidad</b></td>
+                            <td><b>Fecha</b></td>
+                        </tr>
+                    </thead>
+                   <tbody>
+                       {% for transaccion in transaccion_list %}
+                       {% if transaccion.tipo_transaccion == 'SALIDA' %}
+                       <tr>
+                         <td>{{transaccion.producto.nombre_producto}}</td>
+                         <td>{{transaccion.producto.marca_producto}}</td>
+                         <td>{{transaccion.cantidad }}</td>
+                         <td>{{transaccion.fecha}}</td>
+                       </tr>
+                       {% endif %}
+                       {% endfor %}
+                   </tbody>
+                 </table>
+            </div>
+        </div>
+        <div class="contact-form" style = "padding:30px ">
+            <form action="/GestionExpedientes/" method="get" align="center" style = "display:inline">
+              <button type="button" class="btn btn-primary mb-2"  data-toggle="modal" data-target="#modal_salida">+</button>
+            </form>
+        </div>
+        <!--MODAL-->
+        <div class="col-md-12">
+            <div class="modal fade" id="modal_salida" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Agregar salida</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{% url 'inventario:principalProducto' %}" method="post">{% csrf_token %}
+                            <div class="modal-body">
+                                <table>
+                                    {% for field in form_transaccion %}
+                                    <tr><td>{{field.label_tag}}</td><td>{{field}}</td></tr>
+                                    <tr><td><br></td></tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                              <button type="submit" method="post" name="salida" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MODAL-->
     </div>
 </div>
 <br>

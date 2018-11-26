@@ -1,144 +1,130 @@
-{% extends "base.html" %}
+{% extends "app/base_site.html" %}
 
-{% block navbar %}
+{% block title %} Nuevo Expediente {% endblock title %}
 
-<ul>
-  <li><a href="/">Inicio</a></li>
-  <li><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-
-{% endblock %}
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
 
 {% block content %}
-<div class="tratamiento">
-  <div class="container clearfix center">
-    {% if messages %}
-    {% for message in messages %}
-    {% if message.tags == 'success' %}
-    <p style="color: green"> <u>{{ message }}</u></p>
-    {% else %}
-    <p style="color: red"><u>{{ message }}</u> </p>
-    {% endif %}
-    {% endfor %}
-    <p></p>
-    {% endif %}
-    <div align="center" >
-
-        <!-- inicio tabla-->
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>
-                        <!--parte del boton menu-->
-
-                        <div class="contact-form">
-                            <form action="/GestionExpedientes/" method="get">{% csrf_token %}
-                                <input type="submit" value="regresar"  id="frm1_submit" />
-                            </form>
-                        </div>
-
-                        <!--parte del boton menu-->
-                    </th>
-                </tr>
-                <tr>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th><h1>Expediente Nuevo</h1></th>
-                </tr>
-            </thead>
-
-            <div class="contact-form" >
-                <tbody>
-                    <form method="post"> {% csrf_token %}
-                        <div class="contact-form-row " >
-                            {% for field in form2 %}
-                            <tr>
-                                <td align="right">
-                                    <label for="{{ field.label }}" style="padding-right:10px" >{{ field.label_tag }}</label>
-                                </td>
-                                <td>
-                                    {{ field }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    {% if field.help_text %}
-                                    <small style="color: grey">{{ field.help_text|safe }}</small>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <br>
-                                </td>
-                            </tr>
-                            {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                                <strong>{{ error|escape }}</strong>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
-
-                        <!-- inicio de un for -->
-                        {% for field in form1 %}
-
-                        <div class="contact-form-row">
-                            <tr>
-                                <td align="right" >
-                                    <label for="{{ field.label }}" style="padding-right:10px"  >{{ field.label_tag }}</label>
-                                </td>
-                                <td>
-                                    {{ field }}
-                                </td>
-                                <td>
-                                    {% if field.help_text %}
-                                    <small style="color: grey">{{ field.help_text|safe }}</small>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    {% if field.help_text %}
-                                    <small style="color: grey">{{ field.help_text|safe }}</small>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <!-- FINAL de un for -->
-                        </div>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <div class="contact-form">
-                                    <input value="Enviar" type="submit">
-                                </div>
-                            </td>
-                        </tr>
-                    </form>
-                </tbody>
-            </div>
-        </table>
-        <!-- fin tabla-->
-        <!-- inicio de OTRO for -->
-        {% for error in field.errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Nuevo Expediente</h3>
+          </div>
         </div>
-        {% endfor %}
-        <!-- FINAL de otro for -->
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              {% if messages %}
+   {% for message in messages %}
+   {% if message.tags == 'success' %}
+   <p style="color: green"> <u>{{ message }}</u></p>
+   {% else %}
+   <p style="color: red"><u>{{ message }}</u> </p>
+   {% endif %}
+   {% endfor %}
+   <p></p>
+   {% endif %}
+              <div class="x_title">
+                <h2>Ingrese los datos del paciente</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <form autocomplete="off" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post"> {% csrf_token %}
+                  {% for field in form2 %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                       {% if field.field.widget.input_type == "select" %}
+                       <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                         <option value="none">---</option>
+                         {% for choice in field.field.choices %}
+                           <option value="{{choice.0}}">{{choice.1}}</option>
+                         {% endfor %}
+                       </select>
+                       {% else %}
+                       <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }} {{field.field.widget.attrs.id}}"
+                       {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                       {% if field.field.required %} required="required"{% endif %}
+                       {% if field.help_text %}
+                       placeholder="{{ field.help_text|safe }}"
+                       {% endif %}
+                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12">
+                        {% endif %}
+                    </div>
+                    {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                  </div>
+              {% endfor %}
+
+              {% for field in form1 %}
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                   {% if field.field.widget.input_type == "select" %}
+                   <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                     <option value="none">---</option>
+                     {% for choice in field.field.choices %}
+                       <option value="{{choice.0}}">{{choice.1}}</option>
+                     {% endfor %}
+                   </select>
+                   {% else %}
+                   {% if field.field.widget.template_name == "django/forms/widgets/textarea.html" %} <textarea id="id_observaciones" class="form-control"></textarea>{% else %}
+                   <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }}"
+                   {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                   {% if field.field.required %} required="required"{% endif %}
+                   {% if field.help_text %}
+                   placeholder="{{ field.help_text|safe }}"
+                   {% endif %}
+                   class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12">
+                   {% endif %}
+                    {% endif %}
+                </div>
+                {% for error in field.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
+              </div>
+          {% endfor %}
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<br>
-{% endblock %}
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+			$(document).ready(function(){
+				$('.telefono').mask('0000-0000', {placeholder: "Formato: xxxx-xxxx"});
+			});
+		</script>
+    <script>
+    $( function() {
+      $( ".datepicker" ).datepicker({ dateFormat: 'dd-mm-yy', maxDate: '0' }).val();
+    } );
+    </script>
+{% endblock javascripts %}

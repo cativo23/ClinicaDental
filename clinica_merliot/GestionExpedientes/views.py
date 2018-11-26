@@ -19,6 +19,8 @@ from .models import Expediente, Paciente
 from odontograma.models import Consulta
 # Create your views here.
 
+from django.utils import timezone
+from django.shortcuts import render_to_response
 
 @login_required
 def index(request):
@@ -151,7 +153,7 @@ class CitaList(LoginRequiredMixin, ListView):
         if keywords:
             query = SearchQuery(keywords)
             vector = SearchVector('paciente__paciente__nombresPaciente', 'paciente__paciente__apellidosPaciente', 'doctor__nombreDoctor')
-            qs = Consulta.objects.annotate(search=vector).filter(search=query)
+            qs = Cita.objects.annotate(search=vector).filter(search=query)
             qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
 
         return qs
@@ -213,3 +215,7 @@ def editarCita(request, pk):
 
     return render(request, template, context)
 
+
+def cita_list(request):
+    citas = Cita.objects.filter(fechaCita=timezone.now())
+    return render(request,'GestionExpedientes/cita_dia.html', {'citas': citas})

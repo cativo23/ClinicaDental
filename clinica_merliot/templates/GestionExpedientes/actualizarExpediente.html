@@ -29,14 +29,7 @@
                         <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
                     </form>
                     <br>
-                    {% if messages %}
-                    {% for message in messages %}
-                    {% if message.tags == 'success' %}
-                    <p style="color: green"> <u>{{ message }}</u></p>
-                        {% else %}
-                    <p style="color: red"><u>{{ message }}</u> </p>
-                    {% endif %}
-                    {% endfor %}
+                    
                     <p></p>
                     {% endif %}
                     <div style ="padding-left:30px; padding-right: 30px" >
