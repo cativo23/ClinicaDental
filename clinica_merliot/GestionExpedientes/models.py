@@ -2,7 +2,7 @@ from django.db import models
 from myauth import models as authModels
 import datetime
 from decimal import Decimal
-
+from odontograma.models import Odontograma
 # Create your models here.
 
 
@@ -54,6 +54,7 @@ class Paciente(models.Model):
 
 class Expediente(models.Model):
     paciente = models.OneToOneField(Paciente, on_delete=models.CASCADE)
+    odontograma = models.OneToOneField(Odontograma, on_delete=models.CASCADE, null= True, blank = True)
     fechaCreacion = models.DateTimeField('date_created', auto_now_add=True)
     pagado = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     saldo = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)

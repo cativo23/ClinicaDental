@@ -1,15 +1,15 @@
 from django.db import models
-from GestionExpedientes.models import  Doctor, Paciente, Expediente
+import GestionExpedientes
+#from GestionExpedientes.models import  Doctor, Paciente
 # Create your models here.
 
 class Odontograma(models.Model):
-    medico = models.ForeignKey(Doctor, on_delete = models.SET_NULL, null = True)
-    paciente = models.ForeignKey(Paciente, on_delete = models.CASCADE)
+    medico = models.ForeignKey('GestionExpedientes.Doctor', on_delete = models.SET_NULL, null = True)
     fechaCreacion = models.DateTimeField('date_created', auto_now_add=True)
     notas = models.TextField()
 
     def __str__(self):
-        return '%s - %s' % (self.id, self.paciente)
+        return '%s' % (self.id)
 
 class Tratamiento(models.Model):
     nombreTratamiento = models.CharField('Nombre del tratamiento', max_length=100, blank=False, null=False)
@@ -55,9 +55,8 @@ class Procedimiento(models.Model):
 
 
 class Consulta(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT)
-    odontograma = models.OneToOneField(Odontograma, null=True, blank=True, on_delete = models.SET_NULL)
-    paciente = models.ForeignKey(Expediente, on_delete=models.PROTECT)
+    doctor = models.ForeignKey('GestionExpedientes.Doctor', on_delete=models.PROTECT)
+    paciente = models.ForeignKey('GestionExpedientes.Expediente', on_delete=models.PROTECT)
     fechaConsulta = models.DateField('Fecha de Consulta', auto_now_add=True)
     horaInicio = models.TimeField('Hora de inicio', auto_now_add=True)
     horaFinal = models.TimeField('Hora de Final', auto_now_add=False, null=True)

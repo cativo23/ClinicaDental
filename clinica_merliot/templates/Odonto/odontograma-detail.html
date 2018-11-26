@@ -55,7 +55,7 @@
         <td>{{ procedimiento.tratamiento }}</td>
         <td ><span class="label">{{ procedimiento.get_status_display }}</span></td>
         <td><a href="{% url 'odontograma:detalleProcedimiento' procedimiento.id %}" class="btn btn-default">Ver</a></td>
-        
+
       </tr>
       {% endfor %}
 
@@ -79,7 +79,7 @@
 
         <tr>
           <th>Paciente:</th>
-          <td>{{ odontograma.paciente }}</td>
+          <td>{{ odontograma.expediente.paciente }}</td>
         </tr>
 
         <tr>

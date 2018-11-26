@@ -13,10 +13,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic import UpdateView, DetailView
-from GestionExpedientes.models import Doctor, Paciente
+from GestionExpedientes.models import Doctor, Paciente, Expediente
 from .models import Odontograma, Procedimiento, Tratamiento, Consulta
-
-from GestionExpedientes.models import Expediente
 from GestionExpedientes.forms import nuevoExpedienteForm
 
 from .forms import OdontogramaForm, ProcedimientoFormSet, NuevaConsultaForm,  nuevoTratamientoForm, ConsultaForm
@@ -28,8 +26,8 @@ def odontograma(request, paciente_id):
     de esto.
     '''
     template = 'Odonto/testOdonto.html'
-    consulta = get_object_or_404(Consulta, pk=paciente_id)
-    paciente = get_object_or_404(Paciente, pk=consulta.paciente.id)
+    expediente = get_object_or_404(Expediente, pk=1)
+    paciente = get_object_or_404(Paciente, pk=expediente.paciente.id)
     tratamientos = Tratamiento.objects.all()
     medico = get_object_or_404(Doctor, pk = request.user.doctor.pk)
     # initial = [{
@@ -43,15 +41,15 @@ def odontograma(request, paciente_id):
 
     if request.method == 'POST':
         modelform = OdontogramaForm(request.POST)
-        formset = ProcedimientoFormSet(request.POST, initial=initial)
+        formset = ProcedimientoFormSet(request.POST)
 
         if modelform.is_valid():
             odontograma = modelform.save(commit=False)
             odontograma.paciente = paciente
             odontograma.medico = medico
             odontograma.save()
-            consulta.odontograma = odontograma
-            consulta.save()
+            expediente.odontograma = odontograma
+            expediente.save()
             print(formset)
             if formset.is_valid():
                 for form in formset:
@@ -90,7 +88,7 @@ class OdontogramaDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OdontogramaDetail, self).get_context_data(**kwargs)
-        paciente = self.object.paciente
+        paciente = self.object.expediente
         procedimientos = self.object.procedimiento_set.all()
         fecha = self.object.fechaCreacion
         context.update({'paciente': paciente,
@@ -189,22 +187,37 @@ def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
+    paciente = get_object_or_404(Paciente, pk=expediente.paciente.id)
+    tratamientos = Tratamiento.objects.all()
+    medico = get_object_or_404(Doctor, pk = request.user.doctor.pk)
     od = None
-    if consulta.odontograma:
-        od = get_object_or_404(Odontograma, pk=consulta.odontograma.id)
+    initial = [{}]
+    if expediente.odontograma:
+        od = get_object_or_404(Odontograma, pk=expediente.odontograma.id)
         print(od)
     edad = datetime.now().year - expediente.paciente.fechaNacimiento.year
 
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
         form1 = nuevoExpedienteForm(request.POST, instance=expediente)
+        modelform = OdontogramaForm(request.POST)
+        formset = ProcedimientoFormSet(request.POST)
         try:
-            if form.is_valid() and form1.is_valid():
+            if form.is_valid() and form1.is_valid() and modelform.is_valid():
                 if consulta.horaFinal == None:
                     form.instance.horaFinal = datetime.now()
-                consulta.odontograma = od;
-                consulta.save()
-                print(consulta.odontograma)
+                odontograma = modelform.save(commit=False)
+                odontograma.paciente = paciente
+                odontograma.medico = medico
+                odontograma.save()
+                expediente.odontograma = odontograma
+                expediente.save()
+                if formset.is_valid():
+                    print(formset.forms)
+                    for forma in formset:
+                        forma.instance.odontograma = odontograma
+                        print('hola %s'%form.instance)
+                        forma.save()
                 #form.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
                 return redirect('odontograma:listarConsultas')
@@ -217,12 +230,17 @@ def consulta(request, pk):
     else:
         form = ConsultaForm(instance=consulta)
         form1 = nuevoExpedienteForm(instance=expediente)
+        modelform = OdontogramaForm()
+        formset = ProcedimientoFormSet(initial=initial)
 
     context = {
         'form': form,
         'form1': form1,
+        'form2': modelform,
+        'formset': formset,
         'consulta': consulta,
         'expediente': expediente,
+        'tratamientos': tratamientos,
         'edad': edad
     }
 
