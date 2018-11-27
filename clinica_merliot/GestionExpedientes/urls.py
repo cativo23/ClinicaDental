@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list
+from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list,prueba
 
 urlpatterns = [
     path('', views.index, name='home'),
@@ -15,4 +15,5 @@ urlpatterns = [
     path('nuevaCita/', views.agregarCita, name='nuevaCita'),
     path('actualizarCita/<pk>/edit/', views.editarCita, name='editarCita'),
     path('cita/Prueba/', views.cita_list, name='prueba'),
+    path('cita/calendario/', views.prueba, name='calendario')
 ]
