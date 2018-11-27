@@ -101,6 +101,7 @@ jQuery(function(){
 	    		var cara = me.data('cara');
 
 				if(!vm.tratamientoSeleccionado()){
+          print('ss');
 					alert('Debe seleccionar un tratamiento previamente.');
 					return false;
 				}
@@ -215,11 +216,4 @@ jQuery(function(){
 	renderSvg();
 
 
-	//Cargo los tratamientos
-	/*$.getJSON('/static/js/tratamientos.js', function(d){
-		for (var i = d.length - 1; i >= 0; i--) {
-			var tratamiento = d[i];
-			vm.tratamientosPosibles.push(tratamiento);
-		};
-	});*/
 });

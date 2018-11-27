@@ -1,92 +1,95 @@
-{% extends "base.html" %}
+{% extends "app/base_site.html" %}
 
-{% block navbar %}
-<ul>
-  <li><a href="/">Inicio</a></li>
-  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
 {% block content %}
-<script type="text/javascript">
- $(function() { 
-  $(".datepicker2").datepicker({ minDate: 0  });
-}); 
-  
- </script>
-<div class="tratamiento">
-  <div class="container center">
-    <div class="about-grids">
-       <div align="center">
-          <table>
-              <thead>
-                  <tr>
-                      <th></th>
-                      <th>
-                          <div class="contact-form">
-                              <form action="{% url 'gestionExp:listarCita' %}" method="get">{% csrf_token %}
-                                <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
-                              </form>
-                          </div>
-                      </th>
-                  </tr>
-                  <tr><td><br></td></tr>
-                  <tr>
-                      <th></th>
-                      <th><h1>NUEVA CITA</h1></th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr><td><br></td></tr>
-                  <div class="contact-form">
-                    <form method="post">{% csrf_token %}
-                      {% for field in form %}
-                      <div class="contact-form-row">
-                      <tr>
-                          <td align="right">
-                              <label for="{{ field.label }}" style="padding-right:10px" >{{ field.label_tag }}</label>
-                          </td>
-                          <td>
-                              {{ field }}
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <br>
-                          </td>
-                      </tr>
-                         {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                              <strong>{{ error|escape }}</strong>
-                            </div>
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Nueva Cita</h3>
+          </div>
+
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Nueva Cita</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <form autocomplete="off" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post"> {% csrf_token %}
+                  {% for field in form %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                       {% if field.field.widget.input_type == "select" %}
+                       <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                         {% for choice in field.field.choices %}
+                           <option value="{{choice.0}}">{{choice.1}}</option>
+                         {% endfor %}
+                       </select>
+                       {% else %}
+                       <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }} {{field.field.widget.attrs.id}}"
+                       {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                       {% if field.field.required %} required="required"{% endif %}
+                       {% if field.help_text %}
+                       placeholder="{{ field.help_text|safe }}"
+                       {% endif %}
+                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12">
+                        {% endif %}
+                    </div>
+                    {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
                             {% endfor %}
-                          <div class="clearfix"> </div>
-                      </div>
-                      {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                    {% endfor %}
-                    <tr>
-                        <td></td>
-                        <td>
-                            <div class="contact-form">
-                                <input value="Enviar" type="submit">
-                            </div>
-                        </td>
-                    </tr>
-                    </form>
                   </div>
-              </tbody>
-          </table>
+              {% endfor %}
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+              </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<br>
-{% endblock %}
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+   $(function() {
+    $(".datepicker2").datepicker({ minDate: 0  });
+  });
+
+   </script>
+{% endblock javascripts %}

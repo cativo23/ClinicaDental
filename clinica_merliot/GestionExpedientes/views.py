@@ -13,10 +13,7 @@ from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.shortcuts import get_object_or_404
 from datetime import date, datetime
 
-from .forms import nuevoExpedienteForm, nuevoPacienteForm, ExpForm
-from .models import Expediente, Paciente
-
-from odontograma.models import Consulta
+from odontograma.models import Consulta, Odontograma
 # Create your views here.
 
 from django.utils import timezone
@@ -37,7 +34,9 @@ def nuevoExpediente(request):
             if form2.is_valid() and form1.is_valid():
                 a = form2.save()
                 b = form1.cleaned_data['observacionExp']
-                expediente = Expediente.objects.create(paciente=a, observacionExp=b)
+                odonto = Odontograma(medico=request.user.doctor)
+                odonto.save()
+                expediente = Expediente.objects.create(paciente=a, observacionExp=b, odontograma = odonto)
 
                 if request.user.doctor is not None:
                     cons = Consulta.objects.create(paciente=expediente, doctor=request.user.doctor)
@@ -178,7 +177,7 @@ def agregarCita(request):
                 return redirect('gestionExp:listarCita')
 
         except Exception as e:
-            messages.warning(request, 'La cita no se creo debido a un error: {}'.format(e))
+            messages.error(request, 'La cita no se creo debido a un error: {}'.format(e))
     else:
         form = NuevaCitaForm()
 

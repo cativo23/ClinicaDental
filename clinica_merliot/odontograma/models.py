@@ -1,5 +1,7 @@
 from django.db import models
 import GestionExpedientes
+from django.shortcuts import get_object_or_404
+
 #from GestionExpedientes.models import  Doctor, Paciente
 # Create your models here.
 
@@ -9,7 +11,7 @@ class Odontograma(models.Model):
     notas = models.TextField()
 
     def __str__(self):
-        return '%s' % (self.id)
+        return '#%s - Ondontograma del %s' % (self.id, GestionExpedientes.models.Expediente.objects.filter(odontograma=self.id).first())
 
 class Tratamiento(models.Model):
     nombreTratamiento = models.CharField('Nombre del tratamiento', max_length=100, blank=False, null=False)

@@ -1,286 +1,322 @@
-{% extends "base.html" %}
+{% extends "app/base_site.html" %}
 
 {% load static from staticfiles %}
 {% load crispy_forms_tags %}
 
-{% block javascript %}
-<script src="{% static 'js/plugins.js'%}"></script>
-<script src="{% static 'js/jquery-ui-1.8.17.custom.min.js'%}"></script>
-<script src="{% static 'js/jquery.tmpl.js'%}"></script>
-<script src="{% static 'js/knockout-3.3.0.js'%}"></script>
-<script src="{% static 'js/jquery.svg.min.js'%}"></script>
-<script src="{% static 'js/jquery.svggraph.min.js'%}"></script>
-<script src="{% static 'js/odontograma.js'%}"></script>
-<script>
-  // aligns the submit button
-  $('.normalized-btn').addClass(' pull-right')
-</script>
+{% block title %} Consulta {% endblock title %}
 
-<script>
-    window.onunload = refreshParent;
-    function refreshParent() {
-        window.opener.location.reload();
-    }
-</script>
-{% endblock %}
-
-{% block navbar %}
-<ul>
-  <li><a href="/">Inicio</a></li>
-  <li class="active" ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+{% endblock stylesheets %}
 
 {% block content %}
-<div class="tratamiento">
-  <div class="container center">
-    <div class="about-grids">
-        {% if messages %}
-        {% for message in messages %}
-        {% if message.tags == 'success' %}
-        <p style="color: green"><u>{{ message }}</u></p>
-        {% else %}
-        <p style="color: red"><u>{{ message }}</u> </p>
-        {% endif %}
-        {% endfor %}
-        <p></p>
-        {% endif %}
-        <div class="contact-form" align="center">
-            <h1>CONSULTA</h1>
-            <h2>{{expediente}}</h2>
-            <table>
-                <tr><td><br></td></tr>
-                <tr><td><br></td></tr>
-                <tr>
-                  <div class="tratamiento">
-                    <div class="container center">
-                      <div class="about-grids">
-                        <div class="contact-form">
-                        <div class="col-md-14 about-left">
-                  <h2 class="page-header">Odontograma</h2>
+    <div class="right_col" role="main">
+      <div class="hola">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Consulta</h3>
+          </div>
 
-                  <div class="form-inline">
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                    <label for="tratamiento" class="control-label lead">1) Seleccione Tratamiento:</label>
-                    <select name="tratamiento" id="tratamientos" class="form-control form-inline" data-bind="value: tratamientoSeleccionado,">
+        <div class="clearfix"></div>
 
-                      <option>Seleccione un Tratamiento...</option>
-                      {% for tratamiento in tratamientos %}
-                      <option value="{{ tratamiento.id }}">{{ tratamiento }}</option>
-                      {% endfor %}
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Datos Expediente <small>Datos generales del expediente de {{expediente.paciente}}</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
 
-                    </select>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Nombres</th>
+                      <th>Apellidos</th>
+                      <th>Sexo</th>
+                      <th>Edad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">{{expediente.paciente.nombresPaciente}}</th>
+                      <td>{{expediente.paciente.apellidosPaciente}}</td>
+                      <td>{{expediente.paciente.sexo}}</td>
+                      <td>{{edad}} años</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br>
+                <p><strong>Observaciones:</strong> {{expediente.observacionExp}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>{{consulta}}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <form autocomplete="off" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post"> {% csrf_token %}
+
+                  {% for field in form %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                       {% if field.field.widget.input_type == "select" %}
+                       <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                         {% for choice in field.field.choices %}
+                           <option value="{{choice.0}}" {% if field.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
+                         {% endfor %}
+                       </select>
+                       {% else %}
+                       <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }} {{field.field.widget.attrs.id}}"
+                       {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                       {% if field.field.required %} required="required"{% endif %}
+                       {% if field.help_text %}
+                       placeholder="{{ field.help_text|safe }}"
+                       {% endif %}
+                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12"
+                       {% if field.value != None %}{% if field.field.widget.attrs.id %}value = "{{field.value|date:"d/m/Y"}}"{% else %}value = "{{field.value}}"{% endif %}{% endif %} >
+                        {% endif %}
+                    </div>
+                    {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                  </div>
+              {% endfor %}
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Odontograma del {{expediente}} <small>Modificar odontograma de {{expediente.paciente}}</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <label for="tratamiento" class="control-label lead">1) Seleccione Tratamiento:</label>
+                <select name="tratamiento" id="tratamientos" class="form-control form-inline" data-bind="value: tratamientoSeleccionado,">
+
+                  <option>Seleccione un Tratamiento...</option>
+                  {% for tratamiento in tratamientos %}
+                  <option value="{{ tratamiento.id }}">{{ tratamiento }}</option>
+                  {% endfor %}
+
+                </select>
+
+                </div>
+
+                <form method="post" action="">
+
+                {{ formset.management_form }}
+
+                <p class="lead">2) Seleccione Una Pieza:</p>
+
+                <div id="odontograma"></div>
+
+                <div id="tooth-images">
+                  <!--top -->
+                  <!-- left-side -->
+                  <img src="{% static 'img/piezas/18.jpg' %}" alt="18" width="28">
+                  <img src="{% static 'img/piezas/17.jpg' %}" alt="17" width="28">
+                  <img src="{% static 'img/piezas/16.jpg' %}" alt="16" width="28">
+                  <img src="{% static 'img/piezas/15.jpg' %}" alt="15" width="22">
+                  <img src="{% static 'img/piezas/14.jpg' %}" alt="14" width="22">
+                  <img src="{% static 'img/piezas/13.jpg' %}" alt="13" width="22">
+                  <img src="{% static 'img/piezas/12.jpg' %}" alt="12" width="24">
+                  <img src="{% static 'img/piezas/11.jpg' %}" alt="11" width="28">
+                  <!-- right-side -->
+                  <img src="{% static 'img/piezas/21.jpg' %}" alt="21" width="28">
+                  <img src="{% static 'img/piezas/22.jpg' %}" alt="22" width="24">
+                  <img src="{% static 'img/piezas/23.jpg' %}" alt="23" width="22">
+                  <img src="{% static 'img/piezas/24.jpg' %}" alt="24" width="22">
+                  <img src="{% static 'img/piezas/25.jpg' %}" alt="25" width="22">
+                  <img src="{% static 'img/piezas/26.jpg' %}" alt="26" width="28">
+                  <img src="{% static 'img/piezas/27.jpg' %}" alt="27" width="28">
+                  <img src="{% static 'img/piezas/28.jpg' %}" alt="28" width="28">
+                  <br>
+                  <!-- bottom -->
+                  <div class="bottom">
+                    <!-- left-side -->
+                    <img src="{% static 'img/piezas/48.jpg' %}" alt="48" width="28">
+                    <img src="{% static 'img/piezas/47.jpg' %}" alt="47" width="28">
+                    <img src="{% static 'img/piezas/46.jpg' %}" alt="46" width="28">
+                    <img src="{% static 'img/piezas/45.jpg' %}" alt="45" width="20">
+                    <img src="{% static 'img/piezas/44.jpg' %}" alt="44" width="20">
+                    <img src="{% static 'img/piezas/43.jpg' %}" alt="43" width="20">
+                    <img src="{% static 'img/piezas/42.jpg' %}" alt="42" width="20">
+                    <img src="{% static 'img/piezas/41.jpg' %}" alt="41" width="20">
+                    <!-- right-side -->
+                    <img src="{% static 'img/piezas/31.jpg' %}" alt="31" width="20">
+                    <img src="{% static 'img/piezas/32.jpg' %}" alt="32" width="20">
+                    <img src="{% static 'img/piezas/33.jpg' %}" alt="33" width="20">
+                    <img src="{% static 'img/piezas/34.jpg' %}" alt="34" width="20">
+                    <img src="{% static 'img/piezas/35.jpg' %}" alt="35" width="20">
+                    <img src="{% static 'img/piezas/36.jpg' %}" alt="36" width="28">
+                    <img src="{% static 'img/piezas/37.jpg' %}" alt="37" width="28">
+                    <img src="{% static 'img/piezas/38.jpg' %}" alt="38" width="28">
 
                   </div>
 
-                  <form method="post">{% csrf_token %}
+                </div>
 
-                    {{ formset.management_form }}
+                <p class="lead">3) Verifique Detalles:</p>
 
-                    <p class="lead">2) Seleccione Una Pieza:</p>
+                <div class="clearfix" id="formsets">
 
-                    <div id="odontograma"></div>
+                  <ul>
 
-                    <div id="tooth-images">
-                      <!--top -->
-                      <!-- left-side -->
-                      <img src="{% static 'img/piezas/18.jpg' %}" alt="18" width="28">
-                      <img src="{% static 'img/piezas/17.jpg' %}" alt="17" width="28">
-                      <img src="{% static 'img/piezas/16.jpg' %}" alt="16" width="28">
-                      <img src="{% static 'img/piezas/15.jpg' %}" alt="15" width="22">
-                      <img src="{% static 'img/piezas/14.jpg' %}" alt="14" width="22">
-                      <img src="{% static 'img/piezas/13.jpg' %}" alt="13" width="22">
-                      <img src="{% static 'img/piezas/12.jpg' %}" alt="12" width="24">
-                      <img src="{% static 'img/piezas/11.jpg' %}" alt="11" width="28">
-                      <!-- right-side -->
-                      <img src="{% static 'img/piezas/21.jpg' %}" alt="21" width="28">
-                      <img src="{% static 'img/piezas/22.jpg' %}" alt="22" width="24">
-                      <img src="{% static 'img/piezas/23.jpg' %}" alt="23" width="22">
-                      <img src="{% static 'img/piezas/24.jpg' %}" alt="24" width="22">
-                      <img src="{% static 'img/piezas/25.jpg' %}" alt="25" width="22">
-                      <img src="{% static 'img/piezas/26.jpg' %}" alt="26" width="28">
-                      <img src="{% static 'img/piezas/27.jpg' %}" alt="27" width="28">
-                      <img src="{% static 'img/piezas/28.jpg' %}" alt="28" width="28">
-                      <br>
-                      <!-- bottom -->
-                      <div class="bottom">
-                        <!-- left-side -->
-                        <img src="{% static 'img/piezas/48.jpg' %}" alt="48" width="28">
-                        <img src="{% static 'img/piezas/47.jpg' %}" alt="47" width="28">
-                        <img src="{% static 'img/piezas/46.jpg' %}" alt="46" width="28">
-                        <img src="{% static 'img/piezas/45.jpg' %}" alt="45" width="20">
-                        <img src="{% static 'img/piezas/44.jpg' %}" alt="44" width="20">
-                        <img src="{% static 'img/piezas/43.jpg' %}" alt="43" width="20">
-                        <img src="{% static 'img/piezas/42.jpg' %}" alt="42" width="20">
-                        <img src="{% static 'img/piezas/41.jpg' %}" alt="41" width="20">
-                        <!-- right-side -->
-                        <img src="{% static 'img/piezas/31.jpg' %}" alt="31" width="20">
-                        <img src="{% static 'img/piezas/32.jpg' %}" alt="32" width="20">
-                        <img src="{% static 'img/piezas/33.jpg' %}" alt="33" width="20">
-                        <img src="{% static 'img/piezas/34.jpg' %}" alt="34" width="20">
-                        <img src="{% static 'img/piezas/35.jpg' %}" alt="35" width="20">
-                        <img src="{% static 'img/piezas/36.jpg' %}" alt="36" width="28">
-                        <img src="{% static 'img/piezas/37.jpg' %}" alt="37" width="28">
-                        <img src="{% static 'img/piezas/38.jpg' %}" alt="38" width="28">
+                  {% for procedimientoForm in formset %}
+
+                    {% if forloop.last %}
+                    <li data-bind="foreach: tratamientosAplicados">
+                      <div class="form-inline" data-bind='attr: { id: form_div_id }'>
+
+                    {% else %}
+                    <li>
+                      <div class="form-inline" id="form_div_{{forloop.counter0}}">
+                    {% endif %}
+
+                      {% procedimientoForm %}
 
                       </div>
+                      <a href="#" data-bind="click: $parent.quitarTratamiento" class="pull-left text-warning bin"><i class="fa fa-trash fa-lg"></i></a>
+                    </li></li>
 
-                    </div>
+                  {% endfor %}
 
-                    <p class="lead">3) Verifique Detalles:</p>
+                  </ul><!-- end foreach -->
 
-                    <div class="clearfix" id="formsets">
-
-                      <ul>
-
-                      {% for procedimientoForm in formset %}
-
-                        {% if forloop.last %}
-                        <li data-bind="foreach: tratamientosAplicados">
-                          <div class="form-inline" data-bind='attr: { id: form_div_id }'>
-
-                        {% else %}
-                        <li>
-                          <div class="form-inline" id="form_div_{{forloop.counter0}}">
-                        {% endif %}
-
-                          {% crispy procedimientoForm %}
-
-                          </div>
-                          <a href="#" data-bind="click: $parent.quitarTratamiento" class="pull-left text-warning bin"><i class="fa fa-trash fa-lg"></i></a>
-                        </li></li>
-
-                      {% endfor %}
-
-                      </ul><!-- end foreach -->
-
-                    </div>
-
-                    <h3 class="page-header">Detalle Informacion Adicional</h3>
-
-                    {% crispy form2 %}
-
-                  </div>
-
-                  </div>
-                  </div>
-
-                  </div>
-
-                  </div>
-                  </div>
-                </tr>
-                <tr>
-                    <td align="right"><b>Sexo: </b></td>
-                    <td>{{expediente.paciente.sexo}}</td>
-                </tr>
-
-                <tr><td><br></td></tr>
-                <tr>
-                    <td align="right"><b>Edad: </b></td>
-                    <td>{{edad}}</td>
-                </tr>
-
-                <tr><td><br></td></tr>
-                <tr>
-                    <td align="right"><b>Observaciones Expediente: </b></td>
-                    <td>{{expediente.observacionExp}} </td>
-                </tr>
-
-                <tr><td><br></td></tr>
-                    <div class="contact-form-row">
-                        <tr>
-                            <td align="right">
-                                {{ form.doctor.label_tag }}
-                            </td>
-                            <td>
-                                {{ form.doctor }}
-                            </td>
-                        </tr>
-                        {% if form.doctor.help_text %}
-                        <small style="color: grey">{{ form.doctor.help_text|safe }}</small>
-                        {% endif %}
-                        {% for error in form.doctor.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                        {% endfor %}
-                    </div>
-
-
-                <tr><td><br></td></tr>
-                <div class="contact-form-row">
-                    <tr>
-                        <td align="right">{{ form1.tratamientos.label_tag }}</td>
-                        <td>{{ form1.tratamientos }}</td>
-                    </tr>
-                    {% if form1.tratamientos.help_text %}
-                    <tr>
-                        <td></td>
-                        <td width="100px"><small style="color: grey">{{ form1.tratamientos.help_text|safe }}</small></td>
-                    </tr>
-                    {% endif %}
-                    {% for error in form1.tratamientos.errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                    {% endfor %}
                 </div>
 
-                <tr><td><br></td></tr>
-                <div class="contact-form-row">
-                    <tr>
-                        <td align="right">{{ form.observacionCons.label_tag }}</td>
-                        <td>{{ form.observacionCons}}</td>
-                    </tr>
-                    {% if form1.tratamientos.help_text %}
-                    <small style="color: grey">{{ form.observacionCons.help_text|safe }}</small>
-                    {% endif %}
-                    {% for error in form1.tratamientos.errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                    {% endfor %}
-                </div>
+                <h3 class="page-header">Detalle Informacion Adicional</h3>
 
-
-                <tr><td><br></td></tr>
-                <tr>
-                    <td></td>
-                    <td align="center"><h2>ODONTOGRAMA{{consulta}}</h2></td>
-                </tr>
-
-                <tr>
-                  <td></td>
-                  <td align="center" >{{odontograma.id}}
-                    {% if consulta.paciente.odontograma != None %}
-                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma_detail' consulta.paciente.odontograma.id %}')">Ver Odontograma</a>
-                    {% else %}
-                      <a type="button" class="more-btn" onclick="return popup('{% url 'odontograma:odontograma' consulta.id %}')">Crear Odontograma</a>
-                    {% endif %}
-                  </td>
-                </tr>
-                <script>
-                function popup(page) {
-                  var w = window.open(page, "popup_test", "titlebar=no, menubar=no, statusbar=no, toolbar=no");
-                  w.resizeTo(1000,500);
-                }
-                </script></td>
-                <tr>
-                    <td></td>
-                    <td align="center"><input value="Enviar" type="submit"></td>
-                </tr>
+                {% crispy form %}
 
                 </form>
-            </table>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-  </div>
-</div>
-<br>
 {% endblock %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+  <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+  <!-- PNotify -->
+  <script src="/static/vendors/pnotify/dist/pnotify.custom.min.js"></script>
+  <script src="/static/vendors/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="/static/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  {% if messages %}
+  {% for message in messages %}
+  {{message.tag}}
+    {% if message.tags == 'success' %}
+    <script>
+          $('.hola').ready(function() {
+            new PNotify({
+                            title: '¡Exito!',
+                            text: '{{message}}',
+                            type: 'success',
+                            styling: 'bootstrap3'
+                        });
+          });
+  </script>
+    {% else %}
+    <script>
+          $('.hola').ready(function() {
+            new PNotify({
+                            title: '¡Oh, no!',
+                            text: '{{message}}',
+                            type: '{{message.tags}}',
+                            styling: 'bootstrap3'
+                        });
+          });
+  </script>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+
+  <script src="{% static 'js/plugins.js'%}"></script>
+  <script src="{% static 'js/jquery-ui-1.8.17.custom.min.js'%}"></script>
+  <script src="{% static 'js/jquery.tmpl.js'%}"></script>
+  <script src="{% static 'js/knockout-3.3.0.js'%}"></script>
+  <script src="{% static 'js/jquery.svg.min.js'%}"></script>
+  <script src="{% static 'js/jquery.svggraph.min.js'%}"></script>
+  <script src="{% static 'js/odontograma.js'%}"></script>
+  <script>
+    // aligns the submit button
+    $('.normalized-btn').addClass(' pull-right')
+  </script>
+
+  <script>
+      window.onunload = refreshParent;
+      function refreshParent() {
+          window.opener.location.reload();
+      }
+  </script>
+{% endblock javascripts %}

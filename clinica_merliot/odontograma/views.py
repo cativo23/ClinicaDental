@@ -18,6 +18,8 @@ from .models import Odontograma, Procedimiento, Tratamiento, Consulta
 from GestionExpedientes.forms import nuevoExpedienteForm
 
 from .forms import OdontogramaForm, ProcedimientoFormSet, NuevaConsultaForm,  nuevoTratamientoForm, ConsultaForm
+import traceback
+import math
 # Create your views here.
 
 def odontograma(request, paciente_id):
@@ -186,62 +188,32 @@ class ConsultaDetail(LoginRequiredMixin, DetailView):
 def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
+    consulta.doctor = request.user.doctor
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
-    paciente = get_object_or_404(Paciente, pk=expediente.paciente.id)
-    tratamientos = Tratamiento.objects.all()
-    medico = get_object_or_404(Doctor, pk = request.user.doctor.pk)
-    od = None
-    initial = [{}]
-    if expediente.odontograma:
-        od = get_object_or_404(Odontograma, pk=expediente.odontograma.id)
-        print(od)
-    edad = datetime.now().year - expediente.paciente.fechaNacimiento.year
-
+    edad = (date.today() - expediente.paciente.fechaNacimiento).days/365
+    ed = math.trunc(edad)
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
-        form1 = nuevoExpedienteForm(request.POST, instance=expediente)
-        modelform = OdontogramaForm(request.POST)
-        formset = ProcedimientoFormSet(request.POST)
         try:
-            if form.is_valid() and form1.is_valid() and modelform.is_valid():
+            if form.is_valid():
                 if consulta.horaFinal == None:
                     form.instance.horaFinal = datetime.now()
-                odontograma = modelform.save(commit=False)
-                odontograma.paciente = paciente
-                odontograma.medico = medico
-                odontograma.save()
-                expediente.odontograma = odontograma
-                expediente.save()
-                if formset.is_valid():
-                    print(formset.forms)
-                    for forma in formset:
-                        forma.instance.odontograma = odontograma
-                        print('hola %s'%form.instance)
-                        forma.save()
-                #form.save()
+                form.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
                 return redirect('odontograma:listarConsultas')
             else:
-                print("murio")
-                print (form.errors)
-
+                print('Your Post Was Not Saved Due To An Error: {}'.format(form.errors))
         except Exception as e:
-            messages.warning(request, 'Error: {}'.format(e))
+            messages.warning(request, 'Error: %s'%e)
+            traceback.print_tb(e.__traceback__)
     else:
         form = ConsultaForm(instance=consulta)
-        form1 = nuevoExpedienteForm(instance=expediente)
-        modelform = OdontogramaForm()
-        formset = ProcedimientoFormSet(initial=initial)
 
     context = {
         'form': form,
-        'form1': form1,
-        'form2': modelform,
-        'formset': formset,
         'consulta': consulta,
         'expediente': expediente,
-        'tratamientos': tratamientos,
-        'edad': edad
+        'edad': ed,
     }
 
     return render(request, template, context)
@@ -252,14 +224,11 @@ def agregarConsulta(request):
     template = 'GestionExpedientes/agregarConsulta.html'
     if request.method == 'POST':
         form = NuevaConsultaForm(request.POST)
-
         try:
-            print(form.is_valid())
             if form.is_valid():
                 consulta = form.save()
                 messages.success(request, "La consulta fue creada correctamente!")
                 return redirect('odontograma:verConsulta', consulta.id )
-
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
     else:
