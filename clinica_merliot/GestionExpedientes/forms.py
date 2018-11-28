@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import TextInput, Textarea, ChoiceField
-
+import re
 
 from .models import Expediente, Paciente,  Cita
 

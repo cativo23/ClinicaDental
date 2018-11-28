@@ -173,7 +173,7 @@ def agregarCita(request):
     template = 'GestionExpedientes/agregarCita.html'
     if request.method == 'POST':
         form = NuevaCitaForm(request.POST)
-
+        print(form.errors)
         try:
             print(form.is_valid())
             if form.is_valid():
@@ -226,7 +226,7 @@ def cita_list(request):
 
 def prueba(request):
  return render(request, 'GestionExpedientes/calendario_cita.html', {})
-""" all_events = Cita.objects.all() 
+""" all_events = Cita.objects.all()
     event_arr = []
 
     for i in all_events:
@@ -239,5 +239,3 @@ def prueba(request):
 
     context = {"events":all_events}
     return render(request,'GestionExpedientes/calendario_cita.html',context)"""
-
-
