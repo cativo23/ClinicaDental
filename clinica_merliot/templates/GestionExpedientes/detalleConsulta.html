@@ -1,6 +1,6 @@
 {% extends "app/base_site.html" %}
 
-{% block title %} Plain Page {% endblock title %}
+{% block title %} Ver Consulta {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -11,7 +11,7 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Editar Consulta</h3>
+            <h3>Ver Consulta</h3>
           </div>
 
           <div class="title_right">
@@ -32,7 +32,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Editando {{consulta}}</h2>
+                <h2>Viendo {{consulta}}</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -42,107 +42,42 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
-                  </label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                     {% if field.field.widget.input_type == "select" %}
-                     <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
-                       <option value="">---</option>
-                       {% for choice in field.field.choices %}
-                         <option value="{{choice.0}}" {% if field.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
-                       {% endfor %}
-                     </select>
-                     {% else %}
-                     <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }} {{field.field.widget.attrs.id}}"
-                     {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
-                     {% if field.field.required %} required="required"{% endif %}
-                     {% if field.help_text %}
-                     placeholder="{{ field.help_text|safe }}"
-                     {% endif %}
-                     class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12"
-                     {% if field.value != None %}{% if field.field.widget.attrs.id %}value = "{{field.value|date:"d/m/Y"}}"{% else %}value = "{{field.value}}"{% endif %}{% endif %} >
-                      {% endif %}
-                  </div>
-                  {% for error in field.errors %}
-                              <strong>{{ error|escape }}</strong>
-                          {% endfor %}
-                </div>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Consulta del paciente {{consulta.paciente.paciente}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Doctor que atendió</th>
+                      <td>{{consulta.doctor}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Fecha</th>
+                      <td>{{consulta.fechaConsulta}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Hora Inicio</th>
+                      <td>{{consulta.horaInicio}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Hora Final</th>
+                      <td>{{consulta.horaFinal|default_if_none:'---'}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Observaciones</th>
+                      <td>{{consulta.observacionCons|default_if_none:'---'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                  <a type="button"  class="btn btn-app" href="{% url 'odontograma:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-<div class="tratamiento">
-  <div class="container center" align="center">
-      <div class="contact-form">
-        <div>
-            <form action="/odo/consultas/" method="get">
-                <input type="submit" value="Consultas"  id="frm1_submit" />
-            </form>
-        </div>
-      </div>
-    <table>
-        <tr>
-            <td><h1>Consulta de:</h1></td>
-            <td><h1>{{ consulta.paciente.paciente.nombresPaciente }}</h1></td>
-        </tr>
-        <tr><td><br></td></tr>
-        <tr>
-            <td align="right">
-                <b>Doctor que atendio: </b>
-            </td>
-            <td>
-                {{consulta.doctor}}
-            </td>
-        </tr>
-
-        <tr><td><br></td></tr>
-        <tr>
-            <td align="right">
-                <b>Fecha: </b>
-            </td>
-            <td>
-                {{consulta.fechaConsulta}}
-            </td>
-        </tr>
-
-        <tr><td><br></td></tr>
-        <tr>
-            <td align="right">
-                <b>Hora Inicio: </b>
-            </td>
-            <td>
-                {{consulta.horaInicio}}
-            </td>
-        </tr>
-
-        <tr><td><br></td></tr>
-        <tr>
-            <td align="right">
-                <b>Hora Final: </b>
-            </td>
-            <td>
-                {{consulta.horaFinal}}
-            </td>
-        </tr>
-
-        <tr><td><br></td></tr>
-        <tr>
-            <td align="right">
-                <b>Observaciones: </b>
-            </td>
-            <td>
-                {{consulta.observacionCons}}
-            </td>
-        </tr>
-        <tr><td><br></td></tr>
-    </table>
-    <a class="more-btn" href="{% url 'odontograma:verConsulta' consulta.id %}"><span class="glyphicon glyphicon-pencil"></span> Modificar Consulta</a>
-  </div>
-</div>
-<br>
 {% endblock content %}
 
 {% block javascripts %}
