@@ -23,6 +23,15 @@ from datetime import datetime
 import json
 from json import dumps
 
+#Reportes
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.units import cm
+from reportlab.lib import colors
+from django.conf import settings
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from django.views.generic import View
+
 
 @login_required
 def index(request):
@@ -239,3 +248,62 @@ def prueba(request):
 
     context = {"events":all_events}
     return render(request,'GestionExpedientes/calendario_cita.html',context)"""
+
+ 
+class ReportePacientesPDF(View):  
+     
+    def cabecera(self,pdf):
+        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
+        archivo_imagen = 'static/images/logo.jpg'
+        #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
+        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100) 
+        #Establecemos el tamaño de letra en 16 y el tipo de letra Helvetica
+        pdf.setFont("Helvetica", 30)
+        #Dibujamos una cadena en la ubicación X,Y especificada
+        pdf.drawString(215, 790, u"Reporte GENERADO:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(260, 745, u"Reporte De Pacientes")
+        pdf.setTitle("Reporte de Pacientes Completo")  
+        pdf.line(20,700,580,700)           
+                 
+    def get(self, request, *args, **kwargs):
+        #Indicamos el tipo de contenido a devolver, en este caso un pdf
+        response = HttpResponse(content_type='application/pdf')
+        #La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
+        buffer = BytesIO()
+        #Canvas nos permite hacer el reporte con coordenadas X y Y
+        pdf = canvas.Canvas(buffer)
+        #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
+        self.cabecera(pdf)
+        y = 670
+        self.tabla(pdf, y)
+        #Con show page hacemos un corte de página para pasar a la siguiente
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
+
+    def tabla(self,pdf,y):
+        #Creamos una tupla de encabezados para neustra tabla
+        encabezados = ('Id', 'Nombre', 'Apellido', 'Sexo','Fecha Nacimiento')
+        #Creamos una lista de tuplas que van a contener a las personas
+        detalles = [(persona.id, persona.nombresPaciente, persona.apellidosPaciente, persona.sexo, persona.fechaNacimiento) for persona in Paciente.objects.all()]
+        #Establecemos el tamaño de cada una de las columnas de la tabla
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 4 * cm, 4 * cm, 4 * cm])
+        #Aplicamos estilos a las celdas de la tabla
+        detalle_orden.setStyle(TableStyle(
+            [
+                #La primera fila(encabezados) va a estar centrada
+                ('ALIGN',(0,0),(3,0),'CENTER'),
+                #Los bordes de todas las celdas serán de color negro y con un grosor de 1
+                ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                #El tamaño de las letras de cada una de las celdas será de 10
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ]
+        ))
+        #Establecemos el tamaño de la hoja que ocupará la tabla 
+        detalle_orden.wrapOn(pdf, 800, 600)
+        #Definimos la coordenada donde se dibujará la tabla
+        detalle_orden.drawOn(pdf, 40,y)
