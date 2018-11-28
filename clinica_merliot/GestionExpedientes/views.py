@@ -19,6 +19,11 @@ from odontograma.models import Consulta, Odontograma
 from django.utils import timezone
 from django.shortcuts import render_to_response
 
+from datetime import datetime
+import json
+from json import dumps
+
+
 @login_required
 def index(request):
     return render(request, 'GestionExpedientes/index.html', {})
@@ -168,7 +173,7 @@ def agregarCita(request):
     template = 'GestionExpedientes/agregarCita.html'
     if request.method == 'POST':
         form = NuevaCitaForm(request.POST)
-
+        print(form.errors)
         try:
             print(form.is_valid())
             if form.is_valid():
@@ -217,3 +222,20 @@ def editarCita(request, pk):
 def cita_list(request):
     citas = Cita.objects.filter(fechaCita=timezone.now())
     return render(request,'GestionExpedientes/cita_dia.html', {'citas': citas})
+
+
+def prueba(request):
+ return render(request, 'GestionExpedientes/calendario_cita.html', {})
+""" all_events = Cita.objects.all()
+    event_arr = []
+
+    for i in all_events:
+        event_sub_arr = {}
+        event_sub_arr['asuntoCita'] = i.asuntoCita
+        event_sub_arr['fechaCita'] = i.fechaCita.strftime('%Y-%m-%d %H:%M:%S')
+        event_arr.append(event_sub_arr)
+    return HttpResponse(json.dumps(event_arr))
+
+
+    context = {"events":all_events}
+    return render(request,'GestionExpedientes/calendario_cita.html',context)"""
