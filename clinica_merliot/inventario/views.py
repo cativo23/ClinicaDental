@@ -50,7 +50,9 @@ def ProductoListView(request):
             form_producto = nuevoProductoForm(request.POST)
             if form_producto.is_valid():
                 form_producto.save()
+                messages.success(request, "El producto fue agregado correctamente!")
             form_producto = nuevoProductoForm()
+            messages.warning(request, "ERROR!")
 
         if 'entrada' in request.POST:
             form_transaccion = nuevaTransacion(request.POST)
