@@ -73,7 +73,7 @@ class NuevaCitaForm(forms.ModelForm):
         )
 
     asuntoCita=forms.CharField(max_length=20, label="Asundo de Cita")
-    fechaCita=forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}), label="Fecha Cita")
+    fechaCita=forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker', 'type':'text', 'id':'datepicker'}), label="Fecha Cita")
     horaCita=forms.TimeField(required=True, label="Hora de Cita")
    # observaciones=forms.CharField(max_length=20, label="observaciones")
     estado=forms.ChoiceField(choices=ESTADO_CHOICES, label="Estado Cita")

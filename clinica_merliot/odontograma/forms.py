@@ -68,6 +68,9 @@ class nuevoTratamientoForm(forms.ModelForm):
             'precioBase': 'Precio Base',
         }
 
+        widgets = {'precioBase': forms.NumberInput(attrs={'type': 'number', 'id':'num',}),
+        }
+
 
 class ConsultaForm(forms.ModelForm):
     class Meta:

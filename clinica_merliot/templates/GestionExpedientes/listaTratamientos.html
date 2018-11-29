@@ -1,78 +1,140 @@
-{% extends "base.html" %}
+{% extends "app/base_site.html" %}
 
-{% block navbar %}
-<ul>
-  <li class="active"><a href="/">Inicio</a></li>
-  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="{% url 'gestionExp:listarCita' %}">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block title %} Tratamientos {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+{% endblock stylesheets %}
 
 {% block content %}
+    <div class="right_col" role="main">
+      <div class="hola">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Tratamientos</h3>
+          </div>
 
-<div class="tratamiento">
-  <div class="container center">
-    <div class="about-grids">
-      <div class="contact-form">
-    <div class="col-md-14 about-left">
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <form action="/GestionExpedientes/" method="get" align="center">
-      <input type="submit" value="regresar"  id="frm1_submit" />
-    </form>
-    <br><br>
-    <h1 align = "center">TRATAMIENTOS</h1>
-  </div>
-</div>
-      <div class="col-md-14 about-left">
+        <div class="clearfix"></div>
 
-        <div class="contact-form">
-          <form id="searchform" action="{% url 'odontograma:listarTratamientos' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
-      <input value="Buscar" type="submit">
-      <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-    </div>
-    </form>
-    <br>
-          {% if messages %}
-     {% for message in messages %}
-     {% if message.tags == 'success' %}
-     <p style="color: green"> <u>{{ message }}</u></p>
-         {% else %}
-     <p style="color: red"><u>{{ message }}</u> </p>
-     {% endif %}
-     {% endfor %}
-     <p></p>
-     {% endif %}
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Tratamientos</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="form-group">
+                  <div class="col-md-8 col-sm-8col-xs-15">
+                    <div class="col-sm-5">
+                      <div class="input-group">
+                        <a href="{% url 'odontograma:agregarTratamiento' %}"  class="btn btn-success" >
+                        <span class="glyphicon glyphicon-plus">
+                       </span> Nuevo Tratamiento</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <table id="datatable-buttons" class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Nombre Tratamiento</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
 
-     <div style="padding-left: 30px; padding-right: 30px" >
-       {% if object_list %}
-       <table id="customers">
-          <thead>
-            <tr>
-              <td><b>Nombre</b></td>
-              <td><b>PrecioBase</b></td>
-            </tr>
-          </thead>
-          <tbody>
-            {% for tratamiento in object_list %}
-            <tr>
-              <td><a class="button" href="{% url 'odontograma:detalleTratamiento' tratamiento.id %}">{{ tratamiento.nombreTratamiento }}</a></td>
-              <td>{{ tratamiento.precioBase}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <p>No hay tratamientos con esos parametros</p> <a class="more-btn" href="/GestionExpedientes/agregarTratamiento/">Agregar</a>
-      {% endif %}
-     </div>
+                  <tbody>
+                    {% for tratamiento in object_list %}
+                    <tr>
+                      <td><a class="btn btn-round btn-primary" href="{% url 'odontograma:detalleTratamiento' tratamiento.id %}">{{ tratamiento.nombreTratamiento }}</a></td>
+                      <td>{{ tratamiento.precioBase}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<br>
-{% endblock %}
+
+{% endblock content %}
+
+
+{% block javascripts %}
+  {{ block.super }}
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+  <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+  <!-- PNotify -->
+  <script src="/static/vendors/pnotify/dist/pnotify.custom.min.js"></script>
+  <script src="/static/vendors/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="/static/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  {% if messages %}
+  {% for message in messages %}
+  {{message.tag}}
+    {% if message.tags == 'success' %}
+    <script>
+          $('.hola').ready(function() {
+            new PNotify({
+                            title: '¡Exito!',
+                            text: '{{message}}',
+                            type: 'success',
+                            styling: 'bootstrap3'
+                        });
+          });
+  </script>
+    {% else %}
+    <script>
+          $('.hola').ready(function() {
+            new PNotify({
+                            title: '¡Oh, no!',
+                            text: '{{message}}',
+                            type: '{{message.tags}}',
+                            styling: 'bootstrap3'
+                        });
+          });
+  </script>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+{% endblock javascripts %}
