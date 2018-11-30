@@ -189,16 +189,30 @@ def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
     consulta = get_object_or_404(Consulta, pk=pk)
     consulta.doctor = request.user.doctor
+    tratamientos = Tratamiento.objects.all()
+    medico = get_object_or_404(Doctor, pk = request.user.doctor.pk)
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
     edad = (date.today() - expediente.paciente.fechaNacimiento).days/365
     ed = math.trunc(edad)
+    initial = [{}]
+    odontograma = get_object_or_404(Odontograma, id= expediente.odontograma.id)
+
     if request.method == 'POST':
+        formset = ProcedimientoFormSet(request.POST, initial=initial)
         form = ConsultaForm(request.POST, instance=consulta)
+        modelform = OdontogramaForm(request.POST, instance = odontograma)
         try:
-            if form.is_valid():
+            if form.is_valid() and modelform.is_valid():
+                odontograma = modelform.save(commit=False)
+                odontograma.medico = medico
+                odontograma.save()
                 if consulta.horaFinal == None:
                     form.instance.horaFinal = datetime.now()
                 form.save()
+                if formset.is_valid():
+                    for form in formset:
+                        form.instance.odontograma = odontograma
+                        form.save()
                 messages.success(request, "La consulta fue modificada correctamente!")
                 return redirect('odontograma:listarConsultas')
             else:
@@ -208,12 +222,20 @@ def consulta(request, pk):
             traceback.print_tb(e.__traceback__)
     else:
         form = ConsultaForm(instance=consulta)
+        formset = ProcedimientoFormSet(initial=initial)
+        modelform = OdontogramaForm(instance = odontograma)
+
 
     context = {
         'form': form,
         'consulta': consulta,
         'expediente': expediente,
         'edad': ed,
+        'forms': modelform,
+        'formset': formset,
+        'paciente': expediente,
+        'tratamientos': tratamientos,
+        'o_active': 'active'
     }
 
     return render(request, template, context)
