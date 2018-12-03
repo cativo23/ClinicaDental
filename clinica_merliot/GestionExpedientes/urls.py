@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import url,include
 
 from . import views
 from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list,prueba,ReportePacientesPDF,reporte1_crear,Reporte1
@@ -17,6 +18,7 @@ urlpatterns = [
     path('cita/Prueba/', views.cita_list, name='prueba'),
     path('cita/calendario/', views.prueba, name='calendario'),
     path('Reporte/reporte_pacientes_pdf/',ReportePacientesPDF.as_view(), name='reporte_pacientes_pdf'),
-    path('Reporte/es1/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte1.as_view(), name='generar_pdf_1'),
+    #path('Reporte/es1/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/', Reporte1.as_view(), name='generar_pdf_1'),
+    url(r'^reporte/es1/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte1.as_view(), name='generar_pdf_1'),
     path('Reporte/reporte1/',reporte1_crear, name='reporte1_crear')
 ]
