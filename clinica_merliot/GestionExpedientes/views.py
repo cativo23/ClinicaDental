@@ -31,6 +31,10 @@ from django.conf import settings
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from django.views.generic import View
+from time import gmtime, strftime
+import locale
+from django.db import connection, connections
+
 
 
 @login_required
@@ -249,22 +253,38 @@ def prueba(request):
     context = {"events":all_events}
     return render(request,'GestionExpedientes/calendario_cita.html',context)"""
 
- 
+ #Revisar las lineas de current_user y pdf.drawString(359, 727, current_user.username)
 class ReportePacientesPDF(View):  
+
+    showtime = strftime("%Y-%m-%d ", gmtime())
      
-    def cabecera(self,pdf):
+    def cabecera(self,request,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
         archivo_imagen = 'static/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100) 
-        #Establecemos el tamaño de letra en 16 y el tipo de letra Helvetica
-        pdf.setFont("Helvetica", 30)
-        #Dibujamos una cadena en la ubicación X,Y especificada
+        showtime = strftime("%d-%m-%Y ", gmtime())
+        current_user = request.user
+        pdf.setFont("Times-Bold", 30)
+        pdf.drawString(200, 787, u"Reporte Generado:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(210, 762, u"Reporte De Pacientes")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(150, 727, u"Fecha de emisión:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(240, 727, showtime)
+        pdf.setFont("Times-Bold", 11)  
+        pdf.drawString(309, 727, u"Doctora:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(359, 727, current_user.username)
+        
+        """pdf.setFont("Helvetica", 30)
         pdf.drawString(215, 790, u"Reporte GENERADO:")
         pdf.setFont("Helvetica", 20)
-        pdf.drawString(260, 745, u"Reporte De Pacientes")
+        pdf.drawString(260, 745, u"Reporte De Pacientes")""" 
         pdf.setTitle("Reporte de Pacientes Completo")  
-        pdf.line(20,700,580,700)           
+        pdf.line(20,700,580,700)    
+
                  
     def get(self, request, *args, **kwargs):
         #Indicamos el tipo de contenido a devolver, en este caso un pdf
@@ -274,8 +294,8 @@ class ReportePacientesPDF(View):
         #Canvas nos permite hacer el reporte con coordenadas X y Y
         pdf = canvas.Canvas(buffer)
         #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
-        self.cabecera(pdf)
-        y = 670
+        self.cabecera(request,pdf)
+        y = 600
         self.tabla(pdf, y)
         #Con show page hacemos un corte de página para pasar a la siguiente
         pdf.showPage()
@@ -307,3 +327,10 @@ class ReportePacientesPDF(View):
         detalle_orden.wrapOn(pdf, 800, 600)
         #Definimos la coordenada donde se dibujará la tabla
         detalle_orden.drawOn(pdf, 40,y)
+
+#------------------> Reporte General de Pacientes <------------------
+
+def reporte1_crear(request):
+    form1 = reportFecha()
+    showtime = strftime("%d-%m-%Y ", gmtime())
+    return render(request, 'GestionExpedientes/reporte1.html', {'date':showtime})
