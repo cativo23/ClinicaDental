@@ -34,6 +34,7 @@ from django.views.generic import View
 from time import gmtime, strftime
 import locale
 from django.db import connection, connections
+from .forms import *
 
 
 
@@ -333,4 +334,152 @@ class ReportePacientesPDF(View):
 def reporte1_crear(request):
     form1 = reportFecha()
     showtime = strftime("%d-%m-%Y ", gmtime())
-    return render(request, 'GestionExpedientes/reporte1.html', {'date':showtime})
+    return render(request, 'GestionExpedientes/reporte1.html', {'form1':form1,'date':showtime})
+
+class Reporte1(View):
+
+    def get(self,request, *args, **kwargs):
+
+        fech1 = self.kwargs['fecha']
+        fech2 = self.kwargs['fecha2']
+        response = HttpResponse(content_type='application/pdf')
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.cabecera(request,pdf)
+        self.cuerpo(pdf,fech1,fech2)
+        self.tabla(pdf,fech1,fech2)
+        self.pie(pdf)
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response  
+     
+    def cabecera(self,request,pdf):
+       #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
+        archivo_imagen = 'static/images/logo.jpg'
+        #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
+        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100) 
+        showtime = strftime("%d-%m-%Y ", gmtime())
+        current_user = request.user
+        pdf.setFont("Times-Bold", 30)
+        pdf.drawString(200, 787, u"Reporte Generado:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(210, 762, u"Reporte De Pacientes")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(150, 727, u"Fecha de emisión:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(240, 727, showtime)
+        pdf.setFont("Times-Bold", 11)  
+        pdf.drawString(309, 727, u"Doctora:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(359, 727, current_user.username)
+        
+        """pdf.setFont("Helvetica", 30)
+        pdf.drawString(215, 790, u"Reporte GENERADO:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(260, 745, u"Reporte De Pacientes")""" 
+        pdf.setTitle("Reporte de Pacientes Completo")  
+        pdf.line(20,700,580,700)    
+
+
+    def cuerpo(self,pdf,turn,fech1,fech2):
+        if turn == "1":
+            tu = "7:00 a.m. a 9:00 a.m."
+        elif turn == "2":
+            tu = "10:00 a.m. a 12:00 m.d."
+        elif turn == "3":
+            tu = "1:00 p.m. a 3:00 p.m."
+        elif turn == "4":
+            tu = "Todos los turnos"
+
+        pdf.setFont("Times-Bold", 14)
+        pdf.drawString(185, 650, "Reporte de Pacientes Atendidos en la Clinica")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(165, 600, "Fecha inicial:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(240, 600, fech1)
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(310, 600, "Fecha final:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(375, 600, fech2)
+        
+       
+    """def tabla(self,pdf,turn,fech1,fech2):
+
+        if turn == "1" or turn == "2" or turn == "3":
+            if turn == "1":
+                tu = "7:00 a.m. a 9:00 a.m."
+            elif turn == "2":
+                tu = "10:00 a.m. a 12:00 m.d."
+            elif turn == "3":
+                tu = "1:00 p.m. a 3:00 p.m."
+
+            encabezados = ('Turno Clínico', 'N° de Citas')
+
+            cursor1 = connection.cursor()
+            cursor1.execute("SELECT count(*)  FROM orto_citas  INNER JOIN orto_motivo_consulta on orto_motivo_consulta.fichas_id = orto_citas.fichas_id where turno=%s and orto_citas.proxima_cita between %s and %s",[turn,fech1,fech2])
+            cantidad = cursor1.fetchone()
+
+            pxatendidos = [(tu, cantidad[0])]
+
+            detalle_orden = Table([encabezados] + pxatendidos, colWidths=[5 * cm, 5 * cm])
+            detalle_orden.setStyle(TableStyle(
+                [
+                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                    ('FONTSIZE', (0, 0), (-1, -1), 11),
+                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                    ('FONTNAME',(0,1),(1,1),'Times-Roman'),
+                ]
+            ))
+            detalle_orden.wrapOn(pdf, 800, 600)
+            detalle_orden.drawOn(pdf, 165, 515)
+
+        elif turn == "4":
+
+            cursor1 = connection.cursor()
+            cursor1.execute("SELECT count(*)  FROM orto_citas  INNER JOIN orto_motivo_consulta on orto_motivo_consulta.fichas_id = orto_citas.fichas_id where turno=1 and orto_citas.proxima_cita between %s and %s",[fech1,fech2])
+            cant1= cursor1.fetchone()
+
+            cursor2 = connection.cursor()
+            cursor2.execute("SELECT count(*)  FROM orto_citas  INNER JOIN orto_motivo_consulta on orto_motivo_consulta.fichas_id = orto_citas.fichas_id where turno=2 and orto_citas.proxima_cita between %s and %s",[fech1,fech2])
+            cant2 = cursor2.fetchone()
+
+            cursor3 = connection.cursor()
+            cursor3.execute("SELECT count(*)  FROM orto_citas  INNER JOIN orto_motivo_consulta on orto_motivo_consulta.fichas_id = orto_citas.fichas_id where turno=3 and orto_citas.proxima_cita between %s and %s",[fech1,fech2])
+            cant3 = cursor3.fetchone()
+
+            total = cant1[0] + cant2[0] + cant3[0]
+
+
+            pxatendidos = [('Turno Clínico', 'N° de Citas'),
+            ('7:00 a.m. a 9:00 a.m.', cant1[0]),
+            ('10:00 a.m. a 12:00 m.d.', cant2[0]),
+            ('1:00 p.m. a 3:00 p.m.', cant3[0]),
+            ('Total', total)]
+
+            detalle_orden = Table(pxatendidos, colWidths=[5 * cm, 5 * cm])
+            detalle_orden.setStyle(TableStyle(
+                [
+                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                    ('FONTSIZE', (0, 0), (-1, -1), 11),
+                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                    ('FONTNAME',(0,1),(1,3),'Times-Roman'),
+                    ('FONTNAME',(0,4),(0,4),'Times-Bold'),
+                ]
+            ))
+            detalle_orden.wrapOn(pdf, 800, 600)
+            detalle_orden.drawOn(pdf, 155, 455)"""
+
+    def pie(self,pdf):
+        pdf.line(20,115,580,115)
+        pdf.setFont("Helvetica", 12)
+        pdf.drawString(200, 98, u"Facultad de Odontología")    
+        pdf.drawString(190, 83, u"Universidad de El Salvador")
+        pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
+        pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
+        pdf.drawString(182, 38, u"www.odontología.ues.edu.sv")
+        

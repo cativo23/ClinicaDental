@@ -113,20 +113,12 @@ class NuevaCitaForm(forms.ModelForm):
                 return asuntoCita
 
 class reportFecha(forms.ModelForm):
+    
+    fechaConsulta=forms.DateField(widget=forms.DateInput(attrs={'class':'form-control','required':True}))
 
     class Meta:
         model = Consulta
+        fields = ['fechaConsulta']
     
         
-        fields = [
-            'fechaConsulta'
-        ]
-
-        labels={
-            'fechaConsulta':'Fecha de Consulta',
-        }
-
-        widgets={
-            'fechaConsulta':forms.DateInput(attrs={'class':'form-control','required':True}),
-        }
 

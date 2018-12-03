@@ -4,14 +4,6 @@
 
 {% block stylesheets %}
   {{ block.super }}
-  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
-  <link href="/static/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
-  <link href="/static/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -57,7 +49,24 @@
                   </div>
 
                 </form>
-                
+
+              <div class="panel-body">
+              <br><br>
+                  <div class="col-md-3 col-md-offset-2">
+              <div class="form-group">
+                <label for="{{form1.fechaConsulta.name}}">Fecha inicial</label>
+                <br>
+                {{form1.fechaConsulta}}
+                <br>
+                <label for="fechaHasta">Fecha final</label>
+                  <input type="text" class="form-control" id="fechaHasta">
+                <br>
+                <br>
+                <button class="btn btn-success" onclick="generarReporte()">Generar Reporte</button>
+              </div>
+            </div>  
+              </div>
+
 
 
               </div>
@@ -68,55 +77,59 @@
       </div>
     </div>
 <br>
+
+ 
 {% endblock content %}
 
 {% block javascripts %}
-  {{ block.super }}\
-  <script src="/static/vendors/datatables.net/js/jquery.dataTables.js"></script>
-  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-  <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
-  <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
-  <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
-  <!-- PNotify -->
-  <script src="/static/vendors/pnotify/dist/pnotify.custom.min.js"></script>
-  <script src="/static/vendors/pnotify/dist/pnotify.buttons.js"></script>
-  <script src="/static/vendors/pnotify/dist/pnotify.nonblock.js"></script>
-  {% if messages %}
-  {% for message in messages %}
-  {{message.tag}}
-    {% if message.tags == 'success' %}
-    <script>
-          $('.hola').ready(function() {
-            new PNotify({
-                            title: '¡Exito!',
-                            text: '{{message}}',
-                            type: 'success',
-                            styling: 'bootstrap3'
-                        });
-          });
-  </script>
-    {% else %}
-    <script>
-          $('.hola').ready(function() {
-            new PNotify({
-                            title: '¡Oh, no!',
-                            text: '{{message}}',
-                            type: '{{message.tags}}',
-                            styling: 'bootstrap3'
-                        });
-          });
-  </script>
-    {% endif %}
-  {% endfor %}
-  {% endif %}
+  {{ block.super }}
+  <script type="text/javascript">
+  
+ $(function() {
+        $( "#id_fechaConsulta" ).datepicker({
+        dateFormat: 'dd-mm-yy',
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selected) {
+          var fechaParse = new Date($("id_fechaConsulta").val())
+          fechaParse.setDate(fechaParse.getDate() + 2);
+        $("#fechaHasta" ).datepicker( "option", "minDate", fechaParse );
+        }
+        });
+
+        $( "#fechaHasta" ).datepicker({
+       dateFormat: 'dd-mm-yy',
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selected) {
+          var fechaParseh = new Date($("fechaHasta").val())
+          fechaParseh.setDate(fechaParseh.getDate() + 2);
+        $("#id_fechaConsulta" ).datepicker( "option", "maxDate", fechaParseh );
+        }
+        });
+
+    });
+
+
+
+  function generarReporte(){
+    var fecha = $("#id_fechaConsulta").val();
+    var fecha2 = $("#fechaHasta").val();
+    if(fecha == "" || fecha2 == ""){
+      alert("Debe completar todos los campos")
+    }
+    else{
+      if(Date.parse(fecha) > Date.parse(fecha2)){
+        alert("La fecha inicial debe ser menor que la fecha final");
+    }
+      else{
+        location.href='/GestionExpedientes/Reporte/es1/'+fecha+'/'+fecha2+'/'; 
+    }
+    }
+  }
+  
+    
+</script>
 {% endblock javascripts %}
