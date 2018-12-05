@@ -120,5 +120,11 @@ class reportFecha(forms.ModelForm):
         model = Consulta
         fields = ['fechaConsulta']
     
-        
+class reportFechaCita(forms.ModelForm):
+    
+    fechaCita=forms.DateField(widget=forms.DateInput(attrs={'class':'form-control','required':True}))
+
+    class Meta:
+        model = Cita
+        fields = ['fechaCita']
 

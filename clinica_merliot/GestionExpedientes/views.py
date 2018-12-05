@@ -276,10 +276,9 @@ class ReportePacientesPDF(View):
         pdf.setFont("Times-Roman", 11)
         pdf.drawString(240, 727, showtime)
         pdf.setFont("Times-Bold", 11)  
-        pdf.drawString(309, 727, u"Doctora:")
+        pdf.drawString(350, 727, u"Doctora:")
         pdf.setFont("Times-Roman", 11)
-        pdf.drawString(359, 727, current_user.username)
-        
+        pdf.drawString(400, 727, current_user.username)
         """pdf.setFont("Helvetica", 30)
         pdf.drawString(215, 790, u"Reporte GENERADO:")
         pdf.setFont("Helvetica", 20)
@@ -297,6 +296,7 @@ class ReportePacientesPDF(View):
         pdf = canvas.Canvas(buffer)
         #Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
         self.cabecera(request,pdf)
+        self.pie(pdf)
         y = 600
         self.tabla(pdf, y)
         #Con show page hacemos un corte de página para pasar a la siguiente
@@ -329,6 +329,17 @@ class ReportePacientesPDF(View):
         detalle_orden.wrapOn(pdf, 800, 600)
         #Definimos la coordenada donde se dibujará la tabla
         detalle_orden.drawOn(pdf, 40,y)
+
+    def pie(self,pdf):
+        pdf.line(20,115,580,115)
+        pdf.setFont("Helvetica", 12)
+        pdf.drawString(200, 98, u"Clinica Dental Merliot")    
+        pdf.drawString(190, 83, u"Universidad de El Salvador")
+        pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
+        pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
+        pdf.drawString(182, 38, u"www.clinicaDental.com")
+        archivo_imagen2 = 'static/images/logo2.jpg'
+        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Pacientes <------------------
 
@@ -367,16 +378,15 @@ class Reporte1(View):
         pdf.setFont("Times-Bold", 30)
         pdf.drawString(200, 787, u"Reporte Generado:")
         pdf.setFont("Helvetica", 20)
-        pdf.drawString(210, 762, u"Reporte De Pacientes")
+        pdf.drawString(225, 762, u"Reporte De Pacientes")
         pdf.setFont("Times-Bold", 11)
         pdf.drawString(150, 727, u"Fecha de emisión:")
         pdf.setFont("Times-Roman", 11)
         pdf.drawString(240, 727, showtime)
         pdf.setFont("Times-Bold", 11)  
-        pdf.drawString(309, 727, u"Doctora:")
+        pdf.drawString(350, 727, u"Doctora:")
         pdf.setFont("Times-Roman", 11)
-        pdf.drawString(359, 727, current_user.username)
-        
+        pdf.drawString(400, 727, current_user.username)
         """pdf.setFont("Helvetica", 30)
         pdf.drawString(215, 790, u"Reporte GENERADO:")
         pdf.setFont("Helvetica", 20)
@@ -389,7 +399,7 @@ class Reporte1(View):
     
 
         pdf.setFont("Times-Bold", 14)
-        pdf.drawString(185, 650, "Reporte de Pacientes Atendidos en la Clinica")
+        pdf.drawString(175, 650, "Reporte de Pacientes Atendidos en la Clinica")
         pdf.setFont("Times-Bold", 11)
         pdf.drawString(165, 600, "Fecha inicial:")
         pdf.setFont("Times-Roman", 11)
@@ -430,8 +440,6 @@ class Reporte1(View):
         detalle_orden.drawOn(pdf, 115, 515)
         
        
-    
-
     def pie(self,pdf):
         pdf.line(20,115,580,115)
         pdf.setFont("Helvetica", 12)
@@ -443,3 +451,82 @@ class Reporte1(View):
         archivo_imagen2 = 'static/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
         
+#------------------> Reporte General de Citas <------------------
+
+def reporte2_crear(request):
+    form1 = reportFechaCita()
+    showtime = strftime("%d-%m-%Y ", gmtime())
+    return render(request, 'GestionExpedientes/reporte2.html', {'form1':form1,'date':showtime})
+
+class Reporte2(View):
+
+    def get(self,request, *args, **kwargs):
+
+        fech1 = self.kwargs['fecha']
+        fech2 = self.kwargs['fecha2']
+        response = HttpResponse(content_type='application/pdf')
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.cabecera(request,pdf)
+        self.cuerpo(pdf,fech1,fech2)
+        #self.tabla(pdf,fech1,fech2)
+        self.pie(pdf)
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response  
+     
+    def cabecera(self,request,pdf):
+       #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
+        archivo_imagen = 'static/images/logo.jpg'
+        #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
+        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100) 
+        showtime = strftime("%d-%m-%Y ", gmtime())
+        current_user = request.user
+        pdf.setFont("Times-Bold", 30)
+        pdf.drawString(200, 787, u"Reporte Generado:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(225, 762, u"Reporte De Citas")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(150, 727, u"Fecha de emisión:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(240, 727, showtime)
+        pdf.setFont("Times-Bold", 11)  
+        pdf.drawString(350, 727, u"Doctora:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(400, 727, current_user.username)
+        
+        """pdf.setFont("Helvetica", 30)
+        pdf.drawString(215, 790, u"Reporte GENERADO:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(260, 745, u"Reporte De Pacientes")""" 
+        pdf.setTitle("Reporte de Citas")
+        pdf.line(20,700,580,700)    
+
+
+    def cuerpo(self,pdf,fech1,fech2):
+    
+
+        pdf.setFont("Times-Bold", 14)
+        pdf.drawString(150, 650, "Reporte de Citas Aplicadas, Pendientes y No asistidas")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(165, 600, "Fecha inicial:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(240, 600, fech1)
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(310, 600, "Fecha final:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(375, 600, fech2)
+
+    def pie(self,pdf):
+        pdf.line(20,115,580,115)
+        pdf.setFont("Helvetica", 12)
+        pdf.drawString(200, 98, u"Clinica Dental Merliot")    
+        pdf.drawString(190, 83, u"Universidad de El Salvador")
+        pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
+        pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
+        pdf.drawString(182, 38, u"www.clinicaDental.com")
+        archivo_imagen2 = 'static/images/logo2.jpg'
+        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
