@@ -469,7 +469,7 @@ class Reporte2(View):
         pdf = canvas.Canvas(buffer)
         self.cabecera(request,pdf)
         self.cuerpo(pdf,fech1,fech2)
-        #self.tabla(pdf,fech1,fech2)
+        self.tabla(pdf,fech1,fech2)
         self.pie(pdf)
         pdf.showPage()
         pdf.save()
@@ -507,8 +507,6 @@ class Reporte2(View):
 
 
     def cuerpo(self,pdf,fech1,fech2):
-    
-
         pdf.setFont("Times-Bold", 14)
         pdf.drawString(150, 650, "Reporte de Citas Aplicadas, Pendientes y No asistidas")
         pdf.setFont("Times-Bold", 11)
@@ -519,6 +517,41 @@ class Reporte2(View):
         pdf.drawString(310, 600, "Fecha final:")
         pdf.setFont("Times-Roman", 11)
         pdf.drawString(375, 600, fech2)
+
+    def tabla(self,pdf,fech1,fech2):
+
+        encabezados = ('Total Citas','Aplicadas','Pendientes','No Asistieron')
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT count(*) FROM \"GestionExpedientes_cita\" where \"fechaCita\" between %s and %s",[fech1,fech2])
+        cantidad = cursor1.fetchone()
+
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT count(*) FROM \"GestionExpedientes_cita\"  where estado='Aplicada' and \"fechaCita\" between %s and %s",[fech1,fech2])
+        cantidadA=cursor2.fetchone()
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT count(*) FROM \"GestionExpedientes_cita\"  where estado='Pendiente' and \"fechaCita\" between %s and %s",[fech1,fech2])
+        cantidadP=cursor3.fetchone()
+
+        cursor4 = connection.cursor()
+        cursor4.execute("SELECT count(*) FROM \"GestionExpedientes_cita\"  where estado='No Asistio' and \"fechaCita\" between %s and %s",[fech1,fech2])
+        cantidadN=cursor4.fetchone()
+
+
+        pxatendidos = [(cantidad[0], cantidadA[0], cantidadP[0], cantidadN[0])]
+
+        detalle_orden = Table([encabezados] + pxatendidos, colWidths=[5 * cm, 4 * cm, 4 * cm,4 * cm])
+        detalle_orden.setStyle(TableStyle(
+                [
+                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                    ('FONTSIZE', (0, 0), (-1, -1), 11),
+                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                    ('FONTNAME',(0,1),(1,1),'Times-Roman'),
+                ]
+            ))
+        detalle_orden.wrapOn(pdf, 800, 600)
+        detalle_orden.drawOn(pdf, 60, 515)
 
     def pie(self,pdf):
         pdf.line(20,115,580,115)
