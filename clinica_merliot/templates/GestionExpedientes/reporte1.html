@@ -36,7 +36,7 @@
                 <p class="text-muted font-13 m-b-30">
                   Reportes
                 </p>
-                 <h4 class="panel-title" align="center">  Clinica Merliot<br>Fecha de Emision:{{date}} &nbsp;&nbsp;&nbsp;&nbsp; Doctor: {{doctor.nombreDoctor}}  &nbsp;&nbsp;&nbsp;&nbsp;Numero de pagina 1/1<br> Detalle General de pacientes</h4>
+                 <h4 class="panel-title" align="center">  Clinica Merliot<br>Fecha de Emision:{{date}} &nbsp;&nbsp;&nbsp;&nbsp; Doctor: {{user.username}}  &nbsp;&nbsp;&nbsp;&nbsp;Numero de pagina 1/1<br> Detalle General de pacientes</h4>
               <br>
                 
                 <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/" method="get" align ="center">{% csrf_token %}
@@ -66,7 +66,9 @@
               </div>
             </div>  
               </div>
-
+              <p class="text-muted font-13 m-b-30">
+                 Nota: Este reporte Genera los datos de los pacientes atendidos en las fechas ingresadas y cuantos de ellos fueron Hombres y cuantos Mujer.
+                </p>
 
 
               </div>
