@@ -38,6 +38,7 @@ from .forms import *
 
 
 
+
 @login_required
 def index(request):
     return render(request, 'GestionExpedientes/index.html', {})
@@ -347,7 +348,7 @@ class Reporte1(View):
         pdf = canvas.Canvas(buffer)
         self.cabecera(request,pdf)
         self.cuerpo(pdf,fech1,fech2)
-       # self.tabla(pdf,fech1,fech2)
+        self.tabla(pdf,fech1,fech2)
         self.pie(pdf)
         pdf.showPage()
         pdf.save()
@@ -397,6 +398,36 @@ class Reporte1(View):
         pdf.drawString(310, 600, "Fecha final:")
         pdf.setFont("Times-Roman", 11)
         pdf.drawString(375, 600, fech2)
+
+    def tabla(self,pdf,fech1,fech2):
+
+        encabezados = ('Total Pacientes Atendidos','Masculino','Femenino')
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT count(*) FROM odontograma_consulta INNER JOIN \"GestionExpedientes_paciente\" on \"odontograma_consulta\".paciente_id = \"GestionExpedientes_paciente\".id where \"fechaConsulta\" between %s and %s",[fech1,fech2])
+        cantidad = cursor1.fetchone()
+
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT count(*) FROM odontograma_consulta INNER JOIN \"GestionExpedientes_paciente\" on \"odontograma_consulta\".paciente_id = \"GestionExpedientes_paciente\".id where sexo='M' and \"fechaConsulta\" between %s and %s",[fech1,fech2])
+        cantidadM=cursor2.fetchone()
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT count(*) FROM odontograma_consulta INNER JOIN \"GestionExpedientes_paciente\" on \"odontograma_consulta\".paciente_id = \"GestionExpedientes_paciente\".id where sexo='F' and \"fechaConsulta\" between %s and %s",[fech1,fech2])
+        cantidadF=cursor3.fetchone()
+
+        pxatendidos = [(cantidad[0], cantidadM[0], cantidadF[0])]
+
+        detalle_orden = Table([encabezados] + pxatendidos, colWidths=[5 * cm, 4 * cm, 4 * cm])
+        detalle_orden.setStyle(TableStyle(
+                [
+                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+                    ('FONTSIZE', (0, 0), (-1, -1), 11),
+                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                    ('FONTNAME',(0,1),(1,1),'Times-Roman'),
+                ]
+            ))
+        detalle_orden.wrapOn(pdf, 800, 600)
+        detalle_orden.drawOn(pdf, 115, 515)
         
        
     
