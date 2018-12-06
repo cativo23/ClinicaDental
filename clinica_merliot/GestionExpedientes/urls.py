@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf.urls import url,include
 
 from . import views
-from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list,prueba,ReportePacientesPDF,reporte1_crear,Reporte1,reporte2_crear,Reporte2
+from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list,prueba,ReportePacientesPDF,reporte1_crear,Reporte1,reporte2_crear,Reporte2,reporte3_crear,Reporte3
 
 urlpatterns = [
     path('', views.index, name='home'),
@@ -25,5 +25,9 @@ urlpatterns = [
 
 #REPORTES CITA
     path('Reporte/reporte2/',reporte2_crear, name='reporte2_crear'),
-    url(r'^reporte/es2/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte2.as_view(), name='generar_pdf_2')
+    url(r'^reporte/es2/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte2.as_view(), name='generar_pdf_2'),
+
+#REPORTES PAGOS
+    path('Reporte/reporte3/',reporte3_crear, name='reporte3_crear'),
+    url(r'^reporte/es3/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte3.as_view(), name='generar_pdf_3'),
 ]

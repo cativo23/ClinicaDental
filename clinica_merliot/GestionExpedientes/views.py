@@ -563,3 +563,109 @@ class Reporte2(View):
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = 'static/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+
+
+#------------------> Reporte General de Pagos <------------------
+
+def reporte3_crear(request):
+    form1 = reportFechaPago()
+    showtime = strftime("%d-%m-%Y ", gmtime())
+    return render(request, 'GestionExpedientes/reporte3.html', {'form1':form1,'date':showtime})
+
+class Reporte3(View):
+
+    def get(self,request, *args, **kwargs):
+
+        fech1 = self.kwargs['fecha']
+        fech2 = self.kwargs['fecha2']
+        response = HttpResponse(content_type='application/pdf')
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.cabecera(request,pdf)
+        self.cuerpo(pdf,fech1,fech2)
+        self.tabla(pdf,fech1,fech2)
+        self.pie(pdf)
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response  
+     
+    def cabecera(self,request,pdf):
+       #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
+        archivo_imagen = 'static/images/logo.jpg'
+        #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
+        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100) 
+        showtime = strftime("%d-%m-%Y ", gmtime())
+        current_user = request.user
+        pdf.setFont("Times-Bold", 30)
+        pdf.drawString(200, 787, u"Reporte Generado:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(225, 762, u"Reporte De Pagos")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(150, 727, u"Fecha de emisión:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(240, 727, showtime)
+        pdf.setFont("Times-Bold", 11)  
+        pdf.drawString(350, 727, u"Doctora:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(400, 727, current_user.username)
+        
+        """pdf.setFont("Helvetica", 30)
+        pdf.drawString(215, 790, u"Reporte GENERADO:")
+        pdf.setFont("Helvetica", 20)
+        pdf.drawString(260, 745, u"Reporte De Pacientes")""" 
+        pdf.setTitle("Reporte de Pagos")
+        pdf.line(20,700,580,700)    
+
+    def cuerpo(self,pdf,fech1,fech2):
+        pdf.setFont("Times-Bold", 14)
+        pdf.drawString(160, 650, "Reporte de Pagos Cancelados y Pendientes")
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(150, 600, "Fecha inicial:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(220, 600, fech1)
+        pdf.setFont("Times-Bold", 11)
+        pdf.drawString(310, 600, "Fecha final:")
+        pdf.setFont("Times-Roman", 11)
+        pdf.drawString(375, 600, fech2)
+
+    def tabla(self,pdf,fech1,fech2):
+
+        encabezados = ('Cantidad de Personas sin deuda', 'Cantidad de Personas con Deuda')
+    
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT count(*) FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo=0.00 and \"fechaCreacion\" between %s and %s",[fech1,fech2])
+        cantidad=cursor1.fetchone()
+
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT count(*) FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s",[fech1,fech2])
+        cantidadD=cursor2.fetchone()
+
+        pxatendidos = [(cantidad[0], cantidadD[0])]
+        detalle_orden = Table([encabezados] + pxatendidos, colWidths=[7* cm, 7* cm])
+        detalle_orden.setStyle(TableStyle(
+                [
+                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                    ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue), 
+                    ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                    ('FONTSIZE', (0, 0), (-1, -1), 11),
+                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                    ('FONTNAME',(0,1),(1,1),'Times-Roman'),
+                ]
+            ))
+        detalle_orden.wrapOn(pdf, 800, 600)
+        detalle_orden.drawOn(pdf, 115, 515)
+
+    def pie(self,pdf):
+        pdf.line(20,115,580,115)
+        pdf.setFont("Helvetica", 12)
+        pdf.drawString(200, 98, u"Clinica Dental Merliot")    
+        pdf.drawString(190, 83, u"Universidad de El Salvador")
+        pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
+        pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
+        pdf.drawString(182, 38, u"www.clinicaDental.com")
+        archivo_imagen2 = 'static/images/logo2.jpg'
+        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)

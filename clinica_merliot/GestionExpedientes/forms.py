@@ -128,3 +128,12 @@ class reportFechaCita(forms.ModelForm):
         model = Cita
         fields = ['fechaCita']
 
+
+class reportFechaPago(forms.ModelForm):
+    
+    fechaCreacion=forms.DateField(widget=forms.DateInput(attrs={'class':'form-control','required':True}))
+
+    class Meta:
+        model = Expediente
+        fields = ['fechaCreacion']
+

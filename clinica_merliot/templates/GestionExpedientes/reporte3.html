@@ -1,0 +1,137 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Reporte General de Pagos</h3>
+          </div>
+
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+      
+              <div class="x_content">
+                <p class="text-muted font-13 m-b-30">
+                  Reportes
+                </p>
+                 <h4 class="panel-title" align="center">  Clinica Merliot<br>Fecha de Emision:{{date}} &nbsp;&nbsp;&nbsp;&nbsp; Doctor: {{user.username}}  &nbsp;&nbsp;&nbsp;&nbsp;Numero de pagina 1/1<br> Detalle General de Citas</h4>
+              <br>
+                
+                <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/" method="get" align ="center">{% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <button type="submit" value="regresar" name="Submit" id="frm1_submit" class="btn btn-success">Regresar</button>
+                    </div>
+                  </div>
+
+                </form>
+
+              <div class="panel-body">
+              <br><br>
+                  <div class="col-md-3 col-md-offset-2">
+              <div class="form-group">
+                <label for="{{form1.fechaCreacion.name}}">Fecha inicial</label>
+                <br>
+                {{form1.fechaCreacion}}
+                <br>
+                <label for="fechaHasta">Fecha final</label>
+                  <input type="text" class="form-control" id="fechaHasta">
+                <br>
+                <br>
+                <button class="btn btn-success" onclick="generarReporte()">Generar Reporte</button>
+              </div>
+            </div>  
+              </div>
+              <p class="text-muted font-13 m-b-30">
+                 Nota: Este reporte Genera los datos de las pagos que fueron realizados completamente y los pacientes que quedan con saldo pendiente.
+                </p>
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+<br>
+
+ 
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+  
+ $(function() {
+        $( "#id_fechaCreacion" ).datepicker({
+        dateFormat: 'dd-mm-yy',
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selected) {
+          var fechaParse = new Date($("id_fechaCreacion").val())
+          fechaParse.setDate(fechaParse.getDate() + 2);
+        $("#fechaHasta" ).datepicker( "option", "minDate", fechaParse );
+        }
+        });
+
+        $( "#fechaHasta" ).datepicker({
+       dateFormat: 'dd-mm-yy',
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selected) {
+          var fechaParseh = new Date($("fechaHasta").val())
+          fechaParseh.setDate(fechaParseh.getDate() + 2);
+        $("#id_fechaCreacion" ).datepicker( "option", "maxDate", fechaParseh );
+        }
+        });
+
+    });
+
+
+
+  function generarReporte(){
+    var fecha = $("#id_fechaCreacion").val();
+    var fecha2 = $("#fechaHasta").val();
+    if(fecha == "" || fecha2 == ""){
+      alert("Debe completar todos los campos")
+    }
+    else{
+      if(Date.parse(fecha) > Date.parse(fecha2)){
+        alert("La fecha inicial debe ser menor que la fecha final");
+    }
+      else{
+        location.href='/GestionExpedientes/reporte/es3/'+fecha+'/'+fecha2+'/'; 
+    }
+    }
+  }
+  
+    
+</script>
+{% endblock javascripts %}
