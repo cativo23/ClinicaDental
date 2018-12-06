@@ -24,7 +24,7 @@ class OdontogramaForm(forms.ModelForm):
                 Field('notas', wrapper_class='form-control'),
             ),
             ButtonHolder(
-                Submit('save', 'Guardar', css_class='more-btn')
+                Submit('odoform', 'Guardar', css_class='more-btn')
             )
         )
         self.fields['notas'].label = 'Observaciones '

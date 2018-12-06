@@ -201,6 +201,7 @@ def consulta(request, pk):
     if request.method == 'POST':
         try:
             if 'odoform' in request.POST:
+                form = ConsultaForm(instance=consulta)
                 formset = ProcedimientoFormSet(request.POST, initial=initial)
                 modelform = OdontogramaForm(request.POST, instance = odontograma)
                 if modelform.is_valid():
