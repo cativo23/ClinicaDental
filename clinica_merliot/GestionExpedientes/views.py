@@ -326,7 +326,7 @@ class ReportePacientesPDF(View):
             ]
         ))
         #Establecemos el tamaño de la hoja que ocupará la tabla 
-        detalle_orden.wrapOn(pdf, 800, 600)
+        detalle_orden.wrapOn(pdf, 500, 200)
         #Definimos la coordenada donde se dibujará la tabla
         detalle_orden.drawOn(pdf, 40,y)
 
@@ -665,30 +665,27 @@ class Reporte3(View):
 
     def tabla2(self,pdf,fech1,fech2):
 
-        encabezado = ('Paciente', 'Saldo Pendiente')
+        encabezado = ('Paciente', 'Saldo Pendiente($)')
     
         cursor3 = connection.cursor()
-        cursor3.execute("SELECT \"GestionExpedientes_paciente\".\"nombresPaciente\" FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_paciente\".\"nombresPaciente\"",[fech1,fech2])
-        cantidadS=cursor3.fetchone( )
+        cursor3.execute("SELECT \"GestionExpedientes_paciente\".\"nombresPaciente\",\"GestionExpedientes_expediente\".saldo FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_paciente\".\"nombresPaciente\",\"GestionExpedientes_expediente\".saldo",[fech1,fech2])
+        cantidadS=cursor3.fetchall()
 
-        cursor2 = connection.cursor()
-        cursor2.execute("SELECT \"GestionExpedientes_expediente\".saldo  FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_expediente\".saldo",[fech1,fech2])
-        cantidadD=cursor2.fetchone( )
 
-        pxatendido = [(cantidadS[0], cantidadD[0])]
-        detalle_orden2 = Table([encabezado] + pxatendido, colWidths=[7* cm, 7* cm])
+        detalle_orden2 = Table([encabezado] + list(cantidadS), colWidths=[7* cm, 7* cm])
         detalle_orden2.setStyle(TableStyle(
-                [
-                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
-                    ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue), 
-                    ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
-                    ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
-                    ('FONTSIZE', (0, 0), (-1, -1), 11),
-                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
-                    ('FONTNAME',(0,1),(1,1),'Times-Roman'),
-                ]
-            ))
-        detalle_orden2.wrapOn(pdf, 800, 600)
+                        [
+                                ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                                ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue), 
+                                ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+                                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                                ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                                ('FONTNAME',(0,1),(1,1),'Times-Roman'),
+                            ]
+                        ))
+        detalle_orden2.wrapOn(pdf, 600, 400)
         detalle_orden2.drawOn(pdf, 115, 415)
 
     def pie(self,pdf):
