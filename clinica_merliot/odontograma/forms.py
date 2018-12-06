@@ -3,10 +3,11 @@ from django.forms.formsets import formset_factory
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
-    Layout, Fieldset, HTML, Field, ButtonHolder, Submit
+    Layout, Fieldset, HTML, Field, ButtonHolder, Submit, Div
 )
 
 from .models import Odontograma, Procedimiento, Tratamiento, Consulta
+
 
 class OdontogramaForm(forms.ModelForm):
     class Meta:
@@ -17,17 +18,21 @@ class OdontogramaForm(forms.ModelForm):
         super(OdontogramaForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.helper.form_class = 'form-horizontal'
+        self.helper.form_class = 'form-group'
         self.helper.layout = Layout(
             Fieldset(
                 '',
-                Field('notas', wrapper_class='form-control'),
+                Div(
+                    Field('notas', required="required", wrapper_class="form-group", autocomplete='off', css_class='form-control'),
+                    css_class="form-group"
+                    )
             ),
             ButtonHolder(
                 Submit('odoform', 'Guardar', css_class='more-btn')
             )
         )
-        self.fields['notas'].label = 'Observaciones '
+        self.fields['notas'].label = 'Observaciones: '
+
 
 class ProcedimientoForm(forms.ModelForm):
     class Meta:
@@ -57,6 +62,7 @@ class ProcedimientoForm(forms.ModelForm):
 
 ProcedimientoFormSet = formset_factory(ProcedimientoForm, extra=0)
 
+
 class nuevoTratamientoForm(forms.ModelForm):
     class Meta:
         model = Tratamiento
@@ -71,8 +77,8 @@ class nuevoTratamientoForm(forms.ModelForm):
             'precioBase': 'Precio Base',
         }
 
-        widgets = {'precioBase': forms.NumberInput(attrs={'type': 'number', 'id':'num',}),
-        }
+        widgets = {'precioBase': forms.NumberInput(attrs={'type': 'number', 'id':'num', }),
+                   }
 
 
 class ConsultaForm(forms.ModelForm):
