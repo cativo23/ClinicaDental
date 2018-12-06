@@ -1,0 +1,167 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+  <link href="/static/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Citas</h3>
+          </div>
+
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+      
+              <div class="x_content">
+                <p class="text-muted font-13 m-b-30">
+                  Listado de citas
+                </p>
+                <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/" method="get" align ="center">
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <button type="submit" value="regresar" name="Submit" id="frm1_submit" class="btn btn-success">Regresar</button>
+                    </div>
+                  </div>
+                </form>
+                <form id="searchform" action="{% url 'gestionExp:listarCita' %}" method="get" accept-charset="utf-8" class="form-horizontal form-label-left">
+                  <div class="form-group">
+                    <div class="col-md-8 col-sm-8col-xs-15">
+                      <div class="col-sm-5">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-primary">Buscar!</button>
+                                        </span>
+                          <input type="text" name="q" id="searchBox" placeholder="Buscar" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <a href="{% url 'gestionExp:nuevaCita' %}"  class="btn btn-success" >
+                      <span class="glyphicon glyphicon-plus">
+                     </span> Nueva Cita</a>
+                      <a href="{% url 'gestionExp:prueba' %}"  class="btn btn-success" >
+                      <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>Cita del dia</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="tratamiento">
+    <div class="container center">
+        <div class="about-grids">
+            <div class="col-md-14">
+
+                <div class="contact-form" style = "padding:30px" >
+                    <form action="/" method="get" align ="center">
+                        <input type="submit" value="regresar" name="Submit" id="frm1_submit" />
+                    </form>
+                    <h1 align="center">Citas</h1>
+                    <form id="searchform" action="{% url 'gestionExp:listarCita' %}" method="get" accept-charset="utf-8" style="padding-left: 30px">
+                        <input value="Buscar" type="submit">
+                        <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+                    </form>
+
+                    <br>
+                    <br>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                    <p style="color: green"> <u>{{ message }}</u></p>
+                        {% else %}
+                    <p style="color: red"><u>{{ message }}</u> </p>
+                    {% endif %}
+                    {% endfor %}
+                    <p></p>
+                    {% endif %}
+                
+                 </div>
+             </div>
+         </div>
+     </div>
+</div>
+<br>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}\
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+  <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
+  <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+  <!-- PNotify -->
+  <script src="/static/vendors/pnotify/dist/pnotify.custom.min.js"></script>
+  <script src="/static/vendors/pnotify/dist/pnotify.buttons.js"></script>
+  <script src="/static/vendors/pnotify/dist/pnotify.nonblock.js"></script>
+  {% if messages %}
+  {% for message in messages %}
+  {{message.tag}}
+    {% if message.tags == 'success' %}
+    <script>
+          $('.hola').ready(function() {
+            new PNotify({
+                            title: '¡Exito!',
+                            text: '{{message}}',
+                            type: 'success',
+                            styling: 'bootstrap3'
+                        });
+          });
+  </script>
+    {% else %}
+    <script>
+          $('.hola').ready(function() {
+            new PNotify({
+                            title: '¡Oh, no!',
+                            text: '{{message}}',
+                            type: '{{message.tags}}',
+                            styling: 'bootstrap3'
+                        });
+          });
+  </script>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+{% endblock javascripts %}

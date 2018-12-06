@@ -1,8 +1,10 @@
 from django import forms
 from django.forms import TextInput, Textarea, ChoiceField
 import re
+from datetime import datetime
 
 from .models import Expediente, Paciente,  Cita
+from odontograma.models import Consulta
 
 
 
@@ -109,3 +111,29 @@ class NuevaCitaForm(forms.ModelForm):
                 elif (re.match("\w*",asuntoCita)) ==None:
                     raise forms.ValidationError("Deben de ser caracters alfanumerico")
                 return asuntoCita
+
+class reportFecha(forms.ModelForm):
+    
+    fechaConsulta=forms.DateField(widget=forms.DateInput(attrs={'class':'form-control','required':True}))
+
+    class Meta:
+        model = Consulta
+        fields = ['fechaConsulta']
+    
+class reportFechaCita(forms.ModelForm):
+    
+    fechaCita=forms.DateField(widget=forms.DateInput(attrs={'class':'form-control','required':True}))
+
+    class Meta:
+        model = Cita
+        fields = ['fechaCita']
+
+
+class reportFechaPago(forms.ModelForm):
+    
+    fechaCreacion=forms.DateField(widget=forms.DateInput(attrs={'class':'form-control','required':True}))
+
+    class Meta:
+        model = Expediente
+        fields = ['fechaCreacion']
+

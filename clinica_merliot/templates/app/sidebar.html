@@ -56,7 +56,11 @@
         </li>
         <li><a><i class="fa fa-bar-chart-o"></i> Reportes <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="chartjs.html">---</a></li>
+            <li><a href="{% url 'GestionExpedientes:reporte_pacientes_pdf' %}">Reporte Pacientes</a></li>
+             <li><a href="{% url 'GestionExpedientes:reporte1_crear' %}">Reporte General de Pacientes</a></li>
+             <li><a href="{% url 'GestionExpedientes:reporte2_crear' %}">Reporte General de Citas</a></li>
+             <li><a href="{% url 'GestionExpedientes:reporte3_crear' %}">Reporte General de Pagos</a></li>
+          </ul>
           </ul>
         </li>
         <li><a><i class="fa fa-clone"></i>Inventario <span class="fa fa-chevron-down"></span></a>

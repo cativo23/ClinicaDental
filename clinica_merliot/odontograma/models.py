@@ -1,6 +1,9 @@
 from django.db import models
 import GestionExpedientes
 from django.shortcuts import get_object_or_404
+from django.utils import timezone as tz
+
+
 
 #from GestionExpedientes.models import  Doctor, Paciente
 # Create your models here.
@@ -59,7 +62,7 @@ class Procedimiento(models.Model):
 class Consulta(models.Model):
     doctor = models.ForeignKey('GestionExpedientes.Doctor', on_delete=models.PROTECT)
     paciente = models.ForeignKey('GestionExpedientes.Expediente', on_delete=models.PROTECT)
-    fechaConsulta = models.DateField('Fecha de Consulta', auto_now_add=True)
+    fechaConsulta = models.DateField('Fecha de Consulta', default=tz.now)
     horaInicio = models.TimeField('Hora de inicio', auto_now_add=True)
     horaFinal = models.TimeField('Hora de Final', auto_now_add=False, null=True)
     observacionCons = models.TextField('Observaciones', max_length=250, blank=True, null=True)
