@@ -9,11 +9,17 @@ class Medicamento(models.Model):
     presentacion_medicamento = models.CharField('Nombre del producto', max_length = 45, blank = False, null = False)
     form_farmaceutica = models.CharField('Nombre del producto', max_length = 45, blank = False, null = False)
 
+
+    def __str__(self):
+        return self.nombre_medicamento + ' , ' + self.marca_medicamento
+
     class meta:
         ordering = ['nombre_medicamento']
         verbose_name = 'medicamento'
         verbose_name_plural = 'medicamentos'
         unique_together = (("nombre_medicamento", "marca_medicamento", "presentacion_medicamento"))
+
+
 
 class Receta(models.Model):
     consulta = models.ForeignKey('odontograma.Consulta', on_delete=models.PROTECT)

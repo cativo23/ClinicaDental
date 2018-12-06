@@ -33,10 +33,9 @@ def principalMedicamento(request):
 
 def asignandoReceta(request):
 
-    form_especificacion = nuevaEspecificacionForm()
+    queryset_especificaciones = Especificacion.objects.all().filter(consulta_id = Recetas.object.latest().id )
 
-    context = {
-        'form_especificacion':form_especificacion,
-    }
+    #if request.method =='POST':
+
 
     return render(request, 'recetas/asignarReceta.html', context)

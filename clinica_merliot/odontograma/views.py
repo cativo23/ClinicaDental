@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import permission_required
 from GestionExpedientes.models import Doctor, Paciente, Expediente
 from .models import Odontograma, Procedimiento, Tratamiento, Consulta
 
+from recetas.forms import nuevoMedicamentoForm, nuevaEspecificacionForm
+from recetas.models  import Especificacion, Receta
+
 from .forms import (OdontogramaForm, ProcedimientoFormSet, NuevaConsultaForm,
                     nuevoTratamientoForm, ConsultaForm)
 import traceback
@@ -179,6 +182,7 @@ class ConsultaDetail(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'id'
 
 
+#VISTA DE LA CONSULTA CUANDO SE ESTA LLENANDO
 @login_required
 def consulta(request, pk):
     template = 'GestionExpedientes/consulta.html'
@@ -220,6 +224,29 @@ def consulta(request, pk):
                         form.instance.horaFinal = datetime.now()
                     form.save()
                     messages.success(request, "La consulta fue modificada correctamente!")
+
+
+
+
+                    #PARTE DE LA RECETA
+                    irRecetas = request.POST.get('radioSi')
+
+                    if irRecetas=='si':
+
+                        nuevaReceta = Receta(consulta_id=pk)
+                        nuevaReceta.save()
+                        form_especificacion = nuevaEspecificacionForm()
+                        context = {
+                            'form_especificacion': form_especificacion,
+                        }
+                        return render(request, 'recetas/asignarReceta.html', context)
+                    #PARTE DE LA RECETA
+
+
+
+
+
+
                     return redirect('odontograma:listarConsultas')
                 else:
                     print('ERROR CONSULTA: {}'.format(form.errors))
@@ -243,6 +270,12 @@ def consulta(request, pk):
         'o_active': 'active'
     }
     return render(request, template, context)
+
+
+
+
+
+
 
 
 @login_required
