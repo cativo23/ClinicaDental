@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.forms',
     'myauth',
     'odontograma',
+    'recetas',
 ]
 
 MIDDLEWARE = [
@@ -87,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'SistemaClinicaMerliot3',
-        'USER': 'clinicauser',
-        'PASSWORD': 'clinicaDental',
+        'USER': 'postgres',
+        'PASSWORD': 'l20120475',
         'HOST': 'localhost',
         'PORT': '',
     }

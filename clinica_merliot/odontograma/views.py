@@ -194,37 +194,47 @@ def consulta(request, pk):
     expediente = get_object_or_404(Expediente, pk=consulta.paciente.id)
     edad = (date.today() - expediente.paciente.fechaNacimiento).days/365
     ed = math.trunc(edad)
+
     initial = [{}]
-    odontograma = get_object_or_404(Odontograma, id= expediente.odontograma.id)
+    odontograma = Odontograma.objects.get(id= expediente.odontograma.id)
 
     if request.method == 'POST':
-        formset = ProcedimientoFormSet(request.POST, initial=initial)
-        form = ConsultaForm(request.POST, instance=consulta)
-        modelform = OdontogramaForm(request.POST, instance = odontograma)
         try:
-            if form.is_valid() and modelform.is_valid():
-                odontograma = modelform.save(commit=False)
-                odontograma.medico = medico
-                odontograma.save()
-                if consulta.horaFinal == None:
-                    form.instance.horaFinal = datetime.now()
-                form.save()
-                if formset.is_valid():
-                    for form in formset:
-                        form.instance.odontograma = odontograma
-                        form.save()
-                messages.success(request, "La consulta fue modificada correctamente!")
-                return redirect('odontograma:listarConsultas')
-            else:
-                print('Your Post Was Not Saved Due To An Error: {}'.format(form.errors))
+            if 'odoform' in request.POST:
+                form = ConsultaForm(instance=consulta)
+                formset = ProcedimientoFormSet(request.POST, initial=initial)
+                modelform = OdontogramaForm(request.POST, instance = odontograma)
+                if modelform.is_valid():
+                    odontograma = modelform.save(commit=False)
+                    odontograma.medico = medico
+                    odontograma.save()
+                    if formset.is_valid():
+                        for form in formset:
+                            form.instance.odontograma = odontograma
+                            form.save()
+                    messages.success(request, "El odonto se guardo Correctamente!")
+                    form = ConsultaForm(instance=consulta)
+                    return redirect('odontograma:verConsulta', pk=pk)
+                else:
+                    print('ERROR: {}'.format(modelform.errors))
+                form = ConsultaForm(instance=consulta)
+            elif 'consform' in request.POST:
+                form = ConsultaForm(request.POST, instance=consulta)
+                if form.is_valid():
+                    if consulta.horaFinal == None:
+                        form.instance.horaFinal = datetime.now()
+                    form.save()
+                    messages.success(request, "La consulta fue modificada correctamente!")
+                    return redirect('odontograma:listarConsultas')
+                else:
+                    print('ERROR CONSULTA: {}'.format(form.errors))
         except Exception as e:
-            messages.warning(request, 'Error: %s'%e)
+            messages.error(request, 'Error: %s'%e)
             traceback.print_tb(e.__traceback__)
     else:
         form = ConsultaForm(instance=consulta)
         formset = ProcedimientoFormSet(initial=initial)
         modelform = OdontogramaForm(instance = odontograma)
-
 
     context = {
         'form': form,
@@ -237,7 +247,6 @@ def consulta(request, pk):
         'tratamientos': tratamientos,
         'o_active': 'active'
     }
-
     return render(request, template, context)
 
 

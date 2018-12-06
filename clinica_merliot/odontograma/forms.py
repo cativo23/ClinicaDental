@@ -21,8 +21,11 @@ class OdontogramaForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 '',
-                Field('notas', wrapper_class='col-md-12'),
+                Field('notas', wrapper_class='form-control'),
             ),
+            ButtonHolder(
+                Submit('odoform', 'Guardar', css_class='more-btn')
+            )
         )
         self.fields['notas'].label = 'Observaciones '
 
@@ -39,14 +42,14 @@ class ProcedimientoForm(forms.ModelForm):
             Fieldset(
                 '',
                 Field('pieza', data_bind='value: diente.id',
-                      wrapper_class='col-xs-1'),
+                      wrapper_class='form-control'),
                 Field('cara', data_bind='value: cara',
-                      wrapper_class='col-xs-2'),
+                      wrapper_class='form-control'),
                 Field('tratamiento', data_bind='value: tratamiento',
-                      wrapper_class='col-xs-2'),
-                Field('diagnostico', wrapper_class='col-xs-2'),
+                      wrapper_class='form-control'),
+                Field('diagnostico', wrapper_class='form-control'),
 
-                Field('notas', wrapper_class='col-xs-5')
+                Field('notas', wrapper_class='form-control')
 
                 ),
             )
