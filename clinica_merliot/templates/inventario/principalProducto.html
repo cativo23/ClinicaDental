@@ -87,7 +87,6 @@
                         </button>
                         <h4 class="modal-title" id="myModalLabel">Agregar Producto</h4>
                       </div>
-                      <form autocomplete="off" id="demo-form2" class="form-horizontal form-label-left" method="post" action="{% url 'inventario:principalProducto' %}">{% csrf_token %}
                       <div class="modal-body">
                         <form autocomplete="off" id="demo-form2" class="form-horizontal form-label-left" method="post" action="{% url 'inventario:principalProducto' %}">{% csrf_token %}
                           {% for field in form_producto %}
