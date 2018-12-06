@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404
 from datetime import date, datetime
 
 from odontograma.models import Consulta, Odontograma
+from django.conf import settings
 # Create your views here.
 
 from django.utils import timezone
@@ -262,7 +263,7 @@ class ReportePacientesPDF(View):
 
     def cabecera(self,request,pdf):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
-        archivo_imagen = 'staticfiles/images/logo.jpg'
+        archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
@@ -338,7 +339,7 @@ class ReportePacientesPDF(View):
         pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
-        archivo_imagen2 = 'static/images/logo2.jpg'
+        archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Pacientes <------------------
@@ -370,7 +371,7 @@ class Reporte1(View):
 
     def cabecera(self,request,pdf):
        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
-        archivo_imagen = 'staticfiles/images/logo.jpg'
+        archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
@@ -448,7 +449,7 @@ class Reporte1(View):
         pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
-        archivo_imagen2 = 'staticfiles/images/logo2.jpg'
+        archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Citas <------------------
@@ -480,7 +481,7 @@ class Reporte2(View):
 
     def cabecera(self,request,pdf):
        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
-        archivo_imagen = 'staticfiles/images/logo.jpg'
+        archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
@@ -561,7 +562,7 @@ class Reporte2(View):
         pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
-        archivo_imagen2 = 'staticfiles/images/logo2.jpg'
+        archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 
@@ -595,7 +596,7 @@ class Reporte3(View):
 
     def cabecera(self,request,pdf):
        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
-        archivo_imagen = 'staticfiles/images/logo.jpg'
+        archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
@@ -699,5 +700,5 @@ class Reporte3(View):
         pdf.drawString(130, 68, u"Final 25 Av. Nte, Ciudad Universitaria, San Salvador")
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
-        archivo_imagen2 = 'staticfiles/images/logo2.jpg'
+        archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
