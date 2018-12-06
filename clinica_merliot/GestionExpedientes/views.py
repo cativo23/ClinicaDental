@@ -662,17 +662,18 @@ class Reporte3(View):
         detalle_orden.wrapOn(pdf, 800, 600)
         detalle_orden.drawOn(pdf, 115, 515)
 
+
     def tabla2(self,pdf,fech1,fech2):
 
         encabezado = ('Paciente', 'Saldo Pendiente')
     
         cursor3 = connection.cursor()
         cursor3.execute("SELECT \"GestionExpedientes_paciente\".\"nombresPaciente\" FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_paciente\".\"nombresPaciente\"",[fech1,fech2])
-        cantidadS=cursor3.fetchone()
+        cantidadS=cursor3.fetchone( )
 
         cursor2 = connection.cursor()
         cursor2.execute("SELECT \"GestionExpedientes_expediente\".saldo  FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_expediente\".saldo",[fech1,fech2])
-        cantidadD=cursor2.fetchone()
+        cantidadD=cursor2.fetchone( )
 
         pxatendido = [(cantidadS[0], cantidadD[0])]
         detalle_orden2 = Table([encabezado] + pxatendido, colWidths=[7* cm, 7* cm])
