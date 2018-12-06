@@ -482,6 +482,7 @@ class Reporte2(View):
     def cabecera(self,request,pdf):
        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
         archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
+        print(archivo_imagen)
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
@@ -597,6 +598,7 @@ class Reporte3(View):
     def cabecera(self,request,pdf):
        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
         archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
+        print(archivo_imagen)
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
