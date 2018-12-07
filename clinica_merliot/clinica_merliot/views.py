@@ -4,4 +4,4 @@ from django.shortcuts import redirect
 
 @login_required
 def index(request):
-    return redirect('gestionExp:home')
+    return redirect('gestionExp:listarExpedientes')

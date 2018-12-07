@@ -104,12 +104,15 @@ class PacienteDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fecha = Expediente.objects.get(id=self.kwargs['id']).paciente.fechaNacimiento
-        print(fecha)
         hoy = date.today()
-        print(hoy)
         edad = hoy.year - fecha.year - ((hoy.month, hoy.day) < (fecha.month, fecha.day))
-        print(edad)
+        procedimientos = Expediente.objects.get(id=self.kwargs['id']).odontograma.procedimiento_set.filter(status='completado')
+        citas = Expediente.objects.get(id=self.kwargs['id']).cita_set.all()
+        consultas = Expediente.objects.get(id=self.kwargs['id']).consulta_set.all()
+        context['consultas'] = consultas
+        context['citas'] = citas
         context['ahorita'] = edad
+        context['procedimientos'] = procedimientos
         return context
 
 
@@ -134,11 +137,11 @@ class Paciente2List(LoginRequiredMixin, ListView):
 @login_required
 def editarExpediente(request, pk):
     template = 'GestionExpedientes/editarExpediente.html'
-    expediente = get_object_or_404(Paciente, pk=pk)
+    expediente = get_object_or_404(Expediente, pk=pk)
 
     if request.method == 'POST':
-        form = nuevoPacienteForm(request.POST, instance=expediente)
-        form1 = ExpForm(request.POST, instance=expediente.expediente)
+        form = nuevoPacienteForm(request.POST, instance=expediente.paciente)
+        form1 = ExpForm(request.POST, instance=expediente)
         try:
             if form.is_valid() and form1.is_valid():
                 form.save()
@@ -150,8 +153,8 @@ def editarExpediente(request, pk):
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
     else:
-        form = nuevoPacienteForm(instance=expediente)
-        form1 = ExpForm(instance=expediente.expediente)
+        form = nuevoPacienteForm(instance=expediente.paciente)
+        form1 = ExpForm(instance=expediente)
         context = {
         'form': form,
         'form1': form1,

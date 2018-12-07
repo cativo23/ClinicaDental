@@ -12,7 +12,7 @@ from GestionExpedientes.models import Doctor, Paciente, Expediente
 from .models import Odontograma, Procedimiento, Tratamiento, Consulta
 
 from .forms import (OdontogramaForm, ProcedimientoFormSet, NuevaConsultaForm,
-                    nuevoTratamientoForm, ConsultaForm)
+                    nuevoTratamientoForm, ConsultaForm, ProcedimientoEditFormSet)
 import traceback
 import math
 
@@ -202,16 +202,18 @@ def consulta(request, pk):
                 if modelform.is_valid():
                     odontograma = modelform.save(commit=False)
                     odontograma.medico = medico
-                    odontograma.save()
                     if formset.is_valid():
+                        odontograma.save()
                         for form in formset:
                             form.instance.odontograma = odontograma
                             form.save()
-                    messages.success(request, "El odonto se guardo Correctamente!")
+                            messages.success(request, "El odonto se guardo Correctamente!")
+                    else:
+                        messages.error(request, 'ERROR {}'.format(formset.errors))
                     form = ConsultaForm(instance=consulta)
                     return redirect('odontograma:verConsulta', pk=pk)
                 else:
-                    print('ERROR: {}'.format(modelform.errors))
+                    messages.error(request, 'ERROR {}'.format(modelform.errors))
                 form = ConsultaForm(instance=consulta)
             elif 'consform' in request.POST:
                 form = ConsultaForm(request.POST, instance=consulta)
@@ -246,8 +248,10 @@ def consulta(request, pk):
 
 
 @login_required
-def agregarConsulta(request):
+def agregarConsulta(request, id):
     template = 'GestionExpedientes/agregarConsulta.html'
+    expediente = Expediente.objects.get(pk=id)
+    print(expediente)
     if request.method == 'POST':
         form = NuevaConsultaForm(request.POST)
         try:
@@ -258,7 +262,9 @@ def agregarConsulta(request):
         except Exception as e:
             messages.warning(request, 'Your Post Was Not Saved Due To An Error: {}'.format(e))
     else:
-        data = {'doctor': request.user.doctor}
+        data = {'doctor': request.user.doctor,
+                'paciente': expediente,
+        }
         form = NuevaConsultaForm(initial=data)
 
     context = {
@@ -287,21 +293,6 @@ class OdontogramaList(LoginRequiredMixin, ListView):
     ordering = '-fechaCreacion'
     slug_field = 'id'
 
-    def get_queryset(self):
-
-        qs = Odontograma.objects.filter(expediente=self.kwargs['slug'])
-
-        keywords = self.request.GET.get('q')
-        if keywords:
-            query = SearchQuery(keywords)
-            vector = SearchVector('paciente__nombresPaciente',
-                                  'paciente__paciente__apellidosPaciente',
-                                  'doctor__nombreDoctor')
-            qs = Consulta.objects.annotate(search=vector).filter(search=query)
-            qs = qs.annotate(rank=SearchRank(vector, query)).order_by('-rank')
-
-        return qs
-
     def get_context_data(self, **kwargs):
         context = super(OdontogramaList, self).get_context_data(**kwargs)
         paciente = get_object_or_404(Paciente, pk=self.kwargs['slug'])
@@ -309,3 +300,26 @@ class OdontogramaList(LoginRequiredMixin, ListView):
         context.update({'paciente': paciente,
                         })
         return context
+
+def finalizaConsulta(request,id):
+    consulta = Consulta.objects.get(pk=id)
+    print(consulta)
+    print(consulta.paciente.odontograma)
+    total = 0
+    if request.method == 'POST':
+        formset = ProcedimientoEditFormSet(request.POST, queryset=Procedimiento.objects.filter(odontograma=consulta.paciente.odontograma).exclude(status='completado'))
+        print(formset.errors)
+        if formset.is_valid():
+            for form in formset:
+                procedimiento = form.save(commit=False)
+                if procedimiento.status == 'completado':
+                    expediente = consulta.paciente
+                    expediente.saldo+=procedimiento.tratamiento.precioBase
+                    total += procedimiento.tratamiento.precioBase
+                    expediente.save()
+                procedimiento.save()
+            messages.success(request, 'Consulta Finalizada, se cargo{}!'.format(total))
+            return redirect('gestionExp:listarExpedientes')
+    else:
+        formset = ProcedimientoEditFormSet(queryset=Procedimiento.objects.filter(odontograma=consulta.paciente.odontograma).exclude(status='completado'))
+    return render(request, 'pagos/finish.html', {'formset':formset, })

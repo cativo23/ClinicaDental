@@ -27,8 +27,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('myauth.urls')),
     path('odo/', include(('odontograma.urls', 'odontograma'), namespace='odontograma')),
-    path('app/', include('app.urls')),
+    #path('app/', include('app.urls')),
     path('recetas/', include('recetas.urls')),
+    path('pagos/', include(('pagos.urls', 'pagos'), namespace='pagos')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

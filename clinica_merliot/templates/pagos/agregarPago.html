@@ -1,6 +1,6 @@
 {% extends "app/base_site.html" %}
 
-{% block title %} Nueva Consulta {% endblock title %}
+{% block title %} Agregar Pago{% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -11,8 +11,9 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Nueva Consulta</h3>
+            <h3>Agregar Pago</h3>
           </div>
+
           <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -31,9 +32,18 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Iniciar Nueva Consulta</h2>
+                <h2>Agregar pago</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a>
+                      </li>
+                      <li><a href="#">Settings 2</a>
+                      </li>
+                    </ul>
                   </li>
                   <li><a class="close-link"><i class="fa fa-close"></i></a>
                   </li>
@@ -49,8 +59,9 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                        {% if field.field.widget.input_type == "select" %}
                        <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                         <option value="none">---</option>
                          {% for choice in field.field.choices %}
-                           <option value="{{choice.0}}" {% if field.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
+                           <option value="{{choice.0}}">{{choice.1}}</option>
                          {% endfor %}
                        </select>
                        {% else %}
@@ -60,8 +71,7 @@
                        {% if field.help_text %}
                        placeholder="{{ field.help_text|safe }}"
                        {% endif %}
-                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12"
-                       {% if field.value != None %}{% if field.field.widget.attrs.id %}value = "{{field.value|date:"d/m/Y"}}"{% else %}value = "{{field.value}}"{% endif %}{% endif %} >
+                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12">
                         {% endif %}
                     </div>
                     {% for error in field.errors %}
@@ -75,7 +85,7 @@
                   <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
               </div>
-              </form>
+            </form>
               </div>
             </div>
           </div>
