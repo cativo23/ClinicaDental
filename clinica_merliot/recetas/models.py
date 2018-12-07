@@ -11,7 +11,7 @@ class Medicamento(models.Model):
 
 
     def __str__(self):
-        return self.nombre_medicamento + ' , ' + self.marca_medicamento
+        return self.nombre_medicamento + ' , ' + self.marca_medicamento + ' , ' +  self.presentacion_medicamento + ' , ' + self.form_farmaceutica
 
     class meta:
         ordering = ['nombre_medicamento']
