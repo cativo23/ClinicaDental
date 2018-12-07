@@ -1,0 +1,115 @@
+{% extends "app/base_site.html" %}
+
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Grafica Consultas</h3>
+          </div>
+
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+      
+              <div class="x_content">
+                <p class="text-muted font-13 m-b-30">
+                  Grafica
+                </p>
+                 <h4 class="panel-title" align="center">  Clinica Merliot<br> Doctor: {{user.username}}<br> Grafica General de Citas Realizadas</h4>
+                <br>
+                <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/" method="get" align ="center">{% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <button type="submit" value="regresar" name="Submit" id="frm1_submit" class="btn btn-success">Regresar</button>
+                    </div>
+                  </div>
+
+                </form>
+              <canvas id="myChart" width="500" height="300"></canvas>
+              <p class="text-muted font-13 m-b-30">
+                 Nota: Este Grafica correspone a las consultas realizada en los ultimos 7 dias a partir de la actual.
+                </p>
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+<br>
+
+ 
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js'></script>
+
+<script type="text/javascript">
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ["1", "2","3","4","5","6","7"],
+        datasets: [{
+            label: 'Registro de Consultas en los ultimos 7 dias',
+            data: {{ 30_day_registrations }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+
+
+{% endblock javascripts %}

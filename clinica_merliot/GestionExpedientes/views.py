@@ -37,6 +37,8 @@ import locale
 from django.db import connection, connections
 from .forms import *
 
+from django.views.generic import TemplateView
+import arrow
 
 
 
@@ -329,8 +331,8 @@ class ReportePacientesPDF(LoginRequiredMixin,View):
                 ('FONTSIZE', (0, 0), (-1, -1), 10),
             ]
         ))
-        #Establecemos el tamaño de la hoja que ocupará la tabla
-        detalle_orden.wrapOn(pdf, 800, 600)
+        #Establecemos el tamaño de la hoja que ocupará la tabla 
+        detalle_orden.wrapOn(pdf, 500, 200)
         #Definimos la coordenada donde se dibujará la tabla
         detalle_orden.drawOn(pdf, 40,y)
 
@@ -671,31 +673,27 @@ class Reporte3(LoginRequiredMixin,View):
 
     def tabla2(self,pdf,fech1,fech2):
 
-        encabezado = ('Paciente', 'Saldo Pendiente')
-
+        encabezado = ('Paciente', 'Saldo Pendiente($)')
+    
         cursor3 = connection.cursor()
-        cursor3.execute("SELECT \"GestionExpedientes_paciente\".\"nombresPaciente\" FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_paciente\".\"nombresPaciente\"",[fech1,fech2])
-        cantidadS=cursor3.fetchone()
+        cursor3.execute("SELECT \"GestionExpedientes_paciente\".\"nombresPaciente\",\"GestionExpedientes_expediente\".saldo FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_paciente\".\"nombresPaciente\",\"GestionExpedientes_expediente\".saldo",[fech1,fech2])
+        cantidadS=cursor3.fetchall()
 
-        cursor2 = connection.cursor()
-        cursor2.execute("SELECT \"GestionExpedientes_expediente\".saldo  FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_expediente\".saldo",[fech1,fech2])
-        cantidadD=cursor2.fetchone()
-        print(cantidadD)
-        print(cantidadS)
-        pxatendido = [(cantidadS[0], cantidadD[0])]
-        detalle_orden2 = Table([encabezado] + pxatendido, colWidths=[7* cm, 7* cm])
+
+        detalle_orden2 = Table([encabezado] + list(cantidadS), colWidths=[7* cm, 7* cm])
         detalle_orden2.setStyle(TableStyle(
-                [
-                    ('ALIGN',(0,0),(-1,-1),'CENTER'),
-                    ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
-                    ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
-                    ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
-                    ('FONTSIZE', (0, 0), (-1, -1), 11),
-                    ('FONTNAME',(0,0),(1,0),'Times-Bold'),
-                    ('FONTNAME',(0,1),(1,1),'Times-Roman'),
-                ]
-            ))
-        detalle_orden2.wrapOn(pdf, 800, 600)
+                        [
+                                ('ALIGN',(0,0),(-1,-1),'CENTER'),
+                                ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue), 
+                                ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+                                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                                ('FONTNAME',(0,0),(1,0),'Times-Bold'),
+                                ('FONTNAME',(0,1),(1,1),'Times-Roman'),
+                            ]
+                        ))
+        detalle_orden2.wrapOn(pdf, 600, 400)
         detalle_orden2.drawOn(pdf, 115, 415)
 
     def pie(self,pdf):
@@ -708,3 +706,24 @@ class Reporte3(LoginRequiredMixin,View):
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
         #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+
+
+class Grafica(TemplateView):
+    showtime = strftime("%d-%m-%Y ", gmtime())
+    template_name = 'GestionExpedientes/grafica.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Grafica, self).get_context_data(**kwargs)
+        context['30_day_registrations'] = self.thirty_day_registrations()
+        return context
+
+    def thirty_day_registrations(self):
+        final_data = []
+
+        date = arrow.now()
+        for day in range(1, 8):
+            date = date.replace(days=-1)
+            count = Consulta.objects.filter(fechaConsulta__lte=date.ceil('day').datetime, fechaConsulta__gte=date.floor('day').datetime).count()
+            final_data.append(count)
+
+        return final_data
