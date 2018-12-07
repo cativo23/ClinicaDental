@@ -1,6 +1,5 @@
 from django.db import models
 import GestionExpedientes
-from django.shortcuts import get_object_or_404
 from django.utils import timezone as tz
 
 

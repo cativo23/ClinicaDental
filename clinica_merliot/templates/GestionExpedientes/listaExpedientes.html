@@ -81,7 +81,7 @@
                               <td>{{ expediente.fechaCreacion }}</td>
                               <td><a  href="{% url 'gestionExp:editarExpediente' expediente.id %}" class="btn btn-round btn-primary">
                                 <span class="glyphicon glyphicon-edit"></span></a></td>
-                              <td><a href = "{% url 'odontograma:nuevaConsulta'%}"> Consulta </a></td>
+                              <td><a href = "{% url 'odontograma:nuevaConsulta' expediente.id %}"> Consulta </a></td>
                           </tr>
                           {% endfor %}
                       </tbody>

@@ -74,7 +74,7 @@
                      {% endfor %}
                    </select>
                    {% else %}
-                   {% if field.field.widget.template_name == "django/forms/widgets/textarea.html" %} <textarea id="id_observaciones" class="form-control"></textarea>{% else %}
+                   {% if field.field.widget.template_name == "django/forms/widgets/textarea.html" %} <textarea name ="observacionExp" id="id_observaciones" class="form-control">{{field.value}}</textarea>{% else %}
                    <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }}"
                    {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
                    {% if field.field.required %} required="required"{% endif %}
@@ -96,7 +96,6 @@
                       <button type="submit" class="btn btn-success">Guardar</button>
                     </div>
                   </div>
-
                 </form>
               </div>
             </div>

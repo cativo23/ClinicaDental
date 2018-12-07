@@ -14,11 +14,12 @@ urlpatterns = [
     path('consultas/<pk>/', views.consulta, name='verConsulta'),
     #PAGINA QUE SE VE DURANTE LA CONSULTA
 
-    path('nuevaConsulta/', views.agregarConsulta, name='nuevaConsulta'),
+    path('nuevaConsulta/<id>/', views.agregarConsulta, name='nuevaConsulta'),
 
     path('agregarTratamiento/', views.agregarTratamiento, name='agregarTratamiento'),
     path('tratamientos/', views.TratamientoList.as_view(), name='listarTratamientos'),
     path('tratamientos/<pk>/edit/', views.editarTratamiento, name='editarTratamiento'),
     path('tratamientos/<slug:id>/', views.TratamientoDetail.as_view(), name='detalleTratamiento'),
     path('<slug:slug>/odontos/', views.OdontogramaList.as_view(), name='odoList'),
+    path('finalizar/<id>/', views.finalizaConsulta, name='finalizar')
     ]

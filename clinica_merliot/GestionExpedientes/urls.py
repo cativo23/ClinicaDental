@@ -18,7 +18,7 @@ urlpatterns = [
     path('cita/Prueba/', views.cita_list, name='prueba'),
     path('cita/calendario/', views.prueba, name='calendario'),
     path('Reporte/reporte_pacientes_pdf/',ReportePacientesPDF.as_view(), name='reporte_pacientes_pdf'),
-   
+
 #REPORTES PACIENTE
     url(r'^reporte/es1/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte1.as_view(), name='generar_pdf_1'),
     path('Reporte/reporte1/',reporte1_crear, name='reporte1_crear'),

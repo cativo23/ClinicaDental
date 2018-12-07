@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.formsets import formset_factory
+from django.forms import modelformset_factory
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
@@ -97,3 +98,13 @@ class NuevaConsultaForm(forms.ModelForm):
             'doctor',
             'paciente',
         ]
+
+
+class EditarProcedimientos(forms.ModelForm):
+    class Meta:
+        model = Procedimiento
+        fields = [
+                  'status',
+                  ]
+
+ProcedimientoEditFormSet = modelformset_factory(Procedimiento,fields=('status',), extra=0)

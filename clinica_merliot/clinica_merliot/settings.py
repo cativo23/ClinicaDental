@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'GestionExpedientes',
     'inventario',
+    'mathfilters',
     'django.forms',
     'myauth',
     'odontograma',
     'recetas',
+    'pagos',
 ]
 
 MIDDLEWARE = [
@@ -86,12 +88,8 @@ WSGI_APPLICATION = 'clinica_merliot.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'SistemaClinicaMerliot3',
-        'USER': 'postgres',
-        'PASSWORD': 'l20120475',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 

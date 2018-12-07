@@ -57,8 +57,8 @@ class Expediente(models.Model):
     paciente = models.OneToOneField(Paciente, on_delete=models.CASCADE)
     odontograma = models.OneToOneField(Odontograma, on_delete=models.CASCADE, null= True, blank = True)
     fechaCreacion = models.DateTimeField('date_created', default=tz.now)
-    pagado = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    saldo = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    pagado = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, default=0)
+    saldo = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, default=0)
     observacionExp = models.TextField('Observaciones', max_length=250, blank=True, null=True)
 
     def __str__(self):
