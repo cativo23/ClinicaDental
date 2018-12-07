@@ -268,7 +268,7 @@ class ReportePacientesPDF(View):
         #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
         archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
-        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
+        #pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
         current_user = request.user
         pdf.setFont("Times-Bold", 30)
@@ -343,7 +343,7 @@ class ReportePacientesPDF(View):
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
-        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+        #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Pacientes <------------------
 
@@ -376,7 +376,7 @@ class Reporte1(View):
        #Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
         archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
-        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
+        ##pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
         current_user = request.user
         pdf.setFont("Times-Bold", 30)
@@ -453,7 +453,7 @@ class Reporte1(View):
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
-        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+        #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Citas <------------------
 
@@ -487,7 +487,7 @@ class Reporte2(View):
         archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         print(archivo_imagen)
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
-        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
+        ##pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
         current_user = request.user
         pdf.setFont("Times-Bold", 30)
@@ -567,7 +567,7 @@ class Reporte2(View):
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
-        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+        #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 
 #------------------> Reporte General de Pagos <------------------
@@ -603,7 +603,7 @@ class Reporte3(View):
         archivo_imagen = settings.STATIC_ROOT+'/images/logo.jpg'
         print(archivo_imagen)
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
-        pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
+        ##pdf.drawImage(archivo_imagen, 40, 725, width=100, height=100)
         showtime = strftime("%d-%m-%Y ", gmtime())
         current_user = request.user
         pdf.setFont("Times-Bold", 30)
@@ -675,12 +675,13 @@ class Reporte3(View):
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT \"GestionExpedientes_paciente\".\"nombresPaciente\" FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_paciente\".\"nombresPaciente\"",[fech1,fech2])
-        cantidadS=cursor3.fetchone( )
+        cantidadS=cursor3.fetchone()
 
         cursor2 = connection.cursor()
         cursor2.execute("SELECT \"GestionExpedientes_expediente\".saldo  FROM \"GestionExpedientes_expediente\" INNER JOIN \"GestionExpedientes_paciente\" on \"GestionExpedientes_expediente\".paciente_id = \"GestionExpedientes_paciente\".id where saldo<>0.00 and \"fechaCreacion\" between %s and %s group by \"GestionExpedientes_expediente\".saldo",[fech1,fech2])
-        cantidadD=cursor2.fetchone( )
-
+        cantidadD=cursor2.fetchone()
+        print(cantidadD)
+        print(cantidadS)
         pxatendido = [(cantidadS[0], cantidadD[0])]
         detalle_orden2 = Table([encabezado] + pxatendido, colWidths=[7* cm, 7* cm])
         detalle_orden2.setStyle(TableStyle(
@@ -706,4 +707,4 @@ class Reporte3(View):
         pdf.drawString(200, 53, u"Tels.: (503) 2225 7198")
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = settings.STATIC_ROOT+'/images/logo2.jpg'
-        pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+        #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
