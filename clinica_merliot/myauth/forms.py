@@ -8,6 +8,14 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
+    MALE= 'M'
+    FEMALE = "F"
+    NO = "N"
+    SEX_CHOICES = (
+        (MALE, 'Masculino'),
+        (FEMALE, 'Femenino'),
+        (NO, "No decir"),
+    )
     username = forms.CharField(label='Usuario', required=True, )
     avatar = forms.ImageField(
                              label='Imagen',
@@ -15,7 +23,7 @@ class UserChangeForm(forms.ModelForm):
     email = forms.EmailField(label='Email',
                              help_text='Un correo valido porfavor',
                              required=True, )
-    sex = forms.ChoiceField(label='Sexo',
+    sex = forms.ChoiceField(choices=SEX_CHOICES , label='Sexo',
                             required=True, )
 
     class Meta:

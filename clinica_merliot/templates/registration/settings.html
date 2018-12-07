@@ -1,63 +1,112 @@
-{% extends 'base.html' %}
+{% extends "app/base_site.html" %}
 
+{% block title %} Modificar Perfil {% endblock title %}
 
-{% block navbar %}
-<ul>
-  <li ><a href="/">Inicio</a></li>
-  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="#">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li class="active"><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
 
 {% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Modificar Perfil</h3>
+          </div>
 
-
-<div class="Expedientes">
-  <div class="container">
-    <div class="top-grids">
-      <div class="container">
-        <h1 align="center" >Modifica tus datos {{ request.user.doctor}}!</h1>
-
-            <h2>Informacion basica</h2>
-            <form method="post" action='{{ action_url }}' enctype='multipart/form-data'>
-              {% csrf_token %}
-              {% if messages %}
-              {% for message in messages %}
-              {% if message.tags == 'success' %}
-              <p style="color: green"> <u>{{ message }}</u></p>
-                  {% else %}
-              <p style="color: red"><u>{{ message }}</u> </p>
-              {% endif %}
-              {% endfor %}
-              {% endif %}
-              {% for error in form.non_field_errors %}
-              <div class="alert alert-danger" >
-                <strong style="color: red">{{ error|escape }}</strong>
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
               </div>
-              {% endfor %}
-              {% for field in form %}
-                {% for error in field.errors %}
-                    <div class="alert alert-danger">
-                      <strong style="color: red">{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-                <div class="12u$">
-                  {{ field.label_tag }}
-                  {% if field.help_text %}
-                  <small style="color: grey">{{ field.help_text|safe }}</small>
-                  {% endif %}
-                  {{ field }}
-               </div>
-            {% endfor %}
-              <button class="button special big" type="submit">Modificar</button>
-            </form>
-      </div>
-		</div>
-  </div>
-</div>
+            </div>
+          </div>
+        </div>
 
-{% endblock %}
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Modificar Perfil</h2><br><br><br>
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags == 'success' %}
+                <p style="color: green"> <u>{{ message }}</u></p>
+                    {% else %}
+                <p style="color: red"><u>{{ message }}</u> </p>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a>
+                      </li>
+                      <li><a href="#">Settings 2</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <form autocomplete="off" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post"> {% csrf_token %}
+                  {% for field in form %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                       {% if field.field.widget.input_type == "select" %}
+                       <select name="{{field.html_name}}" id="{{field.id_for_label}}" class="select2_single form-control">
+                         <option value="">---</option>
+                         {% for choice in field.field.choices %}
+                           <option value="{{choice.0}}" {% if field.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
+                         {% endfor %}
+                       </select>
+                       {% else %}
+                       <input type="{{field.field.widget.input_type}}" id="{{ field.id_for_label }} {{field.field.widget.attrs.id}}"
+                       {% if field.max_length %}}maxlength="{{field.max_length}}"{% endif %} name="{{field.name}}"
+                       {% if field.field.required %} required="required"{% endif %}
+                       {% if field.help_text %}
+                       placeholder="{{ field.help_text|safe }}"
+                       {% endif %}
+                       class="{{field.field.widget.attrs.class}} form-control col-md-7 col-xs-12"
+                       {% if field.value != None %}{% if field.field.widget.attrs.id %}value = "{{field.value|date:"d/m/Y"}}"{% else %}value = "{{field.value}}"{% endif %}{% endif %} >
+                        {% endif %}
+                    </div>
+                    {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                  </div>
+              {% endfor %}
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+              </div>
+            </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}
