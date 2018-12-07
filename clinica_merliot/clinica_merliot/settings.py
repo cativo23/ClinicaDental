@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'GestionExpedientes',
     'inventario',
-    'mathfilters',
     'django.forms',
     'myauth',
     'odontograma',
