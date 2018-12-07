@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.forms',
     'myauth',
     'odontograma',
+    'arrow',
 ]
 
 MIDDLEWARE = [

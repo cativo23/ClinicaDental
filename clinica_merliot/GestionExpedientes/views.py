@@ -36,6 +36,8 @@ import locale
 from django.db import connection, connections
 from .forms import *
 
+from django.views.generic import TemplateView
+import arrow
 
 
 
@@ -698,3 +700,24 @@ class Reporte3(View):
         pdf.drawString(182, 38, u"www.clinicaDental.com")
         archivo_imagen2 = 'static/images/logo2.jpg'
         pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
+
+
+class Grafica(TemplateView):
+    showtime = strftime("%d-%m-%Y ", gmtime())
+    template_name = 'GestionExpedientes/grafica.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Grafica, self).get_context_data(**kwargs)
+        context['30_day_registrations'] = self.thirty_day_registrations()
+        return context
+
+    def thirty_day_registrations(self):
+        final_data = []
+
+        date = arrow.now()
+        for day in range(1, 7):
+            date = date.replace(days=-1)
+            count = Consulta.objects.filter(fechaConsulta__gte=date.floor('day').datetime, fechaConsulta__lte=date.ceil('day').datetime).count()
+            final_data.append(count)
+
+        return final_data

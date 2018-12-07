@@ -2,7 +2,8 @@ from django.urls import path
 from django.conf.urls import url,include
 
 from . import views
-from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list,prueba,ReportePacientesPDF,reporte1_crear,Reporte1,reporte2_crear,Reporte2,reporte3_crear,Reporte3
+from .views import PacienteList, PacienteDetail, Paciente2List, CitaList, CitaDetail, agregarCita, editarCita,cita_list,prueba,ReportePacientesPDF,reporte1_crear,Reporte1,reporte2_crear,Reporte2,reporte3_crear,Reporte3,Grafica
+
 
 urlpatterns = [
     path('', views.index, name='home'),
@@ -30,4 +31,5 @@ urlpatterns = [
 #REPORTES PAGOS
     path('Reporte/reporte3/',reporte3_crear, name='reporte3_crear'),
     url(r'^reporte/es3/(?P<fecha>[^/]+)/(?P<fecha2>[^/]+)/$', Reporte3.as_view(), name='generar_pdf_3'),
+    path('Reporte/grafica/',Grafica.as_view(), name='grafica')
 ]
