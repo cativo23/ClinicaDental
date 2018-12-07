@@ -1,126 +1,162 @@
-{% extends "base.html" %}
-
+{% extends "app/base_site.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
-{% block navbar %}
-<ul>
-  <li class="active"><a href="/">Inicio</a></li>
-  <li ><a href="/GestionExpedientes/">Expedientes</a></li>
-  <li><a href="#">Agenda Citas</a></li>
-  <li><a href="#">Inventario</a></li>
-  <li><a href="/auth/settings/">Modificar Perfil</a></li>
-  <li><a href="/auth/logout/">Salir</a></li>
-  <img  align="middle" width="75" height="75" src = "{% if user.avatar %}{{ user.avatar.url}} {% endif %}">
-</ul>
-{% endblock %}
+{% block title %} Detalle de Odontograma #{{ odontograma.id }}{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
 
 {% block content %}
-<div class="container center">
-  <div class="about-grids">
-    <div class="contact-form">
-      <div class="col-md-14 about-left">
-<h2  align ="center">Detalle de Odontograma #{{ odontograma.id }}</h2>
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Detalle de Odontograma #{{ odontograma.id }}</h3>
+          </div>
 
-<div class="row">
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <div class="col-md-8 r">
+        <div class="clearfix"></div>
 
-  {% if odontograma.procedimiento_set.all %}
-  <table class="table table-bordered">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Detalle de Odontograma #{{ odontograma.id }}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Settings 1</a>
+                      </li>
+                      <li><a href="#">Settings 2</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="row">
 
-    <thead align ="center">
+                  <div class="col-md-8 r">
 
-      <tr align ="center">
+                  {% if odontograma.procedimiento_set.all %}
+                  <table class="table table-bordered">
 
-        <th align ="center">Pieza</th>
-        <th align ="center">Cara</th>
-        <th align ="center">Tratamiento</th>
-        <th align ="center">Status</th>
-        <th >&nbsp;</th>
+                    <thead align ="center">
 
-      </tr>
+                      <tr align ="center">
 
-    </thead>
+                        <th align ="center">Pieza</th>
+                        <th align ="center">Cara</th>
+                        <th align ="center">Tratamiento</th>
+                        <th align ="center">Status</th>
+                        <th >&nbsp;</th>
 
-    <tbody align ="center">
+                      </tr>
 
-      {% for procedimiento in odontograma.procedimiento_set.all %}
-      <tr>
+                    </thead>
 
-        {% with 'img/piezas/'|add:procedimiento.pieza|add:'.jpg' as image_static %}
-        <td>{{ procedimiento.pieza }}<img src="{% static image_static %}" alt="{{procedimiento.pieza}}" width="28"></td>
-        {% endwith %}
-        <td>{{ procedimiento.get_cara_display }}</td>
-        <td>{{ procedimiento.tratamiento }}</td>
-        <td ><span class="label">{{ procedimiento.get_status_display }}</span></td>
-        <td><a href="{% url 'odontograma:detalleProcedimiento' procedimiento.id %}" class="btn btn-default">Ver</a></td>
+                    <tbody align ="center">
 
-      </tr>
-      {% endfor %}
+                      {% for procedimiento in odontograma.procedimiento_set.all %}
+                      <tr>
 
-    </tbody>
+                        {% with 'img/piezas/'|add:procedimiento.pieza|add:'.jpg' as image_static %}
+                        <td>{{ procedimiento.pieza }}<img src="{% static image_static %}" alt="{{procedimiento.pieza}}" width="28"></td>
+                        {% endwith %}
+                        <td>{{ procedimiento.get_cara_display }}</td>
+                        <td>{{ procedimiento.tratamiento }}</td>
+                        <td ><span class="label">{{ procedimiento.get_status_display }}</span></td>
+                        <td><a href="{% url 'odontograma:detalleProcedimiento' procedimiento.id %}" class="btn btn-default">Ver</a></td>
 
-  </table>
-  {% endif %}
+                      </tr>
+                      {% endfor %}
 
-  </div>
+                    </tbody>
 
-  <div class="col-md-4">
+                  </table>
+                  {% endif %}
 
-    <div class="panel panel-default">
+                  </div>
 
-      <table class="table">
+                  <div class="col-md-4">
 
-        <tr>
-          <th>Medico:</th>
-          <td>{{ odontograma.medico }}</td>
-        </tr>
+                    <div class="panel panel-default">
 
-        <tr>
-          <th>Paciente:</th>
-          <td>{{ odontograma.expediente.paciente }}</td>
-        </tr>
+                      <table class="table">
 
-        <tr>
-          <th>Observaciones:</th>
-          <td>{{ odontograma.notas }}</td>
-        </tr>
+                        <tr>
+                          <th>Medico:</th>
+                          <td>{{ odontograma.medico }}</td>
+                        </tr>
 
-        <tr>
-          <th>Fecha Creacion:</th>
-          <td>{{ odontograma.fechaCreacion}}</td>
-        </tr>
+                        <tr>
+                          <th>Paciente:</th>
+                          <td>{{ odontograma.expediente.paciente }}</td>
+                        </tr>
 
-      </table>
+                        <tr>
+                          <th>Observaciones:</th>
+                          <td>{{ odontograma.notas }}</td>
+                        </tr>
 
+                        <tr>
+                          <th>Fecha Creacion:</th>
+                          <td>{{ odontograma.fechaCreacion}}</td>
+                        </tr>
+
+                      </table>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-  </div>
-
-</div>
-</div>
-
-</div></div>
-
-</div>
 {% endblock content %}
 
-{% block javascript %}
-<script>
-$(function() {
-  $.each($('.label'), function(){
-    var status = $(this);
-    if(status.text() == 'Recomendado') {
-      status.addClass(' label-warning');
-    } else if(status.text() == 'Autorizado') {
-      status.addClass(' label-primary');
-    } else if(status.text() == 'En Proceso') {
-      status.addClass(' label-info');
-    } else {
-      status.addClass(' label-default');
-    }
+
+
+{% block javascripts %}
+  {{ block.super }}
+  <script>
+  $(function() {
+    $.each($('.label'), function(){
+      var status = $(this);
+      if(status.text() == 'Recomendado') {
+        status.addClass(' label-warning');
+      } else if(status.text() == 'Autorizado') {
+        status.addClass(' label-primary');
+      } else if(status.text() == 'En Proceso') {
+        status.addClass(' label-info');
+      } else {
+        status.addClass(' label-default');
+      }
+    })
   })
-})
-</script>
-{% endblock javascript %}
+  </script>
+
+{% endblock javascripts %}

@@ -1,43 +1,70 @@
-{% extends 'base.html' %}
+{% extends "app/base_site.html" %}
 
-{% block navbar %}
-<ul>
-  <li class="active"><a href="/">Inicio</a></li>
-</ul>
-{% endblock %}
+{% block title %} Login {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+          <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+             {{ field.label_tag }}
+          {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text|safe }}</small>
+          {% endif %}
+          {{ field }}
+          <br>
+              {% for error in field.errors %}
+                  <div class="alert alert-danger">
+                      <strong>{{ error|escape }}</strong>
+                  </div>
+              {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+          <button class="btn btn-defaul" type="submit">Login</button>
+          <div>
+            <h1><i class="fa fa-pencil"></i> Bienvenido!</h1>
+            <p>©2018 Grupo 3 DSI</p>
+          </div>
+          </form>
 
 
-{% block content %}
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+
+
+
+
 
 <div class="Expedientes">
   <div class="container">
     <div class="top-grids">
       <div class="container">
         <h1 align="center" class=>Iniciar Sesion</h1>
-        <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-           {{ field.label_tag }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text|safe }}</small>
-        {% endif %}
-        {{ field }}
-        <br>
-            {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-        <button class="button special" type="submit">Login</button>
-        </form>
+
       </div>
 		</div>
   </div>
 </div>
-{% endblock %}
+{% endblock body %}

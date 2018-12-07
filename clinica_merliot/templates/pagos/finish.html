@@ -43,9 +43,11 @@
               </div>
               <div class="x_content">
 
-                {%for form in formset%}
+
                 <form autocomplete="off" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post"> {% csrf_token %}
                   {{ formset.management_form }}
+                  {%for form in formset%}
+                  {{form.instance.tratamiento.nombreTratamiento}}
                   {% for field in form.visible_fields %}
                   <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.label }}">{{ field.label_tag }} {% if field.field.required %}<span class="required">*</span>{% endif %}
@@ -72,16 +74,18 @@
                                 <strong>{{ error|escape }}</strong>
                             {% endfor %}
                   </div>
+                  <input type="hidden" class"hidden" name="" value="{{form.id}}">{{form.id}}
               {% endfor %}
+
+              {%endfor%}
               <div class="ln_solid"></div>
               <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                   <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
               </div>
-              <input type="hidden" class"hidden" name="" value="{{form.id}}">{{form.id}}
             </form>
-            {%endfor%}
+
               </div>
             </div>
           </div>

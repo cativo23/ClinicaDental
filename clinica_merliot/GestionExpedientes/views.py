@@ -237,12 +237,12 @@ def editarCita(request, pk):
 
     return render(request, template, context)
 
-
+@login_required
 def cita_list(request):
     citas = Cita.objects.filter(fechaCita=timezone.now())
     return render(request,'GestionExpedientes/cita_dia.html', {'citas': citas})
 
-
+@login_required
 def prueba(request):
  return render(request, 'GestionExpedientes/calendario_cita.html', {})
 """ all_events = Cita.objects.all()
@@ -260,7 +260,7 @@ def prueba(request):
     return render(request,'GestionExpedientes/calendario_cita.html',context)"""
 
  #Revisar las lineas de current_user y pdf.drawString(359, 727, current_user.username)
-class ReportePacientesPDF(View):
+class ReportePacientesPDF(LoginRequiredMixin,View):
 
     showtime = strftime("%Y-%m-%d ", gmtime())
 
@@ -346,13 +346,13 @@ class ReportePacientesPDF(View):
         #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Pacientes <------------------
-
+@login_required
 def reporte1_crear(request):
     form1 = reportFecha()
     showtime = strftime("%d-%m-%Y ", gmtime())
     return render(request, 'GestionExpedientes/reporte1.html', {'form1':form1,'date':showtime})
 
-class Reporte1(View):
+class Reporte1(LoginRequiredMixin,View):
 
     def get(self,request, *args, **kwargs):
 
@@ -456,13 +456,13 @@ class Reporte1(View):
         #pdf.drawImage(archivo_imagen2, 440 , 38, width=75, height=75)
 
 #------------------> Reporte General de Citas <------------------
-
+@login_required
 def reporte2_crear(request):
     form1 = reportFechaCita()
     showtime = strftime("%d-%m-%Y ", gmtime())
     return render(request, 'GestionExpedientes/reporte2.html', {'form1':form1,'date':showtime})
 
-class Reporte2(View):
+class Reporte2(LoginRequiredMixin,View):
 
     def get(self,request, *args, **kwargs):
 
@@ -571,13 +571,13 @@ class Reporte2(View):
 
 
 #------------------> Reporte General de Pagos <------------------
-
+@login_required
 def reporte3_crear(request):
     form1 = reportFechaPago()
     showtime = strftime("%d-%m-%Y ", gmtime())
     return render(request, 'GestionExpedientes/reporte3.html', {'form1':form1,'date':showtime})
 
-class Reporte3(View):
+class Reporte3(LoginRequiredMixin,View):
 
     def get(self,request, *args, **kwargs):
 

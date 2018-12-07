@@ -21,6 +21,7 @@ import math
 
 
 # Create your views here.
+@login_required
 def odontograma(request, paciente_id):
     '''
     Crea Odontograma con Procedimientos. Se generará una cotizacion despues
@@ -78,7 +79,7 @@ def odontograma(request, paciente_id):
                   })
 
 
-class OdontogramaDetail(DetailView):
+class OdontogramaDetail(LoginRequiredMixin,DetailView):
     slug_field = 'id'
     model = Odontograma
     context_object_name = 'odontograma'
@@ -96,7 +97,7 @@ class OdontogramaDetail(DetailView):
         return context
 
 
-class ProcedimientoDetail(DetailView):
+class ProcedimientoDetail(LoginRequiredMixin,DetailView):
     model = Procedimiento
     template_name = 'Odonto/detalleConsulta.html'
     slug_field = 'id'
@@ -226,10 +227,6 @@ def consulta(request, pk):
                         form.instance.horaFinal = datetime.now()
                     form.save()
                     messages.success(request, "La consulta fue modificada correctamente!")
-
-
-
-
                     #PARTE DE LA RECETA
                     irRecetas = request.POST.get('radioSi')
 
@@ -243,13 +240,7 @@ def consulta(request, pk):
                         }
                         return render(request, 'recetas/asignarReceta.html', context)
                     #PARTE DE LA RECETA
-
-
-
-
-
-
-                    return redirect('odontograma:listarConsultas')
+                    return redirect('odontograma:finalizar', id=expediente.id)
                 else:
                     print('ERROR CONSULTA: {}'.format(form.errors))
         except Exception as e:
@@ -334,6 +325,7 @@ class OdontogramaList(LoginRequiredMixin, ListView):
                         })
         return context
 
+@login_required
 def finalizaConsulta(request,id):
     consulta = Consulta.objects.get(pk=id)
     print(consulta)
