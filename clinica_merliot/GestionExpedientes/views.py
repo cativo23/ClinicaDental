@@ -715,9 +715,9 @@ class Grafica(TemplateView):
         final_data = []
 
         date = arrow.now()
-        for day in range(1, 7):
+        for day in range(1, 8):
             date = date.replace(days=-1)
-            count = Consulta.objects.filter(fechaConsulta__gte=date.floor('day').datetime, fechaConsulta__lte=date.ceil('day').datetime).count()
+            count = Consulta.objects.filter(fechaConsulta__lte=date.ceil('day').datetime, fechaConsulta__gte=date.floor('day').datetime).count()
             final_data.append(count)
 
         return final_data

@@ -75,9 +75,9 @@ var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ["1", "7","14","21","28","30"],
+        labels: ["1", "2","3","4","5","6","7"],
         datasets: [{
-            label: 'Registro de Consultas en los ultimos 30 dias',
+            label: 'Registro de Consultas en los ultimos 7 dias',
             data: {{ 30_day_registrations }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
