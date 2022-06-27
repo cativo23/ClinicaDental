@@ -12,7 +12,7 @@ psycopg2==2.7.5
 psycopg2-binary==2.7.5
 python-dateutil==2.7.5
 pytz==2018.5
-reportlab==3.5.12
+reportlab==3.5.55
 six==1.11.0
 virtualenv==16.0.0
 virtualenv-clone==0.3.0
